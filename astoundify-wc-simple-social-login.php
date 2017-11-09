@@ -63,9 +63,9 @@ define( 'ASTOUNDIFY_WC_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH', trailingslashit( ASTO
  * @since 1.0.0
  */
 function astoundify_wc_simple_social_login_updater() {
-	//require_once( ASTOUNDIFY_WC_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/astoundify/plugin-updater/astoundify-pluginupdater.php' );
+	require_once( ASTOUNDIFY_WC_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/astoundify/plugin-updater/astoundify-pluginupdater.php' );
 
-	//new Astoundify_PluginUpdater( __FILE__ );
+	new Astoundify_PluginUpdater( __FILE__ );
 }
 add_action( 'admin_init', 'astoundify_wc_simple_social_login_updater', 9 );
 
