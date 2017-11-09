@@ -3,7 +3,7 @@
 ### Install
 
 ```
-$ git clone --recursive git@github.com:Astoundify/wc-simple-social-login.git
+$ git clone --recursive git@github.com:Astoundify/simple-social-login.git
 ```
 
 ### Setup
@@ -56,7 +56,7 @@ $ phpunit
 
 ### Build
 
-Bump version in `package.json` and `astoundify-wc-simple-social-login.php`. 
+Bump version in `package.json` and `astoundify-simple-social-login.php`. 
 
 ```
 $ npm run dist

@@ -9,7 +9,7 @@
  * @author Astoundify
  */
 
-namespace Astoundify\WC_Simple_Social_Login;
+namespace Astoundify\Simple_Social_Login;
 
 // Do not access this file directly.
 if ( ! defined( 'ABSPATH' ) ) {

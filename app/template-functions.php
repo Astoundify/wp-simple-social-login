@@ -19,19 +19,19 @@
  * @param string $template_path (default: '') Load from a different area.
  * @param string $default_path  (default: '') Default path.
  */
-function astoundify_wc_simple_social_login_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+function astoundify_simple_social_login_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 	// Extract variable to use in template file.
 	if ( ! empty( $args ) && is_array( $args ) ) {
 		extract( $args ); // WPCS: ok.
 	}
 
 	// Get template file.
-	$located = astoundify_wc_simple_social_login_locate_template( $template_name, $template_path, $default_path );
+	$located = astoundify_simple_social_login_locate_template( $template_name, $template_path, $default_path );
 
 	// File not exists, display error notice.
 	if ( ! file_exists( $located ) ) {
 		// Translators: %s Attempted template file.
-		_doing_it_wrong( __FUNCTION__, esc_attr( sprintf( __( '%s does not exist.', 'astoundify-wc-simple-social-login' ), '<code>' . $located . '</code>' ), $located ), esc_attr( ASTOUNDIFY_WC_SIMPLE_SOCIAL_LOGIN_VERSION ) );
+		_doing_it_wrong( __FUNCTION__, esc_attr( sprintf( __( '%s does not exist.', 'astoundify-simple-social-login' ), '<code>' . $located . '</code>' ), $located ), esc_attr( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION ) );
 		return;
 	}
 
@@ -54,15 +54,15 @@ function astoundify_wc_simple_social_login_get_template( $template_name, $args =
  * @param string $default_path  (default: '') Default path.
  * @return string
  */
-function astoundify_wc_simple_social_login_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function astoundify_simple_social_login_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 	// Set theme path if not set.
 	if ( ! $template_path ) {
-		$template_path = 'astoundify-wc-simple-social-login';
+		$template_path = 'astoundify-simple-social-login';
 	}
 
 	// Set default template path if not set.
 	if ( ! $default_path ) {
-		$default_path = ASTOUNDIFY_WC_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH;
+		$default_path = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH;
 	}
 
 	// Look within passed path within the theme - this is priority.
@@ -74,5 +74,5 @@ function astoundify_wc_simple_social_login_locate_template( $template_name, $tem
 	}
 
 	// Return what we found.
-	return apply_filters( 'astoundify_wc_simple_social_login_locate_template', $template, $template_name, $template_path );
+	return apply_filters( 'astoundify_simple_social_login_locate_template', $template, $template_name, $template_path );
 }

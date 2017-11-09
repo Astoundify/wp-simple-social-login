@@ -45,9 +45,9 @@ gulp.task( 'js:hint', function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'js:minify', function() {
-	gulp.src( 'resources/assets/js/wc-simple-social-login.js' )
+	gulp.src( 'resources/assets/js/simple-social-login.js' )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'wc-simple-social-login.min.js' ) )
+		.pipe( concat( 'simple-social-login.min.js' ) )
 		.pipe( uglify() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/js/' + sourcePath;
@@ -80,9 +80,9 @@ gulp.task( 'css:lint', function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'css:minify', function() {
-	gulp.src( 'resources/assets/css/wc-simple-social-login.css' )
+	gulp.src( 'resources/assets/css/simple-social-login.css' )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'wc-simple-social-login.min.css' ) )
+		.pipe( concat( 'simple-social-login.min.css' ) )
 		.pipe( cleanCss() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/css/' + sourcePath;
@@ -119,7 +119,7 @@ gulp.task( 'checktextdomain', function() {
 		'resources/**/**.php'
 	] )
 		.pipe( checktextdomain( {
-			text_domain: 'astoundify-wc-simple-social-login',
+			text_domain: 'astoundify-simple-social-login',
 			correct_domain: true,
 			force: true,
 			keywords: [
@@ -153,9 +153,9 @@ gulp.task( 'makepot', function() {
 		'resources/**/**.php'
 	] )
 		.pipe( wpPot( {
-			domain: 'astoundify-wc-simple-social-login',
+			domain: 'astoundify-simple-social-login',
 		} ))
-		.pipe( gulp.dest( 'resources/languages/astoundify-wc-simple-social-login.pot' ) );
+		.pipe( gulp.dest( 'resources/languages/astoundify-simple-social-login.pot' ) );
 } );
 
 /* i18n */
@@ -186,7 +186,7 @@ gulp.task( 'php', function() {
  * @since 1.0.0
  */
 gulp.task( 'clean', function() {
-	gulp.src( [ './astoundify-wc-simple-social-login', '*.zip' ], {
+	gulp.src( [ './astoundify-simple-social-login', '*.zip' ], {
 		read: false
 	} )
 		.pipe( clean() );
@@ -199,7 +199,7 @@ gulp.task( 'clean', function() {
  */
 gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 	gulp.src( [
-		'astoundify-wc-simple-social-login.php',
+		'astoundify-simple-social-login.php',
 		'app/*',
 		'app/**',
 		'bootstrap/*',
@@ -217,7 +217,7 @@ gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 	], {
 		base: './'
 	} )
-		.pipe( gulp.dest( 'astoundify-wc-simple-social-login' ) );
+		.pipe( gulp.dest( 'astoundify-simple-social-login' ) );
 
 	cb();
 } );
@@ -231,6 +231,6 @@ gulp.task( 'zip', function() {
 	gulp.src( [ '<%= slug %>/**' ], {
 		base: './'
  	} )
-		.pipe( zip( 'astoundify-wc-simple-social-login-' + pkg.version + '.zip' ) )
+		.pipe( zip( 'astoundify-simple-social-login-' + pkg.version + '.zip' ) )
 		.pipe( gulp.dest( '' ) );
 } );
