@@ -45,9 +45,9 @@ gulp.task( 'js:hint', function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'js:minify', function() {
-	gulp.src( 'resources/assets/js/plugin.js' )
+	gulp.src( 'resources/assets/js/wc-simple-social-login.js' )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'plugin.min.js' ) )
+		.pipe( concat( 'wc-simple-social-login.min.js' ) )
 		.pipe( uglify() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/js/' + sourcePath;
@@ -80,9 +80,9 @@ gulp.task( 'css:lint', function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'css:minify', function() {
-	gulp.src( 'resources/assets/css/plugin.css' )
+	gulp.src( 'resources/assets/css/wc-simple-social-login.css' )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'plugin.min.css' ) )
+		.pipe( concat( 'wc-simple-social-login.min.css' ) )
 		.pipe( cleanCss() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/css/' + sourcePath;
@@ -155,7 +155,7 @@ gulp.task( 'makepot', function() {
 		.pipe( wpPot( {
 			domain: 'astoundify-wc-simple-social-login',
 		} ))
-		.pipe( gulp.dest( 'resources/languages/astoundify-plugin-scaffold.pot' ) );
+		.pipe( gulp.dest( 'resources/languages/astoundify-wc-simple-social-login.pot' ) );
 } );
 
 /* i18n */
@@ -186,7 +186,7 @@ gulp.task( 'php', function() {
  * @since 1.0.0
  */
 gulp.task( 'clean', function() {
-	gulp.src( [ './astoundify-scaffold', '*.zip' ], {
+	gulp.src( [ './astoundify-wc-simple-social-login', '*.zip' ], {
 		read: false
 	} )
 		.pipe( clean() );
@@ -199,7 +199,7 @@ gulp.task( 'clean', function() {
  */
 gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 	gulp.src( [
-		'astoundify-scaffold.php',
+		'astoundify-wc-simple-social-login.php',
 		'app/*',
 		'app/**',
 		'bootstrap/*',
@@ -217,7 +217,7 @@ gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 	], {
 		base: './'
 	} )
-		.pipe( gulp.dest( 'astoundify-scaffold' ) );
+		.pipe( gulp.dest( 'astoundify-wc-simple-social-login' ) );
 
 	cb();
 } );
@@ -231,6 +231,6 @@ gulp.task( 'zip', function() {
 	gulp.src( [ '<%= slug %>/**' ], {
 		base: './'
  	} )
-		.pipe( zip( 'astoundify-scaffold-' + pkg.version + '.zip' ) )
+		.pipe( zip( 'astoundify-wc-simple-social-login-' + pkg.version + '.zip' ) )
 		.pipe( gulp.dest( '' ) );
 } );

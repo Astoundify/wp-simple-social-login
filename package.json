@@ -1,7 +1,7 @@
 {
-  "name": "astoundify-plugin-scaffold",
+  "name": "astoundify-wc-simple-social-login",
   "version": "1.0.0",
-  "description": "Something amazing.",
+  "description": "Simple social login for WooCommerce.",
   "main": "gulpfile.js",
   "devDependencies": {
     "fs": "0.0.1-security",
@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Astoundify/plugin-scaffold.git"
+    "url": "git+https://github.com/Astoundify/wc-simple-social-login.git"
   },
   "author": "Astoundify",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Astoundify/plugin-scaffold/issues"
+    "url": "https://github.com/Astoundify/wc-simple-social-login/issues"
   },
   "homepage": "https://astoundify.com/"
 }

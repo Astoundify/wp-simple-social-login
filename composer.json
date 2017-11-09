@@ -1,6 +1,6 @@
 {
-	"name": "astoundify/plugin-scaffold",
-	"description": "Something awesome.",
+	"name": "astoundify/wc-simple-social-login",
+	"description": "Simple social login for WooCommerce.",
 	"license": "GPL 3.0",
 	"authors": [
 		{
