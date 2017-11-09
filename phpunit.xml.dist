@@ -1,0 +1,16 @@
+<phpunit
+	bootstrap="tests/phpunit/class-bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+  verbose="true"
+  syntaxCheck="true"
+	>
+	<testsuites>
+		<testsuite name="Astoundify Plugin">
+			<directory suffix=".php">./tests/phpunit/unit-tests</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

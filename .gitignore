@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+.gulp
+*.log
+*.zip
+*.js.map
+vendor/composer
+vendor/autoload.php
+public
+astoundify-plugin
