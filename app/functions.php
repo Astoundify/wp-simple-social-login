@@ -4,7 +4,7 @@
  *
  * @since 1.0.0
  *
- * @package Plugin Scaffold
+ * @package Functions
  * @category Functions
  * @author Astoundify
  */

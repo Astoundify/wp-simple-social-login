@@ -15,6 +15,9 @@ namespace Astoundify\Simple_Social_Login;
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions.php' );
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/template-functions.php' );
 
+// Admin Settings
+require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/admin/functions-settings.php' );
+
 /**
  * Initialize plugin.
  *
@@ -29,10 +32,10 @@ add_action( 'plugins_loaded', function() {
 	add_action( 'wp_enqueue_scripts', function() {
 
 		// Load CSS.
-		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/simple-social-login.min.css', array(), ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION );
+		//wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/simple-social-login.min.css', array(), ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION );
 
 		// Load JS.
-		wp_enqueue_script( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/simple-social-login.min.js', array( 'jquery' ), ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION, true );
+		//wp_enqueue_script( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/simple-social-login.min.js', array( 'jquery' ), ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION, true );
 
 	} );
 
