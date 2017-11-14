@@ -37,7 +37,7 @@ add_action( 'admin_init', 'astoundify_simple_social_login_register_settings' );
  * @return array
  */
 function astoundify_simple_social_login_sanitize_settings( $input ) {
-	return $input;
+	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $input );
 }
 
 /**
@@ -63,10 +63,72 @@ add_action( 'admin_menu', 'astoundify_simple_social_login_add_menu_page' );
  * @since 1.0.0
  */
 function astoundify_simple_social_login_menu_page_html() {
+	// Settings array.
+	$settings = array(
+		'settings' => array(
+			'nav'      => esc_html( 'Settings', 'astoundify-simple-social-login' ),
+			'callback' => 'astoundify_simple_social_login_settings_callback',
+		),
+		'facebook' => array(
+			'nav'      => esc_html( 'Facebook', 'astoundify-simple-social-login' ),
+			'callback' => 'astoundify_simple_social_login_facebook_callback',
+		),
+		'twitter' => array(
+			'nav'      => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
+			'callback' => 'astoundify_simple_social_login_twitter_callback',
+		),
+	);
+	
+	
 ?>
-<div class="wrap">
-	<h1><?php esc_html_e( 'Astoundify Simple Social Login', 'astoundify-simple-social-login' ); ?></h1>
-</div>
+<div id="astoundify-simple-social-login-admin" class="wrap">
+
+	<h2 id="astoundify-simple-social-login-nav-tab" class="nav-tab-wrapper wp-clearfix">
+		<?php
+		$i = 0;
+		foreach ( $settings as $id => $setting ) {
+			$i++;
+			echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-' . esc_attr( $id ) . '">' . $setting['nav'] . '</a>';
+		};
+		?>
+	</h2><!-- #astoundify-simple-social-login-nav-tab -->
+
+	<div id="astoundify-simple-social-login-panels">
+
+		<?php
+		$i = 0;
+		foreach ( $settings as $id => $setting ) :
+			$i++;
+		?>
+
+		<div id="astoundify-simple-social-login-<?php echo esc_attr( $id ); ?>" <?php echo ( 1 !== $i ? 'style="display:none"' : '' ); ?>>
+			<?php if ( is_callable( $setting['callback'] ) ) {
+				call_user_func( $setting['callback'] );
+			} ?>
+		</div>
+
+		<?php endforeach; ?>
+
+</div><!-- #astoundify-simple-social-login-admin -->
+<?php
+}
+
+/**
+ * Settings Section Callback
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_settings_callback() {
+?>
+
+<h3><?php esc_html_e( 'Astoundify Simple Social Login Settings', 'astoundify-simple-social-login' ); ?></h3>
+
+<p>Lorem Ipsum..</p>
+
+<h3><?php esc_html_e( 'WooCommerce Settings', 'astoundify-simple-social-login' ); ?></h3>
+
+<p>Lorem Ipsum..</p>
+
 <?php
 }
 
