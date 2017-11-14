@@ -37,7 +37,12 @@ add_action( 'admin_init', 'astoundify_simple_social_login_register_settings' );
  * @return array
  */
 function astoundify_simple_social_login_sanitize_settings( $input ) {
-	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $input );
+	$defaults = array(
+		'display' => array(),
+		'providers' => array(),
+	);
+	$output = wp_parse_args( (array)$input, $defaults );
+	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $output );
 }
 
 /**
@@ -122,38 +127,36 @@ function astoundify_simple_social_login_panel_settings() {
 <table class="form-table">
 	<tbody>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Enable in', 'astoundify-simple-social-login' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Display Social Login buttons on:', 'astoundify-simple-social-login' ); ?></th>
 			<td>
-
 				<?php
-				$location_options = isset( $options['location'] ) && is_array( $options['location'] ) ? $options['location'] : array();
-				$locations = array(
+				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
+				$choices = array(
 					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
 					'wp_register' => esc_html( 'WordPress Register Form', 'astoundify-simple-social-login' ),
 				);
-				$locations = apply_filters( 'astoundify_simple_social_login_locations_choices', $locations );
+				$choices = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
 				?>
 
-				<?php foreach ( $locations as $key => $label ) : ?>
-					<label><input <?php checked( 1, in_array( $key, $location_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[location][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
+				<?php foreach ( $choices as $key => $label ) : ?>
+					<label><input <?php checked( 1, in_array( $key, $display_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[display][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
 				<?php endforeach; ?>
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Services', 'astoundify-simple-social-login' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Providers', 'astoundify-simple-social-login' ); ?></th>
 			<td>
-
 				<?php
-				$service_options = isset( $options['service'] ) && is_array( $options['service'] ) ? $options['service'] : array();
-				$services = array(
+				$provider_options = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
+				$choices = array(
 					'facebook' => esc_html( 'Facebook', 'astoundify-simple-social-login' ),
 					'twitter'  => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
 				);
-				$services = apply_filters( 'astoundify_simple_social_login_services_choices', $services );
+				$choices = apply_filters( 'astoundify_simple_social_login_provider_choices', $choices );
 				?>
 
-				<?php foreach ( $services as $key => $label ) : ?>
-					<label><input <?php checked( 1, in_array( $key, $service_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[service][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
+				<?php foreach ( $choices as $key => $label ) : ?>
+					<label><input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
 				<?php endforeach; ?>
 			</td>
 		</tr>
