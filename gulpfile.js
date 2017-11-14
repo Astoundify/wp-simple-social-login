@@ -54,6 +54,16 @@ gulp.task( 'js:minify', function() {
 		}))
 		.pipe( sourcemaps.write( './' ) )
 		.pipe( gulp.dest( 'public/js' ) );
+
+	gulp.src( 'resources/assets/js/settings.js' )
+		.pipe( sourcemaps.init() )
+		.pipe( concat( 'settings.min.js' ) )
+		.pipe( uglify() )
+		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
+			return 'resources/assets/js/' + sourcePath;
+		}))
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( 'public/js' ) );
 } );
 
 /**
@@ -83,6 +93,16 @@ gulp.task( 'css:minify', function() {
 	gulp.src( 'resources/assets/css/simple-social-login.css' )
 		.pipe( sourcemaps.init() )
 		.pipe( concat( 'simple-social-login.min.css' ) )
+		.pipe( cleanCss() )
+		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
+			return 'resources/assets/css/' + sourcePath;
+		}))
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( 'public/css' ) );
+
+	gulp.src( 'resources/assets/css/settings.css' )
+		.pipe( sourcemaps.init() )
+		.pipe( concat( 'settings.min.css' ) )
 		.pipe( cleanCss() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/css/' + sourcePath;
