@@ -70,7 +70,6 @@ function astoundify_simple_social_login_settings() {
 		'twitter'  => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
 	);
 	$settings = apply_filters( 'astoundify_simple_social_login_settings', $settings );
-	
 ?>
 <div id="astoundify-simple-social-login-admin" class="wrap">
 
@@ -84,19 +83,27 @@ function astoundify_simple_social_login_settings() {
 		?>
 	</h2><!-- #astoundify-simple-social-login-nav-tab -->
 
-	<div id="astoundify-simple-social-login-panels">
+	<form method="post" action="options.php">
+		<div id="astoundify-simple-social-login-panels">
 
-		<?php
-		$i = 0;
-		foreach ( $settings as $id => $tab ) :
-			$i++;
-		?>
+			<?php
+			$i = 0;
+			foreach ( $settings as $id => $tab ) :
+				$i++;
+			?>
 
-		<div id="astoundify-simple-social-login-<?php echo esc_attr( $id ); ?>" <?php echo ( 1 !== $i ? 'style="display:none"' : '' ); ?>>
-			<?php do_action( 'astoundify_simple_social_login_settings_' . $id ); ?>
-		</div>
+			<div id="astoundify-simple-social-login-<?php echo esc_attr( $id ); ?>" <?php echo ( 1 !== $i ? 'style="display:none"' : '' ); ?>>
+				<?php do_action( 'astoundify_simple_social_login_settings_' . $id ); ?>
+			</div>
 
-		<?php endforeach; ?>
+			<?php endforeach; ?>
+
+		</div><!-- #astoundify-simple-social-login-panels -->
+
+		<?php do_settings_sections( 'astoundify-simple-social-login' ); ?>
+		<?php settings_fields( 'astoundify_simple_social_login' ); ?>
+		<?php submit_button(); ?> 
+	</form>
 
 </div><!-- #astoundify-simple-social-login-admin -->
 <?php
@@ -108,35 +115,48 @@ function astoundify_simple_social_login_settings() {
  * @since 1.0.0
  */
 function astoundify_simple_social_login_settings_callback() {
+	$options = get_option( 'astoundify_simple_social_login', array() );
+	$options = is_array( $options ) ? $options : array();
 ?>
 
 <h3><?php esc_html_e( 'Astoundify Simple Social Login Settings', 'astoundify-simple-social-login' ); ?></h3>
 
-<p>Lorem Ipsum..</p>
-
 <table class="form-table">
 	<tbody>
 		<tr>
-			<th scope="row">Text</th>
+			<th scope="row"><?php esc_html_e( 'Enable in', 'astoundify-simple-social-login' ); ?></th>
 			<td>
-				<input type="text" class="regular-text">
-				<p class="description">Lorem ipsum.</p>
+
+				<?php
+				$location_options = isset( $options['location'] ) && is_array( $options['location'] ) ? $options['location'] : array();
+				$locations = array(
+					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
+					'wp_register' => esc_html( 'WordPress Register Form', 'astoundify-simple-social-login' ),
+				);
+				$locations = apply_filters( 'astoundify_simple_social_login_locations_choices', $locations );
+				?>
+
+				<?php foreach ( $locations as $key => $label ) : ?>
+					<label><input <?php checked( 1, in_array( $key, $location_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[location][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
+				<?php endforeach; ?>
 			</td>
 		</tr>
-	</tbody>
-</table>
-
-<h3><?php esc_html_e( 'WooCommerce Settings', 'astoundify-simple-social-login' ); ?></h3>
-
-<p>Lorem Ipsum..</p>
-
-<table class="form-table">
-	<tbody>
 		<tr>
-			<th scope="row">Text</th>
+			<th scope="row"><?php esc_html_e( 'Services', 'astoundify-simple-social-login' ); ?></th>
 			<td>
-				<p><input type="text" class="regular-text"></p>
-				<p class="description">Lorem ipsum.</p>
+
+				<?php
+				$service_options = isset( $options['service'] ) && is_array( $options['service'] ) ? $options['service'] : array();
+				$services = array(
+					'facebook' => esc_html( 'Facebook', 'astoundify-simple-social-login' ),
+					'twitter'  => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
+				);
+				$services = apply_filters( 'astoundify_simple_social_login_services_choices', $services );
+				?>
+
+				<?php foreach ( $services as $key => $label ) : ?>
+					<label><input <?php checked( 1, in_array( $key, $service_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[service][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
+				<?php endforeach; ?>
 			</td>
 		</tr>
 	</tbody>
