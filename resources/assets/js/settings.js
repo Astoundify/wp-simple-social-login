@@ -18,7 +18,18 @@
 	 */
 	$( function(){
 
-		
+		$( '#astoundify-simple-social-login-nav-tabs .nav-tab' ).click( function(e) {
+			e.preventDefault();
+
+			// Tab active state.
+			$( this ).addClass( 'nav-tab-active' );
+			$( this ).siblings( '.nav-tab' ).removeClass( 'nav-tab-active' );
+
+			// Show/hide panel.
+			var panel = $( this ).attr( 'href' );
+			$( panel ).show();
+			$( panel ).siblings( '.astoundify-simple-social-login-panel' ).hide();
+		});
 	});
 
 })( window );

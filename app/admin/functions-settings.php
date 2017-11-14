@@ -64,21 +64,19 @@ add_action( 'admin_menu', 'astoundify_simple_social_login_add_menu_page' );
  */
 function astoundify_simple_social_login_settings() {
 	// Settings array.
-	$settings = array(
+	$tabs = array(
 		'settings' => esc_html( 'Settings', 'astoundify-simple-social-login' ),
-		'facebook' => esc_html( 'Facebook', 'astoundify-simple-social-login' ),
-		'twitter'  => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
 	);
-	$settings = apply_filters( 'astoundify_simple_social_login_settings', $settings );
+	$tabs = apply_filters( 'astoundify_simple_social_login_settings_tabs', $tabs );
 ?>
 <div id="astoundify-simple-social-login-admin" class="wrap">
 
-	<h2 id="astoundify-simple-social-login-nav-tab" class="nav-tab-wrapper wp-clearfix">
+	<h2 id="astoundify-simple-social-login-nav-tabs" class="nav-tab-wrapper wp-clearfix">
 		<?php
 		$i = 0;
-		foreach ( $settings as $id => $tab ) {
+		foreach ( $tabs as $id => $tab ) {
 			$i++;
-			echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-' . esc_attr( $id ) . '">' . $tab . '</a>';
+			echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-panel-' . esc_attr( $id ) . '">' . $tab . '</a>';
 		};
 		?>
 	</h2><!-- #astoundify-simple-social-login-nav-tab -->
@@ -88,12 +86,12 @@ function astoundify_simple_social_login_settings() {
 
 			<?php
 			$i = 0;
-			foreach ( $settings as $id => $tab ) :
+			foreach ( $tabs as $id => $tab ) :
 				$i++;
 			?>
 
-			<div id="astoundify-simple-social-login-<?php echo esc_attr( $id ); ?>" <?php echo ( 1 !== $i ? 'style="display:none"' : '' ); ?>>
-				<?php do_action( 'astoundify_simple_social_login_settings_' . $id ); ?>
+			<div id="astoundify-simple-social-login-panel-<?php echo esc_attr( $id ); ?>" <?php echo ( 1 !== $i ? 'style="display:none"' : '' ); ?> class="astoundify-simple-social-login-panel">
+				<?php do_action( 'astoundify_simple_social_login_panel_' . $id ); ?>
 			</div>
 
 			<?php endforeach; ?>
@@ -110,11 +108,11 @@ function astoundify_simple_social_login_settings() {
 }
 
 /**
- * Settings Section Callback
+ * Settings Panel
  *
  * @since 1.0.0
  */
-function astoundify_simple_social_login_settings_callback() {
+function astoundify_simple_social_login_panel_settings() {
 	$options = get_option( 'astoundify_simple_social_login', array() );
 	$options = is_array( $options ) ? $options : array();
 ?>
@@ -164,7 +162,7 @@ function astoundify_simple_social_login_settings_callback() {
 
 <?php
 }
-add_action( 'astoundify_simple_social_login_settings_settings', 'astoundify_simple_social_login_settings_callback' );
+add_action( 'astoundify_simple_social_login_panel_settings', 'astoundify_simple_social_login_panel_settings' );
 
 /**
  * Settings Page Scripts
