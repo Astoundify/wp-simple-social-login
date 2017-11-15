@@ -5,6 +5,7 @@ node_modules
 *.zip
 *.js.map
 vendor/composer
+vendor/facebook
 vendor/autoload.php
 public
 astoundify-plugin
