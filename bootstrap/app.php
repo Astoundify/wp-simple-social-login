@@ -13,7 +13,11 @@ namespace Astoundify\Simple_Social_Login;
 
 // Load helper functions.
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions.php' );
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/template-functions.php' );
+require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-template.php' );
+
+// Providers
+require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook.php' );
+
 
 /**
  * Initialize plugin.
@@ -21,6 +25,11 @@ require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/template-functions.php'
  * @since 1.0.0
  */
 add_action( 'plugins_loaded', function() {
+
+	// Load Facebook SDK if facebook is selected.
+	if ( astoundify_simple_social_login_is_provider_active( 'facebook' ) ) {
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/facebook/graph-sdk/src/Facebook/autoload.php' );
+	}
 
 	// Load text domain.
 	load_plugin_textdomain( dirname( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH ), false, dirname( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH ) . '/resources/languages/' );
