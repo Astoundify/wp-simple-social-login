@@ -74,7 +74,7 @@ function astoundify_simple_social_login_settings() {
 	);
 	$tabs = apply_filters( 'astoundify_simple_social_login_settings_tabs', $tabs );
 ?>
-<div id="astoundify-simple-social-login-admin" class="wrap">
+<div id="astoundify-simple-social-login-settings" class="wrap">
 
 	<h2 id="astoundify-simple-social-login-nav-tabs" class="nav-tab-wrapper wp-clearfix">
 		<?php
@@ -108,7 +108,7 @@ function astoundify_simple_social_login_settings() {
 		<?php submit_button(); ?> 
 	</form>
 
-</div><!-- #astoundify-simple-social-login-admin -->
+</div><!-- #astoundify-simple-social-login-settings -->
 <?php
 }
 
@@ -127,7 +127,7 @@ function astoundify_simple_social_login_panel_settings() {
 <table class="form-table">
 	<tbody>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Display Social Login buttons on:', 'astoundify-simple-social-login' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Display Social Login Buttons', 'astoundify-simple-social-login' ); ?></th>
 			<td>
 				<?php
 				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
@@ -148,16 +148,16 @@ function astoundify_simple_social_login_panel_settings() {
 			<td>
 				<?php
 				$provider_options = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-				$choices = array(
-					'facebook' => esc_html( 'Facebook', 'astoundify-simple-social-login' ),
-					'twitter'  => esc_html( 'Twitter', 'astoundify-simple-social-login' ),
-				);
-				$choices = apply_filters( 'astoundify_simple_social_login_provider_choices', $choices );
+				$choices = apply_filters( 'astoundify_simple_social_login_provider_choices', array() );
 				?>
 
-				<?php foreach ( $choices as $key => $label ) : ?>
-					<label><input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
-				<?php endforeach; ?>
+				<?php if ( $choices ) : ?>
+					<?php foreach ( $choices as $key => $label ) : ?>
+						<label><input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<p class="description"><?php esc_html_e( 'No provider available.', 'astoundify-simple-socia-login' ); ?></p>
+				<?php endif; ?>
 			</td>
 		</tr>
 	</tbody>

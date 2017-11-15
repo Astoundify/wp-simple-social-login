@@ -39,9 +39,9 @@ add_action( 'admin_init', 'astoundify_simple_social_login_facebook_register_sett
 function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
 	$output = array();
 
-	$output['app_id'] = isset( $input['app_id'] ) ? esc_attr( $input['app_id'] ) : '';
+	$output['app_id'] = isset( $input['app_id'] ) ? esc_attr( trim( $input['app_id'] ) ) : '';
 
-	$output['app_secret'] = isset( $input['app_secret'] ) ? esc_attr( $input['app_secret'] ) : '';
+	$output['app_secret'] = isset( $input['app_secret'] ) ? esc_attr( trim( $input['app_secret'] ) ) : '';
 
 	$output['login_button_text'] = isset( $input['login_button_text'] ) ? esc_attr( $input['login_button_text'] ) : '';
 
@@ -63,6 +63,20 @@ function astoundify_simple_social_login_facebook_add_settings( $settings ) {
 	return $settings;
 }
 add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_facebook_add_settings' );
+
+/**
+ * Add Facebook as Provider.
+ *
+ * @since 1.0.0
+ *
+ * @param array $providers Provider Choices.
+ * @return array
+ */
+function astoundify_simple_social_login_facebook_add_provider( $providers ) {
+	$providers['facebook'] = esc_html( 'Facebook', 'astoundify-simple-social-login' );
+	return $providers;
+}
+add_filter( 'astoundify_simple_social_login_provider_choices', 'astoundify_simple_social_login_facebook_add_provider' );
 
 /**
  * Facebook Settings Panel
