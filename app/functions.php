@@ -88,14 +88,55 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
  */
 function astoundify_simple_social_login_get_redirect_url( $action = 'login' ) {
 	$url = is_singular() ? get_permalink( get_queried_object() ) : home_url();
-	return esc_url( apply_filters( 'astoundify_simple_social_login_redirect_url', $url, $action ) );
+	return esc_url_raw( apply_filters( 'astoundify_simple_social_login_redirect_url', $url, $action ) );
 }
 
+/**
+ * Is registration enabled.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function astoundify_simple_social_login_is_registration_enabled() {
+	return apply_filters( 'astoundify_simple_social_login_registration_enabled', true );
+}
 
+/**
+ * Add Error
+ *
+ * @since 1.0.0
+ *
+ * @param string $id Error ID.
+ * @param string $error Error Message.
+ */
+function astoundify_simple_social_login_add_error( $id, $error ) {
+	// Set if not yet set.
+	global $_astoundify_simple_social_login_error;
+	if ( ! isset( $_astoundify_simple_social_login_error ) || ! is_array( $_astoundify_simple_social_login_error ) ) {
+		$_astoundify_simple_social_login_error = array();
+	}
 
+	// Add error.
+	$_astoundify_simple_social_login_error[ $id ] = $error;
+}
 
+/**
+ * Get Errors
+ *
+ * @since 1.0.0
+ *
+ * @return array
+ */
+function astoundify_simple_social_login_get_errors() {
+	// Set if not yet set.
+	global $_astoundify_simple_social_login_error;
+	if ( ! isset( $_astoundify_simple_social_login_error ) || ! is_array( $_astoundify_simple_social_login_error ) ) {
+		$_astoundify_simple_social_login_error = array();
+	}
 
-
+	return $_astoundify_simple_social_login_error;
+}
 
 
 
