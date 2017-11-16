@@ -55,9 +55,41 @@ function astoundify_simple_social_login_template_include( $template ) {
 }
 add_filter( 'template_include', 'astoundify_simple_social_login_template_include' );
 
+/**
+ * Log User In.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_log_user_in( $user_id ) {
+	// Bail if user already logged in.
+	if ( is_user_logged_in() ) {
+		return false;
+	}
 
+	// Get user data.
+	$user        = get_userdata( $user_id );
+	$user_login  = $user->user_login;
 
+	// Enable remember me cookie.
+	$remember_me = apply_filters( 'astoundify_simple_social_login_remember_me', true, $user_id );
 
+	wp_set_auth_cookie( $user_id, $remember_me );
+	wp_set_current_user( $user_id, $user_login );
+	do_action( 'wp_login', $user_login, $user );
+}
+
+/**
+ * Get Redirect URL.
+ *
+ * @since 1.0.0
+ *
+ * @param string $action Action: login, link, etc.
+ * @return string
+ */
+function astoundify_simple_social_login_get_redirect_url( $action = 'login' ) {
+	$url = is_singular() ? get_permalink( get_queried_object() ) : home_url();
+	return esc_url( apply_filters( 'astoundify_simple_social_login_redirect_url', $url, $action ) );
+}
 
 
 
