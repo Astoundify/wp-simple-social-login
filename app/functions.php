@@ -185,10 +185,39 @@ function astoundify_simple_social_login_get_errors() {
 	return $_astoundify_simple_social_login_error;
 }
 
+/**
+ * Is wp-login.php Page.
+ * WordPress do not have conditional for this.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function astoundify_simple_social_login_is_wp_login_page() {
+	// Always false if register page.
+	if ( astoundify_simple_social_login_is_wp_register_page() ) {
+		return false;
+	}
+	if ( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
+		return true;
+	}
+	return false;
+}
 
-
-
-
+/**
+ * Is wp-login.php Register Page.
+ * WordPress do not have conditional for this.
+ *
+ * @since 1.0.0
+ *
+ * @return bool
+ */
+function astoundify_simple_social_login_is_wp_register_page() {
+	if ( isset( $GLOBALS['pagenow'], $_REQUEST['action'] ) && 'wp-login.php' === $GLOBALS['pagenow'] && 'register' === $_REQUEST['action'] ) {
+		return true;
+	}
+	return false;
+}
 
 
 

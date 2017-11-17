@@ -142,8 +142,9 @@ function astoundify_simple_social_login_facebook_get_login_register_button() {
 
 	$html = "<a class='{$classes}' href='{$url}'>{$text}</a>";
 
-	return apply_filters( 'astoundify_simple_social_login_facebook_login_register_button', $html, $text, $url, $classes );
+	return apply_filters( 'astoundify_simple_social_login_facebook_login_register_button_html', $html, $text, $url, $classes );
 }
+add_action( 'astoundify_simple_social_login_facebook_login_register_button', 'astoundify_simple_social_login_facebook_get_login_register_button' );
 
 /**
  * Facebook Link/Unlink Button.
@@ -185,8 +186,9 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 		$html = "<p class='{$classes}'>" . $text . " <a href='{$url}' title='{$last_connected_time}'>" . $unlink_link_text . "</a>.</p>";
 	}
 
-	return apply_filters( 'astoundify_simple_social_login_facebook_link_unlink_button', $html, $is_connected );
+	return apply_filters( 'astoundify_simple_social_login_facebook_link_unlink_button_html', $html, $is_connected );
 }
+add_action( 'astoundify_simple_social_login_facebook_link_unlink_button', 'astoundify_simple_social_login_facebook_get_link_unlink_button' );
 
 /**
  * Is User Connected to Facebook.
