@@ -103,6 +103,53 @@ function astoundify_simple_social_login_is_registration_enabled() {
 }
 
 /**
+ * Date Format.
+ *
+ * @since 1.0.0
+ *
+ * @return string.
+ */
+function astoundify_simple_social_login_get_date_format() {
+	return apply_filters( 'astoundify_simple_social_login_date_format', get_option( 'date_format' ) );
+}
+
+/**
+ * Time Format.
+ *
+ * @since 1.0.0
+ *
+ * @return string.
+ */
+function astoundify_simple_social_login_get_time_format() {
+	return apply_filters( 'astoundify_simple_social_login_time_format', get_option( 'time_format' ) );
+}
+
+/**
+ * Get Last Connected Time Info.
+ *
+ * @since 1.0.0
+ *
+ * @param int|null $user_id User ID.
+ * @param string $provider Social login provider.
+ * @return string
+ */
+function astoundify_simple_social_login_get_last_connected_time_text( $user_id = null, $provider ) {
+	$user = null !== $user_id ? get_userdata( intval( $user_id ) ) : wp_get_current_user();
+
+	// Bail if user not set.
+	if ( ! $user ) {
+		return '';
+	}
+
+	$time = '';
+	$timestamp = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$provider}_timestamp", true );
+	if ( $timestamp ) {
+		$time = sprintf( esc_html__( 'Last connected: %1$s @ %2$s', 'astoundify-simple-social-login' ), date_i18n( astoundify_simple_social_login_get_date_format(), $timestamp ), date_i18n( astoundify_simple_social_login_get_time_format(), $timestamp ) );
+	}
+	return apply_filters( 'astoundify_simple_social_login_last_connected_time_text', $time, $user, $provider );
+}
+
+/**
  * Add Error
  *
  * @since 1.0.0

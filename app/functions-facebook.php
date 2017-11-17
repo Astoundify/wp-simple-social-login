@@ -167,7 +167,7 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 			'astoundify-simple-social-link-button',
 			'astoundify-simple-social-link-button-facebook',
 		);
-		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
+		$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 
 		$html = "<a class='{$classes}' href='{$url}'>{$text}</a>";
 	} else { // Already connected, show unlink button.
@@ -177,17 +177,12 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 			'astoundify-simple-social-login-unlink-text',
 			'astoundify-simple-social-login-unlink-text-facebook',
 		);
-		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
-		$button_classes = array(
-			'button',
-			'astoundify-simple-social-login-unlink-button',
-			'astoundify-simple-social-login-unlink-button-facebook',
-		);
+		$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 		$url = astoundify_simple_social_login_facebook_get_url( 'unlink' );
-		$button_classes = implode( ' ', array_map( 'sanitize_html_class', $button_classes ) );
-		$unlink_button_text = apply_filters( 'astoundify_simple_social_login_unlink_text', esc_html__( 'Unlink' ) );
+		$unlink_link_text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
+		$last_connected_time = esc_attr( astoundify_simple_social_login_get_last_connected_time_text( get_current_user_id(), 'facebook' ) );
 
-		$html = "<p class='{$classes}'>" . $text . " <a class='{$button_classes}' href='{$url}'>" . $unlink_button_text . "</a></p>";
+		$html = "<p class='{$classes}'>" . $text . " <a href='{$url}' title='{$last_connected_time}'>" . $unlink_link_text . "</a>.</p>";
 	}
 
 	return apply_filters( 'astoundify_simple_social_login_facebook_link_unlink_button', $html, $is_connected );
@@ -395,7 +390,8 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_id', esc_html( $data['facebook_id'] ) );
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_access_token', esc_html( $data['facebook_access_token'] ) );
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_connected', 1 );
-	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_time', time() );
+	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_timestamp', current_time( 'timestamp' ) );
+	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_timestamp_gmt', time() );
 
 	// Log them in.
 	astoundify_simple_social_login_log_user_in( $user_id );
@@ -477,7 +473,8 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_id', esc_html( $data['facebook_id'] ) );
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_access_token', esc_html( $data['facebook_access_token'] ) );
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_connected', 1 );
-	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_time', time() );
+	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_timestamp', current_time( 'timestamp' ) );
+	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_timestamp_gmt', time() );
 
 	// Redirect them back.
 	wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
