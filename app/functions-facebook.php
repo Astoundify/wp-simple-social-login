@@ -483,14 +483,14 @@ function astoundify_simple_social_login_facebook_process_action_link_request( $r
 function astoundify_simple_social_login_facebook_process_action_link( $redirect_to, $referer ) {
 	if ( ! is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'facebook_link_fail', 'Cannot connect to Facebook. User is not logged-in.' );
-		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
 	// User already connected.
 	if ( astoundify_simple_social_login_facebook_is_user_connected() ) {
 		astoundify_simple_social_login_add_error( 'facebook_link_fail', 'User account already connected to Facebook.' );
-		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -499,7 +499,7 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
 
 	// Bail, No data.
 	if ( false === $data ) {
-		wp_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -507,7 +507,7 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
 	$connected_user_id = astoundify_simple_social_login_get_connected_user( $data['facebook_id'] );
 	if ( $connected_user_id ) {
 		astoundify_simple_social_login_add_error( 'facebook_link_fail', 'Another user already connected to this Facebook account.' );
-		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -520,7 +520,7 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
 	update_user_meta( $user_id, '_astoundify_simple_social_login_facebook_timestamp_gmt', time() );
 
 	// Redirect them back.
-	wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+	wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 	exit;
 }
 
@@ -534,7 +534,7 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
 function astoundify_simple_social_login_facebook_process_action_unlink( $redirect_to, $referer ) {
 	if ( ! is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'facebook_unlink_fail', 'Unlink Facebook account fail. User is not logged-in.' );
-		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -543,6 +543,6 @@ function astoundify_simple_social_login_facebook_process_action_unlink( $redirec
 	delete_user_meta( $user_id, '_astoundify_simple_social_login_facebook_access_token' );
 	delete_user_meta( $user_id, '_astoundify_simple_social_login_facebook_connected' );
 
-	wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+	wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 	exit;
 }

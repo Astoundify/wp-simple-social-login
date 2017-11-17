@@ -19,9 +19,6 @@ require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-template.php'
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook.php' );
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook-api.php' );
 
-// Display.
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-wordpress.php' );
-
 
 /**
  * Initialize plugin.
@@ -43,8 +40,12 @@ add_action( 'plugins_loaded', function() {
 	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/admin/functions-settings-facebook.php' );
 	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/admin/functions-settings-twitter.php' );
 
-	// WooCommerce Settings.
+	// WordPress Integrations.
+	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-wordpress.php' );
+
+	// WooCommerce Integrations.
 	if ( class_exists( 'WooCommerce' ) ) {
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-woocommerce.php' );
 		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/admin/functions-settings-woocommerce.php' );
 	}
 

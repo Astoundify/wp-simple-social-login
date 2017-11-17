@@ -1,6 +1,6 @@
 <?php
 /**
- * Facebook WordPress.
+ * WordPress Functions.
  *
  * @since 1.0.0
  *
@@ -30,7 +30,7 @@ function astoundify_simple_social_login_wordpress_login_form() {
 	?>
 
 	<div class="astoundify-simple-social-login-wordpress-wrap">
-		<?php echo astoundify_simple_social_login_get_login_register_buttons() ?>
+		<?php echo astoundify_simple_social_login_get_login_register_buttons(); ?>
 		<p class="login-or"><span><?php _e( 'Or', 'astoundify-simple-social-login' ); ?></span></p>
 		<p class="login-with-username"><a href="#"><?php _e( 'Log in with username and password', 'astoundify-simple-social-login' ); ?></a></p>
 	</div>
