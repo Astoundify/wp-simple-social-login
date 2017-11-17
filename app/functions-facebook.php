@@ -85,14 +85,25 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button_text() {
 }
 
 /**
- * Facebook Unlink Text.
+ * Facebook Connected Info Text.
  *
  * @since 1.0.0
  * @return string
  */
-function astoundify_simple_social_login_facebook_get_unlink_text() {
+function astoundify_simple_social_login_facebook_get_connected_info_text() {
 	$option = get_option( 'astoundify_simple_social_login_facebook', array() );
-	return isset( $option['unlink_text'] ) && $option['unlink_text'] ? esc_attr( $option['unlink_text'] ) : esc_html__( 'Your account is connected to Facebook.', 'astoundify-simple-social-login' );
+
+	// translators: Do not translate {{unlink}} text. It'a a placeholder for unconnect link.
+	$connected_info = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : esc_html__( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' );
+
+	$unlink_link_text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
+	$unlink_url = astoundify_simple_social_login_facebook_get_url( 'unlink' );
+	$last_connected_time = esc_attr( astoundify_simple_social_login_get_last_connected_time_text( get_current_user_id(), 'facebook' ) );
+	$unlink = "<a href='{$unlink_url}' title='{$last_connected_time}'>{$unlink_link_text}</a>";
+
+	$connected_info = str_replace( '{{unlink}}', $unlink, $connected_info );
+
+	return $connected_info;
 }
 
 /**
@@ -161,6 +172,7 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 	// User not connected to Facebook, show connect button.
 	if ( ! astoundify_simple_social_login_facebook_is_user_connected() ) {
 		$is_connected = false;
+
 		$text = astoundify_simple_social_login_facebook_get_link_unlink_button_text();
 		$url = astoundify_simple_social_login_facebook_get_url( 'link' );
 		$classes = array(
@@ -171,9 +183,10 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 		$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 
 		$html = "<a class='{$classes}' href='{$url}'>{$text}</a>";
-	} else { // Already connected, show unlink button.
+	} else { // Already connected, show connected info + unlink.
 		$is_connected = true;
-		$text = astoundify_simple_social_login_facebook_get_unlink_text();
+
+		$text = astoundify_simple_social_login_facebook_get_connected_info_text();
 		$classes = array(
 			'astoundify-simple-social-login-unlink-text',
 			'astoundify-simple-social-login-unlink-text-facebook',
@@ -181,9 +194,8 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 		$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 		$url = astoundify_simple_social_login_facebook_get_url( 'unlink' );
 		$unlink_link_text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
-		$last_connected_time = esc_attr( astoundify_simple_social_login_get_last_connected_time_text( get_current_user_id(), 'facebook' ) );
 
-		$html = "<p class='{$classes}'>" . $text . " <a href='{$url}' title='{$last_connected_time}'>" . $unlink_link_text . "</a>.</p>";
+		$html = "<p class='{$classes}'>{$text}</p>";
 	}
 
 	return apply_filters( 'astoundify_simple_social_login_facebook_link_unlink_button_html', $html, $is_connected );
