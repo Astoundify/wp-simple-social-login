@@ -387,7 +387,7 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
 	// No user, and registration disabled.
 	if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
 		astoundify_simple_social_login_add_error( 'connected_user_not_found', 'Cannot find user with your Facebook account.' );
-		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
+		wp_redirect( esc_url_raw( add_query_arg( '_error_code', 'connected_user_not_found', urldecode( $referer ) ) ) );
 		exit;
 	}
 

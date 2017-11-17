@@ -117,40 +117,17 @@ function astoundify_simple_social_login_wordpress_profile() {
 }
 add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profile', 20 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Connected User Not Found.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_wordpress_add_errors( $errors, $redirect_to ) {
+	if ( isset( $_GET['_error_code'] ) ) {
+		if ( 'connected_user_not_found' === $_GET['_error_code'] ) {
+			$errors->add( 'connected_user_not_found', esc_html__( 'Cannot find user with your social account.', 'astoundify-simple-social-login' ), 'error' );
+		}
+	}
+	return $errors;
+}
+add_filter( 'wp_login_errors', 'astoundify_simple_social_login_wordpress_add_errors', 10, 2 );
