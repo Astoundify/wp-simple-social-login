@@ -90,6 +90,29 @@ function astoundify_simple_social_login_get_login_register_buttons() {
 }
 
 /**
+ * Link/Unlink Buttons.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_get_link_unlink_buttons() {
+	$providers = astoundify_simple_social_login_get_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return '';
+	}
+	ob_start();
+	?>
+
+	<ul class="astoundify-simple-social-login-manage-buttons" style="list-style:none;">
+		<?php foreach ( $providers as $provider ) : ?>
+			<li><?php do_action( "astoundify_simple_social_login_{$provider}_link_unlink_button" ); ?>
+		<?php endforeach; ?>
+	</ul>
+
+	<?php
+	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
+}
+
+/**
  * Add Query Vars
  *
  * @since 1.0.0
@@ -147,6 +170,9 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
  */
 function astoundify_simple_social_login_get_redirect_url( $action = 'login' ) {
 	$url = is_singular() ? get_permalink( get_queried_object() ) : home_url();
+	if ( is_admin() ) {
+		$url = admin_url( 'profile.php' );
+	}
 	return esc_url_raw( apply_filters( 'astoundify_simple_social_login_redirect_url', $url, $action ) );
 }
 

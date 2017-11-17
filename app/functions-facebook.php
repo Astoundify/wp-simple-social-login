@@ -217,7 +217,16 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 
 	return apply_filters( 'astoundify_simple_social_login_facebook_link_unlink_button_html', $html, $is_connected );
 }
-add_action( 'astoundify_simple_social_login_facebook_link_unlink_button', 'astoundify_simple_social_login_facebook_get_link_unlink_button' );
+
+/**
+ * Print Link/Unlink Button.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_facebook_link_unlink_button() {
+	echo astoundify_simple_social_login_facebook_get_link_unlink_button();
+}
+add_action( 'astoundify_simple_social_login_facebook_link_unlink_button', 'astoundify_simple_social_login_facebook_link_unlink_button' );
 
 /**
  * Is User Connected to Facebook.
