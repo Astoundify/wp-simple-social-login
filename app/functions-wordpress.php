@@ -27,9 +27,62 @@ function astoundify_simple_social_login_wordpress_login_form() {
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return '';
 	}
-	echo astoundify_simple_social_login_get_login_register_buttons();
+	?>
+
+	<div class="astoundify-simple-social-login-wordpress-wrap">
+		<?php echo astoundify_simple_social_login_get_login_register_buttons() ?>
+		<p class="login-or"><span><?php _e( 'Or', 'astoundify-simple-social-login' ); ?></span></p>
+		<p class="login-with-username"><a href="#"><?php _e( 'Log in with username and password', 'astoundify-simple-social-login' ); ?></a></p>
+	</div>
+
+	<?php
+
+	// Add "back to social login" link in login footer.
+	add_action( 'login_footer', function() {
+		?>
+		<p id="astoundify-simple-social-login-wordpress-back">
+			<a style="display:none;" href="#"><?php _e( 'Login with social account?', 'astoundify-simple-social-login' );?></a>
+		</p>
+		<?php
+	} );
+	
 }
 add_action( 'login_form', 'astoundify_simple_social_login_wordpress_login_form' );
+
+/**
+ * Scritps in WordPress Login Page.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_wordpress_scripts() {
+	if ( ! astoundify_simple_social_login_is_display_location_active( 'wp_login' ) && astoundify_simple_social_login_is_wp_login_page() ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return '';
+	}
+
+	// Script Vars.
+	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
+
+	// CSS.
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/css/wp-login.min.css';
+	if ( $debug ) {
+		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/wp-login.css';
+	}
+	wp_enqueue_style( 'astoundify-simple-social-login-wordpress', $url, array(), $version );
+
+	// JS.
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/js/wp-login.min.js';
+	if ( $debug ) {
+		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/wp-login.js';
+	}
+	wp_enqueue_script( 'astoundify-simple-social-login-wordpress', $url, array( 'jquery' ), $version );
+}
+add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_scripts' );
+
 
 /**
  * Add Link/Unlink in wp-admin Your Profile Page.
@@ -63,10 +116,6 @@ function astoundify_simple_social_login_wordpress_profile() {
 	<?php
 }
 add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profile', 20 );
-
-
-
-
 
 
 
