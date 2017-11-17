@@ -124,6 +124,7 @@ function astoundify_simple_social_login_facebook_get_url( $action = 'login_regis
 		'action'                         => $action,
 		'redirect_to'                    => astoundify_simple_social_login_get_redirect_url( $action ),
 		'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$action}" ),
+		'_referer'                       => urldecode( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) ),
 	), home_url() );
 
 	return esc_url( $url );
@@ -287,36 +288,36 @@ function astoundify_simple_social_login_get_connected_user( $facebook_id ) {
  *
  * @param string $action Request action.
  */
-function astoundify_simple_social_login_facebook_process_action( $action, $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action( $action, $redirect_to, $referer ) {
 	// Bail if not active.
 	if ( ! astoundify_simple_social_login_facebook_is_active() ) {
-		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
 	// Separate each action.
 	switch ( $action ) {
 		case 'login_register':
-			astoundify_simple_social_login_facebook_process_action_login_register_request( $redirect_to );
+			astoundify_simple_social_login_facebook_process_action_login_register_request( $redirect_to, $referer );
 			break;
 		case '_login_register':
-			astoundify_simple_social_login_facebook_process_action_login_register( $redirect_to );
+			astoundify_simple_social_login_facebook_process_action_login_register( $redirect_to, $referer );
 			break;
 		case 'link':
-			astoundify_simple_social_login_facebook_process_action_link_request( $redirect_to );
+			astoundify_simple_social_login_facebook_process_action_link_request( $redirect_to, $referer );
 			break;
 		case '_link':
-			astoundify_simple_social_login_facebook_process_action_link( $redirect_to );
+			astoundify_simple_social_login_facebook_process_action_link( $redirect_to, $referer );
 			break;
 		case 'unlink':
-			astoundify_simple_social_login_facebook_process_action_unlink( $redirect_to );
+			astoundify_simple_social_login_facebook_process_action_unlink( $redirect_to, $referer );
 			break;
 		default:
-			wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+			wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 			exit;
 	}
 }
-add_action( 'astoundify_simple_social_login_process_facebook', 'astoundify_simple_social_login_facebook_process_action', 10, 2 );
+add_action( 'astoundify_simple_social_login_process_facebook', 'astoundify_simple_social_login_facebook_process_action', 10, 3 );
 
 /**
  * Initial Process Log and Register User Action.
@@ -326,7 +327,7 @@ add_action( 'astoundify_simple_social_login_process_facebook', 'astoundify_simpl
  *
  * @param string $redirect_to Redirect URL.
  */
-function astoundify_simple_social_login_facebook_process_action_login_register_request( $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action_login_register_request( $redirect_to, $referer ) {
 	if ( is_user_logged_in() ) {
 		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
 		exit;
@@ -340,6 +341,7 @@ function astoundify_simple_social_login_facebook_process_action_login_register_r
 		'action'                         => '_login_register',
 		'redirect_to'                    => $redirect_to,
 		'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login__login_register' ),
+		'_referer'                       => $referer,
 	), home_url() );
 	$scope = array( 'email' );
 
@@ -356,10 +358,10 @@ function astoundify_simple_social_login_facebook_process_action_login_register_r
  *
  * @param string $redirect_to Redirect URL.
  */
-function astoundify_simple_social_login_facebook_process_action_login_register( $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action_login_register( $redirect_to, $referer ) {
 	if ( is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'login_register_fail', 'User already logged-in.' );
-		wp_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -368,7 +370,7 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
 
 	// Bail, No data.
 	if ( false === $data ) {
-		wp_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -384,8 +386,8 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
 
 	// No user, and registration disabled.
 	if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
-		astoundify_simple_social_login_add_error( 'registration_disabled', 'Cannot register user, registration disabled.' );
-		wp_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		astoundify_simple_social_login_add_error( 'connected_user_not_found', 'Cannot find user with your Facebook account.' );
+		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -422,7 +424,7 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
 	// Fail to register user.
 	if ( ! $user_id ) {
 		astoundify_simple_social_login_add_error( 'registration_fail', 'Fail to register user.' );
-		wp_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
+		wp_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
 
@@ -446,7 +448,7 @@ function astoundify_simple_social_login_facebook_process_action_login_register( 
  *
  * @param string $redirect_to Redirect URL.
  */
-function astoundify_simple_social_login_facebook_process_action_link_request( $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action_link_request( $redirect_to, $referer ) {
 	if ( ! is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'facebook_link_fail', 'User is not logged-in.' );
 		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
@@ -461,6 +463,7 @@ function astoundify_simple_social_login_facebook_process_action_link_request( $r
 		'action'                         => '_link',
 		'redirect_to'                    => $redirect_to,
 		'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login__link' ),
+		'_referer'                       => $referer,
 	), home_url() );
 	$scope = array( 'email' );
 
@@ -477,7 +480,7 @@ function astoundify_simple_social_login_facebook_process_action_link_request( $r
  *
  * @param string $redirect_to Redirect URL.
  */
-function astoundify_simple_social_login_facebook_process_action_link( $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action_link( $redirect_to, $referer ) {
 	if ( ! is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'facebook_link_fail', 'Cannot connect to Facebook. User is not logged-in.' );
 		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
@@ -528,7 +531,7 @@ function astoundify_simple_social_login_facebook_process_action_link( $redirect_
  *
  * @param string $redirect_to Redirect URL.
  */
-function astoundify_simple_social_login_facebook_process_action_unlink( $redirect_to ) {
+function astoundify_simple_social_login_facebook_process_action_unlink( $redirect_to, $referer ) {
 	if ( ! is_user_logged_in() ) {
 		astoundify_simple_social_login_add_error( 'facebook_unlink_fail', 'Unlink Facebook account fail. User is not logged-in.' );
 		wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
@@ -543,15 +546,3 @@ function astoundify_simple_social_login_facebook_process_action_unlink( $redirec
 	wp_safe_redirect( esc_url_raw( urldecode( $redirect_to ) ) );
 	exit;
 }
-
-
-/* ========================================= */
-add_action( 'init', function() {
-	add_shortcode( 'test', function() {
-		if ( ! is_user_logged_in() ) {
-			return astoundify_simple_social_login_facebook_get_login_register_button();
-		} else {
-			return astoundify_simple_social_login_facebook_get_link_unlink_button();
-		}
-	} );
-} );
