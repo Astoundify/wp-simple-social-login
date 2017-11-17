@@ -79,7 +79,7 @@ function astoundify_simple_social_login_facebook_get_login_register_button_text(
  * @since 1.0.0
  * @return string
  */
-function astoundify_simple_social_login_facebook_get_link_unlink_button_text() {
+function astoundify_simple_social_login_facebook_get_link_button_text() {
 	$option = get_option( 'astoundify_simple_social_login_facebook', array() );
 	return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : esc_html__( 'Link your account to Facebook', 'astoundify-simple-social-login' );
 }
@@ -137,6 +137,10 @@ function astoundify_simple_social_login_facebook_get_url( $action = 'login_regis
  * @return string
  */
 function astoundify_simple_social_login_facebook_get_login_register_button() {
+	if ( ! astoundify_simple_social_login_facebook_is_active() ) {
+		return '';
+	}
+
 	// Not needed if user already logged in.
 	if ( is_user_logged_in() ) {
 		return '';
@@ -151,11 +155,20 @@ function astoundify_simple_social_login_facebook_get_login_register_button() {
 	);
 	$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
 
-	$html = "<a class='{$classes}' href='{$url}'>{$text}</a>";
+	$html = "<p><a class='{$classes}' href='{$url}'>{$text}</a></p>";
 
 	return apply_filters( 'astoundify_simple_social_login_facebook_login_register_button_html', $html, $text, $url, $classes );
 }
-add_action( 'astoundify_simple_social_login_facebook_login_register_button', 'astoundify_simple_social_login_facebook_get_login_register_button' );
+
+/**
+ * Print Login Register Button.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_facebook_login_register_button() {
+	echo astoundify_simple_social_login_facebook_get_login_register_button();
+}
+add_action( 'astoundify_simple_social_login_facebook_login_register_button', 'astoundify_simple_social_login_facebook_login_register_button' );
 
 /**
  * Facebook Link/Unlink Button.
@@ -165,6 +178,10 @@ add_action( 'astoundify_simple_social_login_facebook_login_register_button', 'as
  * @return string
  */
 function astoundify_simple_social_login_facebook_get_link_unlink_button() {
+	if ( ! astoundify_simple_social_login_facebook_is_active() ) {
+		return '';
+	}
+
 	if ( ! is_user_logged_in() ) {
 		return '';
 	}
@@ -173,7 +190,7 @@ function astoundify_simple_social_login_facebook_get_link_unlink_button() {
 	if ( ! astoundify_simple_social_login_facebook_is_user_connected() ) {
 		$is_connected = false;
 
-		$text = astoundify_simple_social_login_facebook_get_link_unlink_button_text();
+		$text = astoundify_simple_social_login_facebook_get_link_button_text();
 		$url = astoundify_simple_social_login_facebook_get_url( 'link' );
 		$classes = array(
 			'button',

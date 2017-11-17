@@ -15,9 +15,12 @@ namespace Astoundify\Simple_Social_Login;
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions.php' );
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-template.php' );
 
-// Providers
+// Providers.
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook.php' );
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook-api.php' );
+
+// Display.
+require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-wordpress.php' );
 
 
 /**

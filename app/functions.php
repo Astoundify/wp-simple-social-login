@@ -15,6 +15,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get active display location.
+ *
+ * @since 1.0.0
+ *
+ * @return array
+ */
+function astoundify_simple_social_login_get_display_locations() {
+	$options = get_option( 'astoundify_simple_social_login', array() );
+	$display = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
+	return $display;
+}
+
+/**
+ * Is location display active.
+ *
+ * @since 1.0.0
+ *
+ * @param string $display_location Display location.
+ * @return array
+ */
+function astoundify_simple_social_login_is_display_location_active( $display_location ) {
+	$locations = astoundify_simple_social_login_get_display_locations();
+	return in_array( $display_location, $locations, true );
+}
+
+/**
+ * Get active providers.
+ *
+ * @since 1.0.0
+ *
+ * @return array
+ */
+function astoundify_simple_social_login_get_providers() {
+	$option = get_option( 'astoundify_simple_social_login', array() );
+	$providers = isset( $option['providers'] ) && is_array( $option['providers'] ) ? $option['providers'] : array();
+	return $providers;
+}
+
+/**
  * Is Provider Active.
  *
  * @since 1.0.0
@@ -23,11 +62,31 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool
  */
 function astoundify_simple_social_login_is_provider_active( $provider ) {
-	// Do not use sanitize functions, because this functions need to be loaded as early as possible.
-	$option = (array)get_option( 'astoundify_simple_social_login', array() );
-	$providers = isset( $option['providers'] ) && is_array( $option['providers'] ) ? $option['providers'] : array();
-
+	$providers = astoundify_simple_social_login_get_providers();
 	return apply_filters( "astoundify_simple_social_login_is_{$provider}_active", in_array( $provider, $providers ) );
+}
+
+/**
+ * Login/Register Buttons
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_get_login_register_buttons() {
+	$providers = astoundify_simple_social_login_get_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return '';
+	}
+	ob_start();
+	?>
+
+	<ul class="astoundify-simple-social-login-buttons" style="list-style:none;">
+		<?php foreach ( $providers as $provider ) : ?>
+			<li><?php do_action( "astoundify_simple_social_login_{$provider}_login_register_button" ); ?>
+		<?php endforeach; ?>
+	</ul>
+
+	<?php
+	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
 }
 
 /**
