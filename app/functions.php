@@ -184,7 +184,9 @@ function astoundify_simple_social_login_get_redirect_url( $action = 'login' ) {
  * @return bool
  */
 function astoundify_simple_social_login_is_registration_enabled() {
-	return apply_filters( 'astoundify_simple_social_login_registration_enabled', true );
+	$options = get_option( 'astoundify_simple_social_login', array() );
+	$enable = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
+	return apply_filters( 'astoundify_simple_social_login_registration_enabled', $enable );
 }
 
 /**
@@ -303,10 +305,3 @@ function astoundify_simple_social_login_is_wp_register_page() {
 	}
 	return false;
 }
-
-
-
-
-
-
-
