@@ -97,7 +97,7 @@ abstract class Provider {
 			'astoundify_simple_social_login' => $this->id,
 			'action'                         => '',
 			'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$this->id}" ),
-			'_referer'                       => urlencode( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) ),
+			'_referer'                       => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?'  ) ), // Remove all query vars from URL.
 		);
 		$args = wp_parse_args( $args, $defaults );
 
