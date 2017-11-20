@@ -109,7 +109,7 @@ class Provider_Facebook extends Provider {
 	 */
 	public function get_link_button_text() {
 		$text = parent::get_link_button_text();
-		return $text ? esc_attr( $text ) : esc_html__( 'Log in with Facebook', 'astoundify-simple-social-login' );
+		return $text ? esc_attr( $text ) : esc_html__( 'Link your account to Facebook', 'astoundify-simple-social-login' );
 	}
 
 
@@ -120,19 +120,12 @@ class Provider_Facebook extends Provider {
 	 */
 	public function get_connected_info_text() {
 		$text = parent::get_connected_info_text();
-		// translators: Do not translate {{unlink}} text. It'a a placeholder to unlink account.
+		// translators: {{unlink}} is a placeholder for unlink account link. Do not translate.
 		$text = $text ? $text : esc_html__( 'Your account is connected to Facebook. {{unlink}}.' );
 
-		$connected_info = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : esc_html__( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' );
+		$text = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
 
-		$unlink_link_text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
-		$unlink_url = astoundify_simple_social_login_facebook_get_url( 'unlink' );
-		$last_connected_time = esc_attr( astoundify_simple_social_login_get_last_connected_time_text( get_current_user_id(), 'facebook' ) );
-		$unlink = "<a href='{$unlink_url}' title='{$last_connected_time}'>{$unlink_link_text}</a>";
-
-		$connected_info = str_replace( '{{unlink}}', $unlink, $connected_info );
-
-		return $connected_info;
+		return $text;
 	}
 
 
