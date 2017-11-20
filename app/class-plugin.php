@@ -23,4 +23,5 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Plugin {
 
+
 }

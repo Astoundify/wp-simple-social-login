@@ -15,6 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Get Facebook Class.
+ *
+ * @since 1.0.0
+ *
+ * @return Astoundify\Simple_Social_Login\Provider_Facebook
+ */
+function astoundify_simple_social_login_provider_facebook() {
+	return '';
+}
+
+/**
  * Is Facebook Social Login Active.
  *
  * @since 1.0.0
