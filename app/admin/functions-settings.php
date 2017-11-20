@@ -134,7 +134,6 @@ function astoundify_simple_social_login_panel_settings() {
 				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
 				$choices = array(
 					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
-					'woocommerce' => esc_html( 'WooCommerce', 'astoundify-simple-social-login' ),
 				);
 				$choices = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
 				?>
