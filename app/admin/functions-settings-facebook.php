@@ -53,32 +53,18 @@ function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
 }
 
 /**
- * Add Settings
+ * Add Settings Tab
  *
  * @since 1.0.0
  *
  * @param array $settings Settings Section.
  * @return array
  */
-function astoundify_simple_social_login_facebook_add_settings( $settings ) {
+function astoundify_simple_social_login_facebook_add_settings_tab( $settings ) {
 	$settings['facebook'] = esc_html( 'Facebook', 'astoundify-simple-social-login' );
 	return $settings;
 }
-add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_facebook_add_settings' );
-
-/**
- * Add Facebook as Provider.
- *
- * @since 1.0.0
- *
- * @param array $providers Provider Choices.
- * @return array
- */
-function astoundify_simple_social_login_facebook_add_provider( $providers ) {
-	$providers['facebook'] = esc_html( 'Facebook', 'astoundify-simple-social-login' );
-	return $providers;
-}
-add_filter( 'astoundify_simple_social_login_provider_choices', 'astoundify_simple_social_login_facebook_add_provider' );
+add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_facebook_add_settings_tab' );
 
 /**
  * Facebook Settings Panel

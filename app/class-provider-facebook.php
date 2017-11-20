@@ -42,6 +42,17 @@ class Provider_Facebook extends Provider {
 	public $option_name = 'astoundify_simple_social_login_facebook';
 
 	/**
+	 * Label
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_label() {
+		return esc_html__( 'Facebook', 'astoundify-simple-social-login' );
+	}
+
+	/**
 	 * App ID.
 	 *
 	 * @since 1.0.0
@@ -140,6 +151,9 @@ class Provider_Facebook extends Provider {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
+
+		// Load Facebook SDK.
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/facebook/graph-sdk/src/Facebook/autoload.php' );
 
 		$config = array(
 			'app_id'                => $this->get_app_id(),

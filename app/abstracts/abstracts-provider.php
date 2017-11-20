@@ -53,6 +53,18 @@ abstract class Provider {
 	public $option_name = '';
 
 	/**
+	 * Label
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_label() {
+		// Use ID as fallback.
+		return $this->id;
+	}
+
+	/**
 	 * Is Active?
 	 *
 	 * @since 1.0.0
@@ -231,7 +243,7 @@ abstract class Provider {
 		} else { // Already connected, show connected info.
 			$is_connected = true;
 
-			$text = get_connected_info_text();
+			$text = $this->get_connected_info_text();
 			$url = $this->get_action_url( array(
 				'action' => 'unlink',
 			) );
@@ -478,6 +490,7 @@ abstract class Provider {
 		if ( $error_code ) {
 			$url = add_query_arg( '_error', $error_code, $url );
 		}
+		$url = add_query_arg( '_provider', $this->id, $url );
 		wp_safe_redirect( esc_url_raw( $url ) );
 		exit;
 	}

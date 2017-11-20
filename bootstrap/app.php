@@ -26,11 +26,6 @@ require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-facebook.php'
  */
 add_action( 'plugins_loaded', function() {
 
-	// Load Facebook SDK if facebook is selected.
-	if ( astoundify_simple_social_login_is_provider_selected( 'facebook' ) ) {
-		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/facebook/graph-sdk/src/Facebook/autoload.php' );
-	}
-
 	// Load text domain.
 	load_plugin_textdomain( dirname( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH ), false, dirname( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH ) . '/resources/languages/' );
 

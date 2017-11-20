@@ -15,6 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Register Provider
+ *
+ * @since 1.0.0
+ *
+ * @param array $providers Service providers.
+ * @return array
+ */
+function astoundify_simple_social_login_facebook_add_provider( $providers ) {
+	$providers['facebook'] = '\Astoundify\Simple_Social_Login\Provider_Facebook';
+	return $providers;
+}
+add_filter( 'astoundify_simple_social_login_providers', 'astoundify_simple_social_login_facebook_add_provider' );
+
+/**
  * Process Button Action Request.
  *
  * @since 1.0.0
@@ -135,7 +149,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			// Get facebook data.
-			$data = $facebook->api_get_data();
+			$data = $facebook->api_get_data( $referer );
 			if ( ! $data || ! isset( $data['id'] ) ) {
 				$facebook->redirect( urldecode( $referer ), 'api_error' );
 			}

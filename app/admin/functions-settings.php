@@ -149,7 +149,14 @@ function astoundify_simple_social_login_panel_settings() {
 			<td>
 				<?php
 				$provider_options = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-				$choices = apply_filters( 'astoundify_simple_social_login_provider_choices', array() );
+				$choices = array();
+				$providers = astoundify_simple_social_login_get_providers();
+				foreach( $providers as $id => $class ) {
+					$provider = astoundify_simple_social_login_get_provider( $id );
+					if ( $provider ) {
+						$choices[ $id ] = $provider->get_label();
+					}
+				}
 				?>
 
 				<?php if ( $choices ) : ?>
