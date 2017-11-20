@@ -126,7 +126,7 @@ add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profi
  * @param string   $redirect_to Redirect URL.
  * @return array
  */
-function astoundify_simple_social_login_wordpress_add_errors( $errors, $redirect_to ) {
+function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $redirect_to ) {
 	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
 		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
 		if ( $provider ) {
@@ -135,4 +135,25 @@ function astoundify_simple_social_login_wordpress_add_errors( $errors, $redirect
 	}
 	return $errors;
 }
-add_filter( 'wp_login_errors', 'astoundify_simple_social_login_wordpress_add_errors', 10, 2 );
+add_filter( 'wp_login_errors', 'astoundify_simple_social_login_wordpress_login_add_errors', 10, 2 );
+
+/**
+ * Print WP-Admin Error Notices
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
+	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
+		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
+		if ( $provider ) {
+		?>
+
+		<div class="notice notice-error">
+			<p><?php echo $provider->get_error( $_GET['_error'] ); ?></p>
+		</div>
+
+		<?php
+		}
+	}
+}
+add_action( 'admin_notices', 'astoundify_simple_social_login_wordpress_admin_add_error_notices' );
