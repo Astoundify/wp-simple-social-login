@@ -457,6 +457,19 @@ abstract class Provider {
 	/* === API === */
 
 	/**
+	 * Get Error
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $code Error Code.
+	 * @return string
+	 */
+	public function get_error( $code ) {
+		$error_codes = $this->get_error_codes();
+		return isset( $error_codes[ $code ] ) ? $error_codes[ $code ] : printf( esc_html__( 'Unknown Error: %s', 'astoundify-simple-social-login' ), $code );
+	}
+
+	/**
 	 * Error Codes
 	 *
 	 * @since 1.0.0
@@ -487,6 +500,7 @@ abstract class Provider {
 	 */
 	public function redirect( $url, $error_code = false ) {
 		$url = remove_query_arg( '_error', $url );
+		$url = remove_query_arg( '_provider', $url );
 		if ( $error_code ) {
 			$url = add_query_arg( '_error', $error_code, $url );
 		}
