@@ -15,41 +15,98 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WooCommerce My Account Link/Unlink Buttons
+ * Print Login Button in Login Form.
  *
  * @since 1.0.0
  */
-function astoundify_simple_social_login_woocommerce_link_unlink_buttons() {
-	if ( ! astoundify_simple_social_login_is_display_location_active( 'woocommerce' ) ) {
+function astoundify_simple_social_login_woocommerce_login_register_buttons() {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'woocommerce' ) ) {
 		return;
 	}
-	$providers = astoundify_simple_social_login_get_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		return '';
+	$buttons = astoundify_simple_social_login_get_login_register_buttons();
+	if ( ! $buttons ) {
+		return;
 	}
-?>
-<div id="astoundify-simple-social-login-woocommerce-profile-wrap">
-	<h2><?php esc_html_e( 'Connected Social Accounts', 'astoundify-simple-social-login' ); ?></h2>
-	<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:' )?></p>
-	<?php echo astoundify_simple_social_login_get_link_unlink_buttons(); ?>
-</div><!-- #astoundify-simple-social-login-woocommerce-profile-wrap -->
-<?php
-}
-add_action( 'woocommerce_after_edit_account_form', 'astoundify_simple_social_login_woocommerce_link_unlink_buttons' );
-
-/**
- * Print Login Button
- *
- *
- */
-function astoundify_simple_social_login_woocommerce_login_register_buttons() {
 ?>
 <div id="astoundify-simple-social-login-woocommerce-wrap">
 	<p><?php esc_html_e( 'Use a social account for faster login or easy registration.', 'astoundify-simple-social-login' ); ?></p>
-	<?php echo astoundify_simple_social_login_get_login_register_buttons(); ?>
+	<?php echo $buttons; ?>
 </div><!-- #astoundify-simple-social-login-woocommerce-wrap -->
 <?php
 }
 add_action( 'woocommerce_login_form_end', 'astoundify_simple_social_login_woocommerce_login_register_buttons' );
 
 
+/**
+ * WooCommerce My Account Link/Unlink Buttons
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_woocommerce_link_unlink_buttons() {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'woocommerce' ) ) {
+		return;
+	}
+	$buttons = astoundify_simple_social_login_get_link_unlink_buttons();
+	if ( ! $buttons ) {
+		return;
+	}
+?>
+<div id="astoundify-simple-social-login-woocommerce-profile-wrap">
+	<h2><?php esc_html_e( 'Connected Social Accounts', 'astoundify-simple-social-login' ); ?></h2>
+	<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:', 'astoundify-simple-social-login' )?></p>
+	<?php echo $buttons; ?>
+</div><!-- #astoundify-simple-social-login-woocommerce-profile-wrap -->
+<?php
+}
+add_action( 'woocommerce_after_edit_account_form', 'astoundify_simple_social_login_woocommerce_link_unlink_buttons' );
+
+/**
+ * Scritps for WooCommerce Pages.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_woocommerce_scripts() {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'woocommerce' ) ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return;
+	}
+
+	// Script Vars.
+	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
+
+	// CSS.
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/css/woocommerce.min.css';
+	if ( $debug ) {
+		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/woocommerce.css';
+	}
+	wp_enqueue_style( 'astoundify-simple-social-login-woocommerce', $url, array(), $version );
+}
+add_action( 'wp_enqueue_scripts', 'astoundify_simple_social_login_woocommerce_scripts' );
+
+/**
+ * Add Error Notice for WooCommerce
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_woocommerce_add_error_notice() {
+	// Bail if not active.
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return;
+	}
+
+	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
+		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
+		if ( $provider ) {
+			wc_add_notice( $provider->get_error( $_GET['_error'] ), 'error' );
+		}
+	}
+}
+add_action( 'template_redirect', 'astoundify_simple_social_login_woocommerce_add_error_notice' );

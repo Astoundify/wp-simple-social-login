@@ -134,7 +134,6 @@ function astoundify_simple_social_login_panel_settings() {
 				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
 				$choices = array(
 					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
-					'woocommerce' => esc_html( 'WooCommerce', 'astoundify-simple-social-login' ),
 				);
 				$choices = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
 				?>
@@ -149,7 +148,14 @@ function astoundify_simple_social_login_panel_settings() {
 			<td>
 				<?php
 				$provider_options = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-				$choices = apply_filters( 'astoundify_simple_social_login_provider_choices', array() );
+				$choices = array();
+				$providers = astoundify_simple_social_login_get_providers();
+				foreach( $providers as $id => $class ) {
+					$provider = astoundify_simple_social_login_get_provider( $id );
+					if ( $provider ) {
+						$choices[ $id ] = $provider->get_label();
+					}
+				}
 				?>
 
 				<?php if ( $choices ) : ?>
