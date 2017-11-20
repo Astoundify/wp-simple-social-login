@@ -47,6 +47,8 @@ function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
 
 	$output['link_button_text'] = isset( $input['link_button_text'] ) ? esc_attr( $input['link_button_text'] ) : '';
 
+	$output['connected_info'] = isset( $input['connected_info'] ) ? esc_attr( $input['connected_info'] ) : '';
+
 	return apply_filters( 'astoundify_simple_social_login_facebook_sanitize_settings', $output );
 }
 
@@ -115,10 +117,18 @@ function astoundify_simple_social_login_panel_facebook() {
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><label for="facebook-login-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
+			<th scope="row"><label for="facebook-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<input placeholder="<?php esc_attr_e( 'Link your account to Facebook', 'astoundify-simple-social-login' ); ?>" id="facebook-login-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[link_button_text]" value="<?php echo esc_attr( $options['link_button_text'] ); ?>">
+				<input placeholder="<?php esc_attr_e( 'Link your account to Facebook', 'astoundify-simple-social-login' ); ?>" id="facebook-link-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[link_button_text]" value="<?php echo esc_attr( $options['link_button_text'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><label for="facebook-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
+			<td>
+				<?php // translators: Do not translate {{unlink}} text. It'a a placeholder for unconnect link. ?>
+				<input placeholder="<?php esc_attr_e( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' ); ?>" id="facebook-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
+				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if user already connected. Use <code>{{unlink}}</code> to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
 	</tbody>

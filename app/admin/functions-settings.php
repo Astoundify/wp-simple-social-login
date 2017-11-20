@@ -38,8 +38,9 @@ add_action( 'admin_init', 'astoundify_simple_social_login_register_settings' );
  */
 function astoundify_simple_social_login_sanitize_settings( $input ) {
 	$defaults = array(
-		'display' => array(),
-		'providers' => array(),
+		'display'             => array(),
+		'providers'           => array(),
+		'users_can_register'  => get_option( 'users_can_register', false ),
 	);
 	$output = wp_parse_args( (array)$input, $defaults );
 	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $output );
@@ -133,7 +134,7 @@ function astoundify_simple_social_login_panel_settings() {
 				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
 				$choices = array(
 					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
-					'wp_register' => esc_html( 'WordPress Register Form', 'astoundify-simple-social-login' ),
+					'woocommerce' => esc_html( 'WooCommerce', 'astoundify-simple-social-login' ),
 				);
 				$choices = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
 				?>
@@ -158,6 +159,17 @@ function astoundify_simple_social_login_panel_settings() {
 				<?php else : ?>
 					<p class="description"><?php esc_html_e( 'No provider available.', 'astoundify-simple-socia-login' ); ?></p>
 				<?php endif; ?>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php esc_html_e( 'Enable Registration', 'astoundify-simple-social-login' ); ?></th>
+			<td>
+				<?php
+				$registration_enabled = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
+				?>
+
+				<label><input <?php checked( true, $registration_enabled ); ?> type="checkbox" name="astoundify_simple_social_login[users_can_register][]" value="1"> <?php echo esc_html_e( 'Register user if no users associated with social profile.', 'astoundify-simple-social-login' ); ?></label><br/>
+
 			</td>
 		</tr>
 	</tbody>

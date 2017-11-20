@@ -1,0 +1,81 @@
+/**
+ * WordPress Login Page.
+ *
+ * @since 1.0.0
+ */
+
+/* Hide Login Form on Initial Load. */
+#loginform * {
+	display: none;
+}
+
+/* Show Social Login On Initial Load */
+#loginform .astoundify-simple-social-login-wordpress-wrap,
+#loginform .astoundify-simple-social-login-wordpress-wrap * {
+	display: block !important;
+}
+
+#loginform .astoundify-simple-social-login-wordpress-wrap {
+	text-align: center;
+}
+
+#loginform .astoundify-simple-social-login-wordpress-wrap:after {
+	content:".";display:block;height:0;clear:both;visibility:hidden;
+}
+
+/* "Or" Style. */
+.astoundify-simple-social-login-wordpress-wrap .login-or {
+	text-transform: uppercase;
+	color: #777;
+	font-size: 13px;
+	text-align: center;
+	border-top: 1px solid #ccc;
+	margin-top: 30px;
+}
+
+.astoundify-simple-social-login-wordpress-wrap .login-or span {
+	background: #fff none repeat scroll 0 0;
+	display: inline-block !important;
+	margin: -11px auto 0;
+	text-transform: uppercase;
+	width: 40px;
+}
+
+/* Login With Username Style */
+.astoundify-simple-social-login-wordpress-wrap .login-with-username {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 14px;
+}
+
+/* Back to Social Login Link */
+#astoundify-simple-social-login-wordpress-back {
+	margin: auto;
+	padding: 0;
+	width: 272px;
+}
+
+#astoundify-simple-social-login-wordpress-back a {
+	color: #555d66;
+	text-decoration: none;
+}
+
+#astoundify-simple-social-login-wordpress-back a:hover {
+	color: #00a0d2;
+}
+
+/* Regular Login Active */
+#loginform.regular-login * {
+	display: block;
+}
+
+#loginform.regular-login #rememberme,
+#loginform.regular-login label {
+	display: inline-block !important;
+}
+
+#loginform.regular-login .astoundify-simple-social-login-wordpress-wrap {
+	display: none !important;
+}
+
+
