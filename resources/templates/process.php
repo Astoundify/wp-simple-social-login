@@ -16,13 +16,13 @@ if( ! session_id() ) {
  * Check request, redirect back if not valid.
  * - Provider.
  * - Action.
- * - Redirect URL.
  * - Nonce.
  */
-if ( ! isset( $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['redirect_to'], $_GET['_nonce'], $_GET['_referer'] ) || ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$_GET['action']}" ) ) {
-	wp_safe_redirect( esc_url_raw( urldecode( $_GET['redirect_to'] ) ) );
+if ( ! isset( $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_nonce'], $_GET['_referer'] ) || ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$_GET['astoundify_simple_social_login']}" ) ) {
+	wp_die( 'batman111' );
+	wp_safe_redirect( esc_url_raw( home_url() ) );
 	exit;
 }
 
-do_action( 'astoundify_simple_social_login_process_' . $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['redirect_to'], $_GET['_referer'] );
+do_action( 'astoundify_simple_social_login_process_' . $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_referer'] );
 exit;

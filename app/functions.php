@@ -15,6 +15,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Providers.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_providers_data() {
+	$providers = array(
+		'facebook' => array(
+			'class' => '\Astoundify\Simple_Social_Login\Provider_Facebook',
+		),
+	);
+	return $providers;
+}
+
+/**
+ * Provider.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_provider_data( $id ) {
+	$providers = astoundify_simple_social_login_providers_data();
+	return $providers[ $id ];
+}
+
+/**
  * Get active display location.
  *
  * @since 1.0.0
@@ -28,16 +52,16 @@ function astoundify_simple_social_login_get_display_locations() {
 }
 
 /**
- * Is location display active.
+ * Is location selected.
  *
  * @since 1.0.0
  *
- * @param string $display_location Display location.
+ * @param string $location Display location.
  * @return array
  */
-function astoundify_simple_social_login_is_display_location_active( $display_location ) {
+function astoundify_simple_social_login_is_display_location_selected( $location ) {
 	$locations = astoundify_simple_social_login_get_display_locations();
-	return in_array( $display_location, $locations, true );
+	return in_array( $location, $locations, true );
 }
 
 /**
@@ -54,22 +78,24 @@ function astoundify_simple_social_login_get_providers() {
 }
 
 /**
- * Is Provider Active.
+ * Is Provider selected.
  *
  * @since 1.0.0
  *
  * @param string $provider The provider ID.
  * @return bool
  */
-function astoundify_simple_social_login_is_provider_active( $provider ) {
+function astoundify_simple_social_login_is_provider_selected( $provider ) {
 	$providers = astoundify_simple_social_login_get_providers();
-	return apply_filters( "astoundify_simple_social_login_is_{$provider}_active", in_array( $provider, $providers ) );
+	return in_array( $provider, $providers );
 }
 
 /**
  * Login/Register Buttons
  *
  * @since 1.0.0
+ *
+ * @return string
  */
 function astoundify_simple_social_login_get_login_register_buttons() {
 	$providers = astoundify_simple_social_login_get_providers();
@@ -77,15 +103,11 @@ function astoundify_simple_social_login_get_login_register_buttons() {
 		return '';
 	}
 	ob_start();
-	?>
 
-	<ul class="astoundify-simple-social-login-buttons" style="list-style:none;">
-		<?php foreach ( $providers as $provider ) : ?>
-			<li><?php do_action( "astoundify_simple_social_login_{$provider}_login_register_button" ); ?>
-		<?php endforeach; ?>
-	</ul>
+	astoundify_simple_social_login_get_template( 'buttons.php', array(
+		'providers' => $providers,
+	) );
 
-	<?php
 	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
 }
 

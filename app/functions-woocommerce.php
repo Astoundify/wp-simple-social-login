@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 function astoundify_simple_social_login_woocommerce_link_unlink_buttons() {
-	if ( ! astoundify_simple_social_login_is_display_location_active( 'woocommerce' ) ) {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'woocommerce' ) ) {
 		return;
 	}
 	$providers = astoundify_simple_social_login_get_providers();
