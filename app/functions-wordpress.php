@@ -127,6 +127,15 @@ add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profi
  * @return array
  */
 function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $redirect_to ) {
+	// Bail if not active.
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
+		return $errors;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return $errors;
+	}
+
 	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
 		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
 		if ( $provider ) {
@@ -143,6 +152,15 @@ add_filter( 'wp_login_errors', 'astoundify_simple_social_login_wordpress_login_a
  * @since 1.0.0
  */
 function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
+	// Bail if not active.
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return;
+	}
+
 	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
 		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
 		if ( $provider ) {
