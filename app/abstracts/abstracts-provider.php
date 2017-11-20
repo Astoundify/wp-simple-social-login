@@ -478,14 +478,14 @@ abstract class Provider {
 	 */
 	public function get_error_codes() {
 		$errors = array(
-			'no_id'                    => esc_html__( 'Cannot retrieve social account ID.', 'astoundify-simple-social-login' ),
+			'no_id'                    => esc_html__( 'Cannot retrieve social profile ID.', 'astoundify-simple-social-login' ),
 			'already_log_in'           => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
 			'api_error'                => esc_html__( 'API connection error.', 'astoundify-simple-social-login' ),
 			'connected_user_not_found' => esc_html__( 'Login failed. Your social profile is not registered to this website.', 'astoundify-simple-social-login' ),
 			'registration_fail'        => esc_html__( 'Fail to register user.', 'astoundify-simple-social-login' ),
 			'already_connected'        => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
 			'link_fail'                => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
-			'unknown_action'           => esc_html__( 'Action unknown.', 'astoundify-simple-social-login' ),
+			'unknown_action'           => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
 		);
 		return $errors;
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Social Login Provider : Facebook
+ * Social Login Provider: Facebook
  *
  * @since 1.0.0
  *
@@ -165,7 +165,7 @@ class Provider_Facebook extends Provider {
 	}
 
 	/**
-	 * Add Error Codes.
+	 * Add Additional Error Codes.
 	 *
 	 * @since 1.0.0
 	 *
@@ -218,6 +218,11 @@ class Provider_Facebook extends Provider {
 			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
 		} catch( Facebook\Exceptions\FacebookSDKException $e ) {
 			$this->redirect( urldecode( $referer ), 'facebook_sdk_error' );
+		}
+
+		// Bail if not set.
+		if ( ! isset( $access_token ) ) {
+			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
 		}
 
 		// Add access token to data array.
