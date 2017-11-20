@@ -1,0 +1,22 @@
+/**
+ * WooCommerce CSS
+ *
+ * @since 1.0.0
+ */
+
+/* Login Form */
+.astoundify-simple-social-login--login-register-buttons {
+	list-style: none;
+	margin: 0;
+}
+
+/* My Account */
+#astoundify-simple-social-login-woocommerce-profile-wrap {
+	border-top: 1px solid #eee;
+	padding-top: 20px;
+}
+
+.astoundify-simple-social-login--link-unlink-buttons {
+	list-style: none;
+	margin: 0;
+}

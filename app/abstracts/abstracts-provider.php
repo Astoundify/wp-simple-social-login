@@ -481,7 +481,7 @@ abstract class Provider {
 			'no_id'                    => esc_html__( 'Cannot retrieve social account ID.', 'astoundify-simple-social-login' ),
 			'already_log_in'           => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
 			'api_error'                => esc_html__( 'API connection error.', 'astoundify-simple-social-login' ),
-			'connected_user_not_found' => esc_html__( 'Login failed. You are not registered to this website.', 'astoundify-simple-social-login' ),
+			'connected_user_not_found' => esc_html__( 'Login failed. Your social profile is not registered to this website.', 'astoundify-simple-social-login' ),
 			'registration_fail'        => esc_html__( 'Fail to register user.', 'astoundify-simple-social-login' ),
 			'already_connected'        => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
 			'link_fail'                => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
@@ -503,8 +503,8 @@ abstract class Provider {
 		$url = remove_query_arg( '_provider', $url );
 		if ( $error_code ) {
 			$url = add_query_arg( '_error', $error_code, $url );
+			$url = add_query_arg( '_provider', $this->id, $url );
 		}
-		$url = add_query_arg( '_provider', $this->id, $url );
 		wp_safe_redirect( esc_url_raw( $url ) );
 		exit;
 	}

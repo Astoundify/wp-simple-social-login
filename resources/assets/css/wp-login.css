@@ -10,21 +10,21 @@
 }
 
 /* Show Social Login On Initial Load */
-#loginform .astoundify-simple-social-login-wordpress-wrap,
-#loginform .astoundify-simple-social-login-wordpress-wrap * {
+#loginform #astoundify-simple-social-login-wordpress-wrap,
+#loginform #astoundify-simple-social-login-wordpress-wrap * {
 	display: block !important;
 }
 
-#loginform .astoundify-simple-social-login-wordpress-wrap {
+#loginform #astoundify-simple-social-login-wordpress-wrap {
 	text-align: center;
 }
 
-#loginform .astoundify-simple-social-login-wordpress-wrap:after {
+#loginform #astoundify-simple-social-login-wordpress-wrap:after {
 	content:".";display:block;height:0;clear:both;visibility:hidden;
 }
 
 /* "Or" Style. */
-.astoundify-simple-social-login-wordpress-wrap .login-or {
+#astoundify-simple-social-login-wordpress-wrap .login-or {
 	text-transform: uppercase;
 	color: #777;
 	font-size: 13px;
@@ -33,7 +33,7 @@
 	margin-top: 30px;
 }
 
-.astoundify-simple-social-login-wordpress-wrap .login-or span {
+#astoundify-simple-social-login-wordpress-wrap .login-or span {
 	background: #fff none repeat scroll 0 0;
 	display: inline-block !important;
 	margin: -11px auto 0;
@@ -42,7 +42,7 @@
 }
 
 /* Login With Username Style */
-.astoundify-simple-social-login-wordpress-wrap .login-with-username {
+#astoundify-simple-social-login-wordpress-wrap .login-with-username {
 	text-align: center;
 	margin-top: 20px;
 	font-size: 14px;
@@ -74,6 +74,6 @@
 	display: inline-block !important;
 }
 
-#loginform.regular-login .astoundify-simple-social-login-wordpress-wrap {
+#loginform.regular-login #astoundify-simple-social-login-wordpress-wrap {
 	display: none !important;
 }
