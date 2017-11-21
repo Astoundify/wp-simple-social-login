@@ -145,10 +145,21 @@ class Provider_Twitter extends Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Facebook\Facebook|false
+	 * @return TwitterOAuth|false
 	 */
-	function api_init() {
+	function api_init( $oauth_token = false, $oauth_token_secret = false ) {
+		if ( ! $this->is_active() ) {
+			return false;
+		}
 
+		// Load Twitter SDK.
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/abraham/twitteroauth/autoload.php' );
+
+		if ( ! $oauth_token ) {
+			return new \Abraham\TwitterOAuth\TwitterOAuth( $this->get_consumer_key(), $this->get_consumer_secret() );
+		} else {
+			return new \Abraham\TwitterOAuth\TwitterOAuth( $this->get_consumer_key(), $this->get_consumer_secret(), $oauth_token, $oauth_token_secret );
+		}
 	}
 
 	/**
@@ -160,7 +171,23 @@ class Provider_Twitter extends Provider {
 	 */
 	public function get_error_codes() {
 		$errors = parent::get_error_codes();
+		$errors['twitter_oauth_unverified'] = esc_html__( 'Unable to verify Twitter oAuth request.', 'astoundify-simple-social-login' );
+		$errors['twitter_oauth_not_match'] = esc_html__( 'Twitter oAuth token do not match.', 'astoundify-simple-social-login' );
+		$errors['twitter_cannot_retrive_credentials'] = esc_html__( 'Cannot retrieve user credentials from Twitter profile.', 'astoundify-simple-social-login' );
 		return $errors;
+	}
+
+	/**
+	 * API Callback
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_api_callback_url() {
+		$url = add_query_arg( array(
+			'astoundify_simple_social_login' => $this->id,
+			'action' => 'done',
+		), home_url() );
+		return $url;
 	}
 
 	/**
@@ -171,7 +198,53 @@ class Provider_Twitter extends Provider {
 	 * @return array
 	 */
 	public function api_get_data( $referer ) {
+		// Make sure all data available.
+		if ( ! isset( $_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] ) ) {
+			$this->redirect( urldecode( $referer ), 'twitter_oauth_unverified' );
+		}
 
+		// Check if token matches with previous request.
+		if ( $_GET['oauth_token'] !== $_SESSION['astoundify_simple_social_login_twitter_oauth_token'] ) {
+			$this->redirect( urldecode( $referer ), 'twitter_oauth_not_match' );
+		}
+
+		// Initiate request.
+		$tw = $this->api_init( $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] );
+
+		// Get Access tokens: oauth_token, oauth_token_secret, user_id, screen_name, x_auth_expires
+		$tokens = $tw->oauth( 'oauth/access_token', array(
+			'oauth_verifier' => $_GET['oauth_verifier'],
+		) );
+
+		// Re-init using access token.
+		$tw = $this->api_init( $tokens['oauth_token'], $tokens['oauth_token_secret'] );
+
+		// Get credentials.
+		$profile = $tw->get( 'account/verify_credentials', array(
+			'include_email'    => 'true', // Need to use string. Weird.
+			'include_entities' => false,
+			'skip_status'      => true,
+		) );
+
+		if ( ! $profile ) {
+			$this->redirect( urldecode( $referer ), 'twitter_cannot_retrive_credentials' );
+		}
+
+		// Format data.
+		$data = array(
+			'id'            => property_exists( $profile, 'id' ) ? $profile->id : '',
+			'user_email'    => property_exists( $profile, 'email' ) ? $profile->email : '',
+			'display_name'  => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+			'nickname'      => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+			'first_name'    => property_exists( $profile, 'name' ) ? $profile->name : '',
+			'last_name'     => '',
+			'screen_name'   => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+		);
+
+		if ( ! $data['id'] ) {
+			$this->redirect( urldecode( $referer ), 'no_id' );
+		}
+
+		return $data;
 	}
-
 }

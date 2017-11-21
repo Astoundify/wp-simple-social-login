@@ -204,7 +204,7 @@ class Provider_Facebook extends Provider {
 		$data = array(
 			'access_token'  => '',
 			'id'            => '',
-			'email'         => '',
+			'user_email'    => '',
 			'display_name'  => '',
 			'nickname'      => '',
 			'first_name'    => '',
@@ -241,7 +241,7 @@ class Provider_Facebook extends Provider {
 			}
 
 			$data['id']            = $profile->getProperty( 'id' );
-			$data['email']         = $profile->getProperty( 'email' );
+			$data['user_email']    = $profile->getProperty( 'email' );
 			$data['display_name']  = $profile->getProperty( 'name' );
 			$data['nickname']      = $profile->getProperty( 'name' );
 			$data['first_name']    = $profile->getProperty( 'first_name' );

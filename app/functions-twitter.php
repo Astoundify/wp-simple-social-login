@@ -51,7 +51,38 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 				$twitter->redirect( urldecode( $referer ), 'already_log_in' );
 			}
 
-			/* SEND TO TWITTER */
+			$tw = $twitter->api_init();
+
+			// Process URL.
+			$process_url = add_query_arg( array(
+				'astoundify_simple_social_login' => 'twitter',
+				'action'                         => '_login_register',
+				'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login_twitter' ),
+				'_referer'                       => $referer,
+			), home_url() );
+
+			// Get tokens: oauth_token, oauth_token_secret, oauth_callback_confirmed.
+			$tokens = $tw->oauth( 'oauth/request_token', array(
+				'oauth_callback' => esc_url_raw( $process_url ),
+			) );
+
+			// Error.
+			if( $tw->getLastHttpCode() !== 200 ) {
+				$facebook->redirect( urldecode( $referer ), 'api_error' );
+			}
+
+			// Store tokens in session.
+			$_SESSION['astoundify_simple_social_login_twitter_oauth_token'] = $tokens['oauth_token'];
+			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
+
+			// Generate the URL to make request to authorize our application
+			$tw_url = $tw->url( 'oauth/authorize', array(
+				'oauth_token' => $tokens['oauth_token'],
+			) );
+
+			// Send request to Twitter.
+			wp_redirect( esc_url_raw( $tw_url ) );
+			exit;
 
 			break;
 		case '_login_register':
@@ -100,22 +131,52 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			break;
 		case 'link':
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-				exit;
+				$twitter->redirect( urldecode( $referer ), 'already_log_in' );
 			}
 
-			/* SEND TO TWITTER */
+			$is_connected = $twitter->is_user_connected( get_current_user_id() );
+			if ( $is_connected ) {
+				$twitter->redirect( urldecode( $referer ), 'already_connected' );
+			}
+
+			$tw = $twitter->api_init();
+
+			// Process URL.
+			$process_url = add_query_arg( array(
+				'astoundify_simple_social_login' => 'twitter',
+				'action'                         => '_link',
+				'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login_twitter' ),
+				'_referer'                       => $referer,
+			), home_url() );
+
+			// Get tokens: oauth_token, oauth_token_secret, oauth_callback_confirmed.
+			$tokens = $tw->oauth( 'oauth/request_token', array(
+				'oauth_callback' => esc_url_raw( $process_url ),
+			) );
+
+			// Error.
+			if( $tw->getLastHttpCode() !== 200 ) {
+				$facebook->redirect( urldecode( $referer ), 'api_error' );
+			}
+
+			// Store tokens in session.
+			$_SESSION['astoundify_simple_social_login_twitter_oauth_token'] = $tokens['oauth_token'];
+			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
+
+			// Generate the URL to make request to authorize our application
+			$tw_url = $tw->url( 'oauth/authorize', array(
+				'oauth_token' => $tokens['oauth_token'],
+			) );
+
+			// Send request to Twitter.
+			wp_redirect( esc_url_raw( $tw_url ) );
+			exit;
 
 			break;
 		case '_link':
 			if ( ! is_user_logged_in() ) {
 				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 				exit;
-			}
-
-			$is_connected = $twitter->is_user_connected( get_current_user_id() );
-			if ( $is_connected ) {
-				$twitter->redirect( urldecode( $referer ), 'already_connected' );
 			}
 
 			// Get twitter data.
