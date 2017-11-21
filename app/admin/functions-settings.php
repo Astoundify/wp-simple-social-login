@@ -203,14 +203,14 @@ function astoundify_simple_social_login_admin_enqueue_scripts( $hook_suffix ) {
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
 	// Settings CSS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/css/settings.min.css';
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/settings.min.css';
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/settings.css';
 	}
 	wp_enqueue_style( 'astoundify-simple-social-login', $url, array(), $version );
 
 	// Settings JS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/js/settings.min.js';
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/settings.min.js';
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/settings.js';
 	}

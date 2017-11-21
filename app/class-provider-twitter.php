@@ -226,19 +226,21 @@ class Provider_Twitter extends Provider {
 			'skip_status'      => true,
 		) );
 
-		if ( ! $profile ) {
+		if ( ! $profile || property_exists( $profile, 'errors' ) ) {
 			$this->redirect( urldecode( $referer ), 'twitter_cannot_retrive_credentials' );
 		}
 
 		// Format data.
 		$data = array(
-			'id'            => property_exists( $profile, 'id' ) ? $profile->id : '',
-			'user_email'    => property_exists( $profile, 'email' ) ? $profile->email : '',
-			'display_name'  => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
-			'nickname'      => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
-			'first_name'    => property_exists( $profile, 'name' ) ? $profile->name : '',
-			'last_name'     => '',
-			'screen_name'   => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+			'id'                 => property_exists( $profile, 'id' ) ? $profile->id : '',
+			'user_email'         => property_exists( $profile, 'email' ) ? $profile->email : '',
+			'display_name'       => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+			'nickname'           => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+			'first_name'         => property_exists( $profile, 'name' ) ? $profile->name : '',
+			'last_name'          => '',
+			'screen_name'        => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : $tokens['screen_name'],
+			'oauth_token'        => $tokens['oauth_token'],
+			'oauth_token_secret' => $tokens['oauth_token_secret'],
 		);
 
 		if ( ! $data['id'] ) {
