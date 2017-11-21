@@ -76,7 +76,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
 
 			// Generate the URL to make request to authorize our application
-			$tw_url = $tw->url( 'oauth/authorize', array(
+			$tw_url = $tw->url( 'oauth/authenticate', array(
 				'oauth_token' => $tokens['oauth_token'],
 			) );
 
@@ -164,7 +164,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
 
 			// Generate the URL to make request to authorize our application
-			$tw_url = $tw->url( 'oauth/authorize', array(
+			$tw_url = $tw->url( 'oauth/authenticate', array(
 				'oauth_token' => $tokens['oauth_token'],
 			) );
 
