@@ -84,8 +84,6 @@ function astoundify_simple_social_login_panel_twitter() {
 
 <p><?php esc_html_e( 'Need help setting up and configuring Twitter social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
 
-<p><?php esc_html_e( 'The callback URL is:', 'astoundify-simple-social-login' ); ?> <code><?php echo esc_url( $callback_url ); ?></code></p>
-
 <table class="form-table">
 	<tbody>
 		<tr>
