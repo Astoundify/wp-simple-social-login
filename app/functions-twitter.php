@@ -68,7 +68,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 
 			// Error.
 			if( $tw->getLastHttpCode() !== 200 ) {
-				$facebook->redirect( urldecode( $referer ), 'api_error' );
+				$twitter->redirect( urldecode( $referer ), 'api_error' );
 			}
 
 			// Store tokens in session.
@@ -156,7 +156,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 
 			// Error.
 			if( $tw->getLastHttpCode() !== 200 ) {
-				$facebook->redirect( urldecode( $referer ), 'api_error' );
+				$twitter->redirect( urldecode( $referer ), 'api_error' );
 			}
 
 			// Store tokens in session.
