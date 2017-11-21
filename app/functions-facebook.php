@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Register Provider
+ * Register Facebook as Provider
  *
  * @since 1.0.0
  *
@@ -38,8 +38,8 @@ add_filter( 'astoundify_simple_social_login_providers', 'astoundify_simple_socia
  */
 function astoundify_simple_social_login_facebook_process_action( $action, $referer ) {
 	// Bail if not active.
-	$facebook = new \Astoundify\Simple_Social_Login\Provider_Facebook;
-	if ( ! $facebook->is_active() ) {
+	$facebook = astoundify_simple_social_login_get_provider( 'facebook' );
+	if ( ! $facebook || ! $facebook->is_active() ) {
 		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 		exit;
 	}
@@ -119,6 +119,11 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 				exit;
 			}
 
+			$is_connected = $facebook->is_user_connected( get_current_user_id() );
+			if ( $is_connected ) {
+				$facebook->redirect( urldecode( $referer ), 'already_connected' );
+			}
+
 			$fb = $facebook->api_init();
 			$helper = $fb->getRedirectLoginHelper();
 
@@ -141,11 +146,6 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			if ( ! is_user_logged_in() ) {
 				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
 				exit;
-			}
-
-			$is_connected = $facebook->is_user_connected( get_current_user_id() );
-			if ( $is_connected ) {
-				$facebook->redirect( urldecode( $referer ), 'already_connected' );
 			}
 
 			// Get facebook data.
