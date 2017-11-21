@@ -290,7 +290,7 @@ abstract class Provider {
 	 * @param array $data API data.
 	 * @return int|false
 	 */
-	public function insert_user( $data ) {
+	public function insert_user( $data, $referer = false ) {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
@@ -320,7 +320,10 @@ abstract class Provider {
 
 		// Email.
 		if ( $data['user_email'] && email_exists( $data['user_email'] ) ) {
-			$this->redirect( urldecode( $referer ), 'email_already_registered' );
+			if ( $referer ) {
+				$this->redirect( urldecode( $referer ), 'email_already_registered' );
+			}
+			return false;
 		}
 
 		$inserted = wp_insert_user( $data );

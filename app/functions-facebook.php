@@ -101,7 +101,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			// Register user.
-			$user_id = $facebook->insert_user( $data );
+			$user_id = $facebook->insert_user( $data, $referer );
 			if ( ! $user_id ) {
 				$facebook->redirect( urldecode( $referer ), 'registration_fail' );
 			}
