@@ -117,7 +117,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			}
 
 			// Register user.
-			$user_id = $twitter->insert_user( $data );
+			$user_id = $twitter->insert_user( $data, $referer );
 			if ( ! $user_id ) {
 				$twitter->redirect( urldecode( $referer ), 'registration_fail' );
 			}
