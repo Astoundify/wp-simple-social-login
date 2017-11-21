@@ -77,3 +77,8 @@
 #loginform.regular-login #astoundify-simple-social-login-wordpress-wrap {
 	display: none !important;
 }
+
+/* Buttons */
+.astoundify-simple-social-login--login-register-buttons li {
+	margin-bottom: 10px;
+}
