@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Provider
+ * Facebook Social Login Provider
  *
  * @since 1.0.0
  */
@@ -60,7 +60,7 @@ class Provider_Facebook extends Provider {
 	 * @return string
 	 */
 	public function get_app_id() {
-		$option = get_option( 'astoundify_simple_social_login_facebook', array() );
+		$option = get_option( $this->option_name, array() );
 		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
 	}
 
@@ -72,7 +72,7 @@ class Provider_Facebook extends Provider {
 	 * @return string
 	 */
 	public function get_app_secret() {
-		$option = get_option( 'astoundify_simple_social_login_facebook', array() );
+		$option = get_option( $this->option_name, array() );
 		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
 	}
 
