@@ -319,15 +319,8 @@ abstract class Provider {
 		}
 
 		// Email.
-		$sitename = strtolower( $_SERVER['SERVER_NAME'] );
-		if ( substr( $sitename, 0, 4 ) == 'www.' ) {
-			$sitename = substr( $sitename, 4 );
-		}
-		if ( ! $data['user_email'] ) {
-			$data['user_email'] = sanitize_email( $data['id'] . '@' . $sitename );
-		}
-		if ( email_exists( $data['user_email'] ) ) {
-			$data['user_email'] = sanitize_email( $data['id'] . '_' . time() . '@' . $sitename );
+		if ( $data['user_email'] && email_exists( $data['user_email'] ) ) {
+			$this->redirect( urldecode( $referer ), 'email_already_registered' );
 		}
 
 		$inserted = wp_insert_user( $data );
@@ -486,6 +479,7 @@ abstract class Provider {
 			'already_connected'        => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
 			'link_fail'                => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
 			'unknown_action'           => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
+			'email_already_registered' => esc_html__( 'Fail to register user. Email already registered.', 'astoundify-simple-social-login' ),
 		);
 		return $errors;
 	}
