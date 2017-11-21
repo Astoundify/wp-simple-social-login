@@ -139,6 +139,57 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 				$twitter->redirect( urldecode( $referer ), 'already_connected' );
 			}
 
+			// Attempt to use stored oauth token if available.
+			$user_oauth_token = get_user_meta( get_current_user_id(), '_astoundify_simple_social_login_twitter_oauth_token', true );
+			$user_oauth_token_secret = get_user_meta( get_current_user_id(), '_astoundify_simple_social_login_twitter_oauth_token_secret', true );
+
+			if ( $user_oauth_token && $user_oauth_token_secret ) {
+
+				// Use token to get credentials.
+				$tw = $twitter->api_init( $user_oauth_token, $user_oauth_token_secret );
+
+				// Get credentials.
+				$profile = $tw->get( 'account/verify_credentials', array(
+					'include_email'    => 'true', // Need to use string. Weird.
+					'include_entities' => false,
+					'skip_status'      => true,
+				) );
+
+				// Success.
+				if ( $profile && ! property_exists( $profile, 'errors' ) ) {
+
+					// Format data.
+					$data = array(
+						'id'                 => property_exists( $profile, 'id' ) ? $profile->id : '',
+						'user_email'         => property_exists( $profile, 'email' ) ? $profile->email : '',
+						'display_name'       => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+						'nickname'           => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
+						'first_name'         => property_exists( $profile, 'name' ) ? $profile->name : '',
+						'last_name'          => '',
+						'screen_name'        => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : $tokens['screen_name'],
+						'oauth_token'        => $tokens['oauth_token'],
+						'oauth_token_secret' => $tokens['oauth_token_secret'],
+					);
+
+					if ( ! $data['id'] ) {
+						$twitter->redirect( urldecode( $referer ), 'no_id' );
+					}
+
+					// Link user.
+					$link = $twitter->link_user( array(
+						'id' => $data['id'],
+						'oauth_token' => $data['oauth_token'],
+						'oauth_token_secret' => $data['oauth_token_secret'],
+					) );
+
+					if ( ! $link ) {
+						$twitter->redirect( urldecode( $referer ), 'link_fail' );
+					}
+
+					$twitter->redirect( urldecode( $referer ) );
+				}
+			}
+
 			$tw = $twitter->api_init();
 
 			// Process URL.
@@ -188,6 +239,8 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			// Link user.
 			$link = $twitter->link_user( array(
 				'id' => $data['id'],
+				'oauth_token' => $data['oauth_token'],
+				'oauth_token_secret' => $data['oauth_token_secret'],
 			) );
 
 			if ( ! $link ) {
