@@ -125,6 +125,7 @@ function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
 		return;
 	}
 
+	// Display Error.
 	if ( isset( $_GET['_error'], $_GET['_provider'] ) ) {
 		$provider = astoundify_simple_social_login_get_provider( $_GET['_provider'] );
 		if ( $provider ) {
@@ -137,8 +138,50 @@ function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
 		<?php
 		}
 	}
+
+	// Display error if user do not have email in their account.
+	if ( is_user_logged_in() ) {
+		$user = wp_get_current_user();
+		if ( ! $user->user_email ) {
+		?>
+
+		<div class="notice notice-error">
+			<p><?php esc_html_e( 'Please setup your email to activate your account.', 'astoundify-simple-social-login' ); ?> <a href="<?php echo esc_url( admin_url( 'profile.php' ) ); ?>#email"><?php esc_html_e( 'Add Email', 'astoundify-simple-social-login' ); ?></a></p>
+		</div>
+
+		<?php
+		}
+	}
 }
 add_action( 'admin_notices', 'astoundify_simple_social_login_wordpress_admin_add_error_notices' );
+
+/**
+ * Redirect to admin profile if email is not yet set.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_wordpress_email_setup_redirect() {
+	// Bail if not active.
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return;
+	}
+
+	// Display error if user do not have email in their account.
+	if ( apply_filters( 'astoundify_simple_social_login_wordpress_admin_email_setup_redirect', true ) ) {
+		if ( is_user_logged_in() ) {
+			$user = wp_get_current_user();
+			if ( ! $user->user_email ) {
+				wp_safe_redirect( esc_url_raw( admin_url( 'profile.php' ) ) );
+				exit;
+			}
+		}
+	}
+}
+add_action( 'template_redirect', 'astoundify_simple_social_login_wordpress_email_setup_redirect', 999 ); // Need to be very late to make sure WC or other can redirect it.
 
 /**
  * Scritps in WordPress Login Page.

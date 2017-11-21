@@ -178,6 +178,26 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
 	wp_set_auth_cookie( $user_id, $remember_me );
 	wp_set_current_user( $user_id, $user_login );
 	do_action( 'wp_login', $user_login, $user );
+
+	// User logged in, but no email.
+	if ( is_user_logged_in() ) {
+		$user = wp_get_current_user();
+		if ( ! $user->user_email ) {
+			wp_safe_redirect( esc_url_raw( astoundify_simple_social_login_get_setup_profile_url() ) );
+			exit;
+		}
+	}
+}
+
+/**
+ * Setup Profile URL
+ * In case cannot capture email from social account. User will need to setup email in their user account.
+ * As default it will use WordPress admin profile edit page.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_get_setup_profile_url() {
+	return apply_filters( 'astoundify_simple_social_login_setup_profile_url', admin_url( 'profile.php' ) );
 }
 
 /**
