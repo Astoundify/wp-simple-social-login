@@ -202,14 +202,14 @@ function astoundify_simple_social_login_wordpress_scripts() {
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
 	// CSS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/css/wp-login.min.css';
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-login.min.css';
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/wp-login.css';
 	}
 	wp_enqueue_style( 'astoundify-simple-social-login-wordpress', $url, array(), $version );
 
 	// JS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/assets/js/wp-login.min.js';
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/wp-login.min.js';
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/wp-login.js';
 	}
