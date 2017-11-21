@@ -75,14 +75,11 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
 function astoundify_simple_social_login_panel_twitter() {
 	$options = get_option( 'astoundify_simple_social_login_twitter', array() );
 	$options = astoundify_simple_social_login_twitter_sanitize_settings( $options );
-
-	$callback_url = add_query_arg( array(
-		'astoundify_simple_social_login' => 'twitter',
-		'action' => 'done',
-	), home_url() );
 ?>
 
 <p><?php esc_html_e( 'Need help setting up and configuring Twitter social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
+
+<p><?php esc_html_e( 'The callback URL is:', 'astoundify-simple-social-login' ); ?> <code><?php echo esc_url( home_url() ); ?></code></p>
 
 <table class="form-table">
 	<tbody>
