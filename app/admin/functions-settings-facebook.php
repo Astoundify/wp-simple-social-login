@@ -53,7 +53,7 @@ function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
 }
 
 /**
- * Add Settings Tab
+ * Add Facebook Settings Tab
  *
  * @since 1.0.0
  *
@@ -76,7 +76,7 @@ function astoundify_simple_social_login_panel_facebook() {
 	$options = astoundify_simple_social_login_facebook_sanitize_settings( $options );
 ?>
 
-<p><?php esc_html_e( 'Need help setting up and configuring Facebook social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a></p>
+<p><?php esc_html_e( 'Need help setting up and configuring Facebook social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
 
 <table class="form-table">
 	<tbody>
@@ -90,8 +90,7 @@ function astoundify_simple_social_login_panel_facebook() {
 		<tr>
 			<th scope="row"><label for="facebook-app-secret"><?php esc_html_e( 'App Secret', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<?php // @todo: Use password input. ?>
-				<input id="facebook-app-secret" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[app_secret]" value="<?php echo esc_attr( $options['app_secret'] ); ?>">
+				<input id="facebook-app-secret" type="<?php echo esc_attr( defined( 'WP_DEBUG' ) && WP_DEBUG ? 'text' : 'password' ); ?>" class="regular-text" name="astoundify_simple_social_login_facebook[app_secret]" value="<?php echo esc_attr( $options['app_secret'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
