@@ -106,6 +106,17 @@ abstract class Provider {
 		return $url;
 	}
 
+	/**
+	 * Get SVG Icon
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		return astoundify_simple_social_login_get_svg( $this->id );
+	}
+
 	/* === LOGIN/REGISTER === */
 
 	/**
@@ -139,12 +150,13 @@ abstract class Provider {
 		) );
 		$classes = array(
 			'button',
-			'astoundify-simple-social-login-register-button',
-			'astoundify-simple-social-login-register-button-' . $this->id,
+			'astoundify-simple-social-login_login-register-button',
+			'astoundify-simple-social-login_login-register-button_' . $this->id,
 		);
 		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
+		$icon = $this->get_icon();
 
-		$html = "<p><a class='{$classes}' href='{$url}'>{$text}</a></p>";
+		$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
 
 		return $html;
 	}

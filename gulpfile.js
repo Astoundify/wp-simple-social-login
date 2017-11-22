@@ -141,11 +141,23 @@ gulp.task( 'css:minify', function() {
 		.pipe( gulp.dest( 'public/css' ) );
 } );
 
+/**
+ * Move and optimize images.
+ *
+ * @since 1.0.0
+ */
+gulp.task( 'images', function() {
+	gulp.src( [
+		'resources/assets/images/*'
+	] )
+		.pipe( gulp.dest( 'public/images' ) );
+} );
+
 /* Minify */
 gulp.task( 'minify', [ 'css:minify', 'js:minify'] );
 
 /** Assets */
-gulp.task( 'assets', [ 'minify' ] );
+gulp.task( 'assets', [ 'images', 'minify' ] );
 
 /**
  * Watch
