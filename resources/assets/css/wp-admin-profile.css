@@ -1,0 +1,13 @@
+/**
+ * WordPress Admin Profile Edit Screen.
+ *
+ * @since 1.0.0
+ */
+
+.astoundify-simple-social-login-icon {
+	width: 1em;
+	height: 1em;
+	margin: 0 5px 0 0;
+	padding: 0;
+	display: inline-block !important;
+}

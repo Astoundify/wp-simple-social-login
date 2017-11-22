@@ -250,8 +250,9 @@ abstract class Provider {
 				'astoundify-simple-social-link-button-' . $this->id,
 			);
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
+			$icon = $this->get_icon();
 
-			$html = "<p><a class='{$classes}' href='{$url}'>{$text}</a></p>";
+			$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
 		} else { // Already connected, show connected info.
 			$is_connected = true;
 

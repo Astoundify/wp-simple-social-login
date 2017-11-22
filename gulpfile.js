@@ -130,6 +130,16 @@ gulp.task( 'css:minify', function() {
 		.pipe( sourcemaps.write( './' ) )
 		.pipe( gulp.dest( 'public/css' ) );
 
+	gulp.src( 'resources/assets/css/wp-admin-profile.css' )
+		.pipe( sourcemaps.init() )
+		.pipe( concat( 'wp-admin-profile.min.css' ) )
+		.pipe( cleanCss() )
+		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
+			return 'resources/assets/css/' + sourcePath;
+		}))
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( 'public/css' ) );
+
 	gulp.src( 'resources/assets/css/woocommerce.css' )
 		.pipe( sourcemaps.init() )
 		.pipe( concat( 'woocommerce.min.css' ) )
