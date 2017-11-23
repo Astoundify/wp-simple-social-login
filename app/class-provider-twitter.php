@@ -176,33 +176,94 @@ class Provider_Twitter extends Provider {
 	}
 
 	/**
+	 * Set API oAuth Token
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $token Token to store.
+	 * @return bool
+	 */
+	public function set_oauth_token( $token ) {
+		$id = wp_create_nonce( 'astoundify_simple_social_login_twitter_oauth_token' );
+		return set_transient( $id, $token, HOUR_IN_SECONDS );
+	}
+
+	/**
+	 * Get API oAuth Token
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_oauth_token() {
+		$id = wp_create_nonce( 'astoundify_simple_social_login_twitter_oauth_token' );
+		return get_transient( $id );
+	}
+
+	/**
+	 * Set API oAuth Token Secret
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $token Token to store.
+	 * @return bool
+	 */
+	public function set_oauth_token_secret( $token ) {
+		$id = wp_create_nonce( 'astoundify_simple_social_login_twitter_oauth_token_secret' );
+		return set_transient( $id, $token, HOUR_IN_SECONDS );
+	}
+
+	/**
+	 * Get API oAuth Token Secret
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_oauth_token_secret() {
+		$id = wp_create_nonce( 'astoundify_simple_social_login_twitter_oauth_token_secret' );
+		return get_transient( $id );
+	}
+
+	/**
 	 * Get API Data
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
-	public function api_get_data() {
-		// Make sure all data available.
-		if ( ! isset( $_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] ) ) {
-			return false;
+	public function api_get_data( $user_token = false, $user_token_secret = false ) {
+
+		// Get access token.
+		if ( $user_token && $user_token_secret ) {
+			$access_tokens = array(
+				'oauth_token' => $user_token,
+				'oauth_token_secret' => $user_token_secret,
+			);
+		} else {
+			// Make sure all data available.
+			if ( ! isset( $_GET['oauth_token'], $_GET['oauth_verifier'] ) ) {
+				return false;
+			}
+
+			// Require token.
+			if ( ! $this->get_oauth_token() || ! $this->get_oauth_token_secret() ) {
+				return false;
+			}
+
+			// Check if token matches with previous request.
+			if ( $_GET['oauth_token'] !== $this->get_oauth_token() ) {
+				return false;
+			}
+			$access_tokens = $this->api_get_access_token( $this->get_oauth_token(), $this->get_oauth_token_secret() );
 		}
 
-		// Check if token matches with previous request.
-		if ( $_GET['oauth_token'] !== $_SESSION['astoundify_simple_social_login_twitter_oauth_token'] ) {
+		if ( ! is_array( $access_tokens ) || ! $access_tokens ) {
 			return false;
 		}
-
-		// Initiate request.
-		$tw = $this->api_init( $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] );
-
-		// Get Access tokens: oauth_token, oauth_token_secret, user_id, screen_name, x_auth_expires
-		$tokens = $tw->oauth( 'oauth/access_token', array(
-			'oauth_verifier' => $_GET['oauth_verifier'],
-		) );
 
 		// Re-init using access token.
-		$tw = $this->api_init( $tokens['oauth_token'], $tokens['oauth_token_secret'] );
+		$tw = $this->api_init( $access_tokens['oauth_token'], $access_tokens['oauth_token_secret'] );
 
 		// Get credentials.
 		$profile = $tw->get( 'account/verify_credentials', array(
@@ -212,6 +273,11 @@ class Provider_Twitter extends Provider {
 		) );
 
 		if ( ! $profile || property_exists( $profile, 'errors' ) ) {
+			// Error. Delete stored tokens.
+			if ( is_user_logged_in() ) {
+				delete_user_meta( get_current_user_id(), '_astoundify_simple_social_login_twitter_oauth_token' );
+				delete_user_meta( get_current_user_id(), '_astoundify_simple_social_login_twitter_oauth_token_secret' );
+			}
 			return false;
 		}
 
@@ -223,9 +289,9 @@ class Provider_Twitter extends Provider {
 			'nickname'           => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
 			'first_name'         => property_exists( $profile, 'name' ) ? $profile->name : '',
 			'last_name'          => '',
-			'screen_name'        => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : $tokens['screen_name'],
-			'oauth_token'        => $tokens['oauth_token'],
-			'oauth_token_secret' => $tokens['oauth_token_secret'],
+			'screen_name'        => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : ( isset( $access_tokens['screen_name'] ) ? $access_tokens['screen_name'] : '' ),
+			'oauth_token'        => $access_tokens['oauth_token'],
+			'oauth_token_secret' => $access_tokens['oauth_token_secret'],
 		);
 
 		if ( ! $data['id'] ) {
@@ -234,4 +300,26 @@ class Provider_Twitter extends Provider {
 
 		return $data;
 	}
+
+	/**
+	 * Get Token.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $oauth_token        oAuth token.
+	 * @param string $oauth_token_secret oAuth token secret.
+	 * @return array|false
+	 */
+	public function api_get_access_token( $oauth_token, $oauth_token_secret ) {
+		// Initiate request.
+		$tw = $this->api_init( $oauth_token, $oauth_token_secret );
+
+		// Get Access tokens: oauth_token, oauth_token_secret, user_id, screen_name, x_auth_expires
+		$access_tokens = $tw->oauth( 'oauth/access_token', array(
+			'oauth_verifier' => $_GET['oauth_verifier'],
+		) );
+
+		return $access_tokens;
+	}
+
 }
