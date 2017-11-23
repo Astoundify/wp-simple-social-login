@@ -183,7 +183,6 @@ class Provider_Facebook extends Provider {
 
 		$fb = $this->api_init();
 		$helper = $fb->getRedirectLoginHelper();
-		$_SESSION['FBRLH_state'] = $_GET['state'];
 
 		// Default data.
 		$data = array(
