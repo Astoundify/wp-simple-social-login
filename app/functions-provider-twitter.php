@@ -71,9 +71,9 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 				$twitter->error_redirect( 'api_error' );
 			}
 
-			// Store tokens in session.
-			$_SESSION['astoundify_simple_social_login_twitter_oauth_token'] = $tokens['oauth_token'];
-			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
+			// Store tokens in transient.
+			$twitter->set_oauth_token( $tokens['oauth_token'] );
+			$twitter->set_oauth_token_secret( $tokens['oauth_token_secret'] );
 
 			// Generate the URL to make request to authorize our application
 			$tw_url = $tw->url( 'oauth/authenticate', array(
@@ -145,55 +145,32 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 
 			if ( $user_oauth_token && $user_oauth_token_secret ) {
 
-				// Use token to get credentials.
-				$tw = $twitter->api_init( $user_oauth_token, $user_oauth_token_secret );
+				// Get data.
+				$data = $twitter->api_get_data( $user_oauth_token, $user_oauth_token_secret );
 
-				// Get credentials.
-				$profile = $tw->get( 'account/verify_credentials', array(
-					'include_email'    => 'true', // Need to use string. Weird.
-					'include_entities' => false,
-					'skip_status'      => true,
+				if ( ! $data['id'] ) {
+					$twitter->error_redirect( 'no_id', urldecode( $referer ) );
+				}
+
+				// Get connected user ID.
+				$user_id = $twitter->get_connected_user_id( $data['id'] );
+				if ( $user_id ) {
+					$twitter->error_redirect( 'another_already_connected', urldecode( $referer ) );
+				}
+
+				// Link user.
+				$link = $twitter->link_user( array(
+					'id'                 => $data['id'],
+					'oauth_token'        => $data['oauth_token'],
+					'oauth_token_secret' => $data['oauth_token_secret'],
+					'screen_name'        => $data['screen_name'],
 				) );
 
-				// Success.
-				if ( $profile && ! property_exists( $profile, 'errors' ) ) {
-
-					// Format data.
-					$data = array(
-						'id'                 => property_exists( $profile, 'id' ) ? $profile->id : '',
-						'user_email'         => property_exists( $profile, 'email' ) ? $profile->email : '',
-						'display_name'       => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
-						'nickname'           => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : '',
-						'first_name'         => property_exists( $profile, 'name' ) ? $profile->name : '',
-						'last_name'          => '',
-						'screen_name'        => property_exists( $profile, 'screen_name' ) ? $profile->screen_name : $tokens['screen_name'],
-						'oauth_token'        => $tokens['oauth_token'],
-						'oauth_token_secret' => $tokens['oauth_token_secret'],
-					);
-
-					if ( ! $data['id'] ) {
-						$twitter->error_redirect( 'no_id', urldecode( $referer ) );
-					}
-
-					// Get connected user ID.
-					$user_id = $twitter->get_connected_user_id( $data['id'] );
-					if ( $user_id ) {
-						$twitter->error_redirect( 'another_already_connected', urldecode( $referer ) );
-					}
-
-					// Link user.
-					$link = $twitter->link_user( array(
-						'id' => $data['id'],
-						'oauth_token' => $data['oauth_token'],
-						'oauth_token_secret' => $data['oauth_token_secret'],
-					) );
-
-					if ( ! $link ) {
-						$twitter->error_redirect( 'link_fail', urldecode( $referer ) );
-					}
-
-					$twitter->success_redirect( urldecode( $referer ) );
+				if ( ! $link ) {
+					$twitter->error_redirect( 'link_fail', urldecode( $referer ) );
 				}
+
+				$twitter->success_redirect( urldecode( $referer ) );
 			}
 
 			$tw = $twitter->api_init();
@@ -216,9 +193,9 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 				$twitter->error_redirect( 'api_error' );
 			}
 
-			// Store tokens in session.
-			$_SESSION['astoundify_simple_social_login_twitter_oauth_token'] = $tokens['oauth_token'];
-			$_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] = $tokens['oauth_token_secret'];
+			// Store tokens in transient.
+			$twitter->set_oauth_token( $tokens['oauth_token'] );
+			$twitter->set_oauth_token_secret( $tokens['oauth_token_secret'] );
 
 			// Generate the URL to make request to authorize our application
 			$tw_url = $tw->url( 'oauth/authenticate', array(
