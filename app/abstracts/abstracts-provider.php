@@ -503,6 +503,45 @@ abstract class Provider {
 	}
 
 	/**
+	 * Error Redirect
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $error_code   Error code.
+	 * @param string $redirect_url Force redirect URL, optional.
+	 */
+	public function error_redirect( $error_code, $redirect_url = false ) {
+		// Redirect URL.
+		$url = apply_filters( 'astoundify_simple_social_login_error_redirect_url', $redirect_url ? $redirect_url : wp_login_url(), $error_code, $redirect_url, $this );
+
+		// Error code.
+		$url = remove_query_arg( '_error', $url );
+		$url = add_query_arg( '_error', $error_code, $url );
+
+		// Provider info to get error code string/content.
+		$url = remove_query_arg( '_provider', $url );
+		$url = add_query_arg( '_provider', $this->id, $url );
+
+		// Redirect with error code.
+		wp_safe_redirect( esc_url_raw( $url ) );
+		exit;
+	}
+
+	/**
+	 * Success Redirect
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $redirect_url Force redirect URL, optional.
+	 */
+	public function success_redirect( $redirect_url = false ) {
+		$url = apply_filters( 'astoundify_simple_social_login_success_redirect_url', $redirect_url ? $redirect_url : home_url(), $redirect_url, $this );
+
+		wp_safe_redirect( esc_url_raw( $url ) );
+		exit;
+	}
+
+	/**
 	 * Redirect/Error Redirect
 	 *
 	 * @since 1.0.0
