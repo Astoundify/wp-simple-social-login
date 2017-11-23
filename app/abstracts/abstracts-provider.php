@@ -149,9 +149,10 @@ abstract class Provider {
 			'action' => 'login_register',
 		) );
 		$classes = array(
-			'button',
-			'astoundify-simple-social-login_login-register-button',
-			'astoundify-simple-social-login_login-register-button_' . $this->id,
+			'astoundify-simple-social-login-button',
+			'astoundify-simple-social-login-button-' . $this->id,
+			'astoundify-simple-social-login-login-register-button',
+			'astoundify-simple-social-login-login-register-button-' . $this->id,
 		);
 		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
 		$icon = $this->get_icon();
@@ -245,9 +246,10 @@ abstract class Provider {
 				'action' => 'link',
 			) );
 			$classes = array(
-				'button',
-				'astoundify-simple-social-link-button',
-				'astoundify-simple-social-link-button-' . $this->id,
+				'astoundify-simple-social-login-button',
+				'astoundify-simple-social-login-button-' . $this->id,
+				'astoundify-simple-social-login-link-button',
+				'astoundify-simple-social-login-link-button-' . $this->id,
 			);
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 			$icon = $this->get_icon();

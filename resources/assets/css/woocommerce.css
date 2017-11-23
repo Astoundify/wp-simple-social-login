@@ -5,9 +5,64 @@
  */
 
 /* Login Form */
+.astoundify-simple-social-login--login-register-buttons p {
+	margin: 0;
+}
+
 .astoundify-simple-social-login--login-register-buttons {
 	list-style: none;
 	margin: 0;
+}
+
+.astoundify-simple-social-login-button,
+.astoundify-simple-social-login-button:focus,
+.astoundify-simple-social-login-button:hover {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 2.5em;
+	text-align: left;
+	height: 2.5em;
+	font-size: 100%;
+	font-family: inherit;
+	font-weight: bold;
+	text-decoration: none;
+	overflow: hidden;
+	white-space: nowrap;
+	border: none;
+	color: #fff;
+	background: #333;
+	margin: 6px 0;
+	border-radius: 2px;
+	box-sizing: content-box;
+	cursor: pointer;
+	padding: 3px 20px 3px 10px;
+}
+
+.astoundify-simple-social-login-icon {
+	float: left;
+	width: 2em;
+	height: 2em;
+	margin: 5px 10px 0 0;
+	padding: 0;
+	display: inline-block !important;
+	fill: #fff;
+}
+
+.astoundify-simple-social-login-button:hover .astoundify-simple-social-login-icon {
+	opacity: 0.8;
+}
+
+.astoundify-simple-social-login-button-facebook,
+.astoundify-simple-social-login-button-facebook:hover,
+.astoundify-simple-social-login-button-facebook:focus {
+	background: #3B5998;
+}
+
+.astoundify-simple-social-login-button-twitter,
+.astoundify-simple-social-login-button-twitter:hover,
+.astoundify-simple-social-login-button-twitter:focus {
+	background: #1DA1F3;
 }
 
 /* My Account */
@@ -21,10 +76,6 @@
 	margin: 0;
 }
 
-.astoundify-simple-social-login-icon {
-	width: 1em;
-	height: 1em;
-	margin: 0 5px 0 0;
-	padding: 0;
-	display: inline-block;
+.astoundify-simple-social-login--link-unlink-buttons p {
+	margin: 0;
 }
