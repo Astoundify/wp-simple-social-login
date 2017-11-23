@@ -130,6 +130,16 @@ gulp.task( 'css:minify', function() {
 		.pipe( sourcemaps.write( './' ) )
 		.pipe( gulp.dest( 'public/css' ) );
 
+	gulp.src( 'resources/assets/css/wp-admin-profile.css' )
+		.pipe( sourcemaps.init() )
+		.pipe( concat( 'wp-admin-profile.min.css' ) )
+		.pipe( cleanCss() )
+		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
+			return 'resources/assets/css/' + sourcePath;
+		}))
+		.pipe( sourcemaps.write( './' ) )
+		.pipe( gulp.dest( 'public/css' ) );
+
 	gulp.src( 'resources/assets/css/woocommerce.css' )
 		.pipe( sourcemaps.init() )
 		.pipe( concat( 'woocommerce.min.css' ) )
@@ -141,11 +151,23 @@ gulp.task( 'css:minify', function() {
 		.pipe( gulp.dest( 'public/css' ) );
 } );
 
+/**
+ * Move and optimize images.
+ *
+ * @since 1.0.0
+ */
+gulp.task( 'images', function() {
+	gulp.src( [
+		'resources/assets/images/*'
+	] )
+		.pipe( gulp.dest( 'public/images' ) );
+} );
+
 /* Minify */
 gulp.task( 'minify', [ 'css:minify', 'js:minify'] );
 
 /** Assets */
-gulp.task( 'assets', [ 'minify' ] );
+gulp.task( 'assets', [ 'images', 'minify' ] );
 
 /**
  * Watch

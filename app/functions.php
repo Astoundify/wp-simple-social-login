@@ -268,3 +268,25 @@ function astoundify_simple_social_login_is_wp_register_page() {
 	}
 	return false;
 }
+
+/**
+ * Get SVG
+ *
+ * @since 1.0.0
+ *
+ * @param string $icon Icon name.
+ */
+function astoundify_simple_social_login_get_svg( $icon ) {
+	$file = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "public/images/{$icon}.svg";
+	$file = apply_filters( 'astoundify_simple_social_login_svg', $file, $icon );
+
+	if ( file_exists( $file ) ) {
+		ob_start();
+?>
+
+<span class="astoundify-simple-social-login-icon"><?php require( $file ); ?></span>
+
+<?php
+		return ob_get_clean();
+	}
+}

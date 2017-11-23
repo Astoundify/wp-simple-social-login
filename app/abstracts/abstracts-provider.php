@@ -106,6 +106,17 @@ abstract class Provider {
 		return $url;
 	}
 
+	/**
+	 * Get SVG Icon
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		return astoundify_simple_social_login_get_svg( $this->id );
+	}
+
 	/* === LOGIN/REGISTER === */
 
 	/**
@@ -138,13 +149,15 @@ abstract class Provider {
 			'action' => 'login_register',
 		) );
 		$classes = array(
-			'button',
-			'astoundify-simple-social-login-register-button',
-			'astoundify-simple-social-login-register-button-' . $this->id,
+			'astoundify-simple-social-login-button',
+			'astoundify-simple-social-login-button-' . $this->id,
+			'astoundify-simple-social-login-login-register-button',
+			'astoundify-simple-social-login-login-register-button-' . $this->id,
 		);
 		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
+		$icon = $this->get_icon();
 
-		$html = "<p><a class='{$classes}' href='{$url}'>{$text}</a></p>";
+		$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
 
 		return $html;
 	}
@@ -233,13 +246,15 @@ abstract class Provider {
 				'action' => 'link',
 			) );
 			$classes = array(
-				'button',
-				'astoundify-simple-social-link-button',
-				'astoundify-simple-social-link-button-' . $this->id,
+				'astoundify-simple-social-login-button',
+				'astoundify-simple-social-login-button-' . $this->id,
+				'astoundify-simple-social-login-link-button',
+				'astoundify-simple-social-login-link-button-' . $this->id,
 			);
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
+			$icon = $this->get_icon();
 
-			$html = "<p><a class='{$classes}' href='{$url}'>{$text}</a></p>";
+			$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
 		} else { // Already connected, show connected info.
 			$is_connected = true;
 

@@ -82,3 +82,47 @@
 .astoundify-simple-social-login--login-register-buttons li {
 	margin-bottom: 10px;
 }
+
+#loginform .astoundify-simple-social-login-button {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 2.5em;
+	text-align: left;
+	height: 2.5em;
+	font-size: 100%;
+	font-family: inherit;
+	font-weight: bold;
+	text-decoration: none;
+	overflow: hidden;
+	white-space: nowrap;
+	border: none;
+	color: #fff;
+	background: #333;
+	margin: 6px 0;
+	border-radius: 2px;
+	box-sizing: content-box;
+	cursor: pointer;
+	padding: 5px 10px;
+}
+
+#loginform #astoundify-simple-social-login-wordpress-wrap .astoundify-simple-social-login-icon {
+	width: 2em;
+	height: 18px;
+	margin: 0 10px 0 0;
+	padding: 0;
+	display: inline-block !important;
+	fill: #fff;
+}
+
+#loginform .astoundify-simple-social-login-button:hover .astoundify-simple-social-login-icon {
+	opacity: 0.8;
+}
+
+#loginform .astoundify-simple-social-login-button-facebook {
+	background: #3B5998;
+}
+
+#loginform .astoundify-simple-social-login-button-twitter {
+	background: #1DA1F3;
+}

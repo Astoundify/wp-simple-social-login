@@ -20,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 function astoundify_simple_social_login_wordpress_login_form() {
+	if ( is_user_logged_in() ) {
+		return false;
+	}
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) && astoundify_simple_social_login_is_wp_login_page() ) {
 		return;
 	}
@@ -91,6 +94,11 @@ add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profi
  * @return array
  */
 function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $redirect_to ) {
+	// Bail if user already logged-in.
+	if ( is_user_logged_in() ) {
+		$errors->add( 'already_logged_in', esc_html__( "You're already logged-in.", 'astoundify-simple-social-login' ), 'error' );
+		return $errors;
+	}
 	// Bail if not active.
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
 		return $errors;
@@ -184,11 +192,14 @@ function astoundify_simple_social_login_wordpress_email_setup_redirect() {
 add_action( 'template_redirect', 'astoundify_simple_social_login_wordpress_email_setup_redirect', 999 ); // Need to be very late to make sure WC or other can redirect it.
 
 /**
- * Scritps in WordPress Login Page.
+ * Scripts in WordPress Login Page.
  *
  * @since 1.0.0
  */
-function astoundify_simple_social_login_wordpress_scripts() {
+function astoundify_simple_social_login_wordpress_login_scripts() {
+	if ( is_user_logged_in() ) {
+		return;
+	}
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) && astoundify_simple_social_login_is_wp_login_page() ) {
 		return;
 	}
@@ -215,4 +226,33 @@ function astoundify_simple_social_login_wordpress_scripts() {
 	}
 	wp_enqueue_script( 'astoundify-simple-social-login-wordpress', $url, array( 'jquery' ), $version );
 }
-add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_scripts' );
+add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_login_scripts' );
+
+/**
+ * Scripts in WordPress Admin Profile Page.
+ *
+ * @since 1.0.0
+ *
+ * @param string $hook_suffix Page context.
+ */
+function astoundify_simple_social_login_wordpress_admin_scripts( $hook_suffix ) {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' )  || 'profile.php' !== $hook_suffix ) {
+		return;
+	}
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		return;
+	}
+
+	// Script Vars.
+	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
+
+	// CSS.
+	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-admin-profile.min.css';
+	if ( $debug ) {
+		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/wp-admin-profile.css';
+	}
+	wp_enqueue_style( 'astoundify-simple-social-login-wordpress-profile', $url, array(), $version );
+}
+add_action( 'admin_enqueue_scripts', 'astoundify_simple_social_login_wordpress_admin_scripts' );

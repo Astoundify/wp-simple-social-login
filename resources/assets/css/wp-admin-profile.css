@@ -1,18 +1,8 @@
 /**
- * WooCommerce CSS
+ * WordPress Admin Profile Edit Screen.
  *
  * @since 1.0.0
  */
-
-/* Login Form */
-.astoundify-simple-social-login--login-register-buttons p {
-	margin: 0;
-}
-
-.astoundify-simple-social-login--login-register-buttons {
-	list-style: none;
-	margin: 0;
-}
 
 .astoundify-simple-social-login-button,
 .astoundify-simple-social-login-button:focus,
@@ -63,19 +53,4 @@
 .astoundify-simple-social-login-button-twitter:hover,
 .astoundify-simple-social-login-button-twitter:focus {
 	background: #1DA1F3;
-}
-
-/* My Account */
-#astoundify-simple-social-login-woocommerce-profile-wrap {
-	border-top: 1px solid #eee;
-	padding-top: 20px;
-}
-
-.astoundify-simple-social-login--link-unlink-buttons {
-	list-style: none;
-	margin: 0;
-}
-
-.astoundify-simple-social-login--link-unlink-buttons p {
-	margin: 0;
 }
