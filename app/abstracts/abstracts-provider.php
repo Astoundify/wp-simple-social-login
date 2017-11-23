@@ -53,15 +53,6 @@ abstract class Provider {
 	public $option_name = '';
 
 	/**
-	 * Referer URL
-	 *
-	 * @since 1.0.0
-	 *
-	 * @var string $referer URL referer.
-	 */
-	public $referer = '';
-
-	/**
 	 * Label
 	 *
 	 * @since 1.0.0
@@ -71,28 +62,6 @@ abstract class Provider {
 	public function get_label() {
 		// Use ID as fallback.
 		return $this->id;
-	}
-
-	/**
-	 * Set Referer
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $url Referer URL.
-	 */
-	public function set_referer( $url ) {
-		$this->referer = $url;
-	}
-
-	/**
-	 * Get Referer URL
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_referer() {
-		return $this->referer;
 	}
 
 	/**
