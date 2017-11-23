@@ -86,7 +86,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			// User found. Log them in.
 			if ( $user_id ) {
 				astoundify_simple_social_login_log_user_in( $user_id );
-				$facebook->success_redirect();
+				$facebook->success_redirect( urldecode( $referer ) );
 			}
 
 			// If registration disabled. bail.
@@ -104,7 +104,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			astoundify_simple_social_login_log_user_in( $user_id );
 
 			// Redirect to home, if in login page.
-			$facebook->success_redirect();
+			$facebook->success_redirect( urldecode( $referer ) );
 
 			break;
 		case 'link':
@@ -161,7 +161,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 				$facebook->error_redirect( 'link_fail', urldecode( $referer ) );
 			}
 
-			$facebook->success_redirect();
+			$facebook->success_redirect( urldecode( $referer ) );
 
 			break;
 		case 'unlink':
@@ -170,7 +170,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			$facebook->unlink_user( get_current_user_id() );
-			$facebook->success_redirect();
+			$facebook->success_redirect( urldecode( $referer ) );
 
 			break;
 		default:

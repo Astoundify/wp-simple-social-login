@@ -15,6 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Change Login Error Redirect To MyAccount Page.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_woocommerce_login_register_error_redirect_url( $url, $error_code, $redirect_url, $provider ) {
+	// Only if not forced.
+	if ( ! $redirect_url ) {
+		$url = wc_get_page_permalink( 'myaccount' );
+	}
+	return $url;
+}
+apply_filters( 'astoundify_simple_social_login_error_redirect_url', 'astoundify_simple_social_login_woocommerce_login_register_error_redirect_url', 10, 4 );
+
+/**
  * Print Login Button in Login Form.
  *
  * @since 1.0.0

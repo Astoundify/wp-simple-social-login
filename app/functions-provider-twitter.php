@@ -108,7 +108,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			// User found. Log them in.
 			if ( $user_id ) {
 				astoundify_simple_social_login_log_user_in( $user_id );
-				$twitter->success_redirect();
+				$twitter->success_redirect( urldecode( $referer ) );
 			}
 
 			// If registration disabled. bail.
@@ -126,7 +126,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			astoundify_simple_social_login_log_user_in( $user_id );
 
 			// Redirect to home, if in login page.
-			$twitter->success_redirect();
+			$twitter->success_redirect( urldecode( $referer ) );
 
 			break;
 		case 'link':
