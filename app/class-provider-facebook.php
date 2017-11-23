@@ -193,7 +193,7 @@ class Provider_Facebook extends Provider {
 
 		// @link https://stackoverflow.com/questions/32029116
 		if ( ! isset( $_GET['state'] ) ) {
-			$this->redirect( urldecode( $referer ), 'facebook_state_missing' );
+			$this->error_redirect( 'facebook_state_missing' );
 		}
 
 		$fb = $this->api_init();
@@ -215,14 +215,14 @@ class Provider_Facebook extends Provider {
 		try {
 			$access_token = $helper->getAccessToken();
 		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			$this->error_redirect( 'facebook_token_graph_error' );
 		} catch( Facebook\Exceptions\FacebookSDKException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_sdk_error' );
+			$this->error_redirect( 'facebook_sdk_error' );
 		}
 
 		// Bail if not set.
 		if ( ! isset( $access_token ) ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			$this->error_redirect( 'facebook_token_graph_error' );
 		}
 
 		// Add access token to data array.
@@ -237,7 +237,7 @@ class Provider_Facebook extends Provider {
 			$profile = $profile_request->getGraphUser();
 
 			if ( ! $profile->getProperty( 'id' ) ) {
-				$this->redirect( urldecode( $referer ), 'no_id' );
+				$this->error_redirect( 'no_id' );
 			}
 
 			$data['id']            = $profile->getProperty( 'id' );
@@ -248,11 +248,11 @@ class Provider_Facebook extends Provider {
 			$data['last_name']     = $profile->getProperty( 'last_name' );
 
 		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			$this->error_redirect( 'facebook_token_graph_error' );
 		}
 
 		if ( ! $data['id'] ) {
-			$this->redirect( urldecode( $referer ), 'no_id' );
+			$this->error_redirect( 'no_id' );
 		}
 
 		return $data;

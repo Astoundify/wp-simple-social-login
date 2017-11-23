@@ -200,12 +200,12 @@ class Provider_Twitter extends Provider {
 	public function api_get_data( $referer ) {
 		// Make sure all data available.
 		if ( ! isset( $_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] ) ) {
-			$this->redirect( urldecode( $referer ), 'twitter_oauth_unverified' );
+			$this->error_redirect( 'twitter_oauth_unverified' );
 		}
 
 		// Check if token matches with previous request.
 		if ( $_GET['oauth_token'] !== $_SESSION['astoundify_simple_social_login_twitter_oauth_token'] ) {
-			$this->redirect( urldecode( $referer ), 'twitter_oauth_not_match' );
+			$this->error_redirect( 'twitter_oauth_not_match' );
 		}
 
 		// Initiate request.
@@ -227,7 +227,7 @@ class Provider_Twitter extends Provider {
 		) );
 
 		if ( ! $profile || property_exists( $profile, 'errors' ) ) {
-			$this->redirect( urldecode( $referer ), 'twitter_cannot_retrive_credentials' );
+			$this->error_redirect( 'twitter_cannot_retrive_credentials' );
 		}
 
 		// Format data.
@@ -244,7 +244,7 @@ class Provider_Twitter extends Provider {
 		);
 
 		if ( ! $data['id'] ) {
-			$this->redirect( urldecode( $referer ), 'no_id' );
+			$this->error_redirect( 'no_id' );
 		}
 
 		return $data;

@@ -48,7 +48,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 	switch ( $action ) {
 		case 'login_register':
 			if ( is_user_logged_in() ) {
-				$facebook->redirect( urldecode( $referer ), 'already_log_in' );
+				$facebook->error_redirect( 'already_logged_in' );
 			}
 
 			$fb = $facebook->api_init();
@@ -71,19 +71,13 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			break;
 		case '_login_register':
 			if ( is_user_logged_in() ) {
-				$facebook->redirect( urldecode( $referer ), 'already_log_in' );
-			}
-
-			// Success URL:
-			$url = urldecode( $referer );
-			if ( false !== strpos( $url, '/wp-login.php' ) ) {
-				$url = home_url();
+				$facebook->error_redirect( 'already_logged_in' );
 			}
 
 			// Get facebook data.
 			$data = $facebook->api_get_data( $referer );
 			if ( ! $data || ! isset( $data['id'] ) ) {
-				$facebook->redirect( urldecode( $referer ), 'api_error' );
+				$facebook->error_redirect( 'api_error' );
 			}
 
 			// Get connected user ID.
@@ -92,36 +86,35 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			// User found. Log them in.
 			if ( $user_id ) {
 				astoundify_simple_social_login_log_user_in( $user_id );
-				$facebook->redirect( urldecode( $url ) );
+				$facebook->success_redirect();
 			}
 
 			// If registration disabled. bail.
 			if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
-				$facebook->redirect( urldecode( $referer ), 'connected_user_not_found' );
+				$facebook->error_redirect( 'connected_user_not_found' );
 			}
 
 			// Register user.
 			$user_id = $facebook->insert_user( $data, $referer );
 			if ( ! $user_id ) {
-				$facebook->redirect( urldecode( $referer ), 'registration_fail' );
+				$facebook->error_redirect( 'registration_fail' );
 			}
 
 			// Log them in.
 			astoundify_simple_social_login_log_user_in( $user_id );
 
 			// Redirect to home, if in login page.
-			$facebook->redirect( $url );
+			$facebook->success_redirect();
 
 			break;
 		case 'link':
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-				exit;
+				$facebook->error_redirect( 'not_logged_in' );
 			}
 
 			$is_connected = $facebook->is_user_connected( get_current_user_id() );
 			if ( $is_connected ) {
-				$facebook->redirect( urldecode( $referer ), 'already_connected' );
+				$facebook->error_redirect( 'already_connected' );
 			}
 
 			$fb = $facebook->api_init();
@@ -144,14 +137,19 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			break;
 		case '_link':
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-				exit;
+				$facebook->error_redirect( 'not_logged_in' );
 			}
 
 			// Get facebook data.
 			$data = $facebook->api_get_data( $referer );
 			if ( ! $data || ! isset( $data['id'] ) ) {
-				$facebook->redirect( urldecode( $referer ), 'api_error' );
+				$facebook->error_redirect( 'api_error' );
+			}
+
+			// Get connected user ID.
+			$user_id = $facebook->get_connected_user_id( $data['id'] );
+			if ( $user_id ) {
+				$facebook->error_redirect( 'another_already_connected' );
 			}
 
 			// Link user.
@@ -160,10 +158,10 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			) );
 
 			if ( ! $link ) {
-				$facebook->redirect( urldecode( $referer ), 'link_fail' );
+				$facebook->error_redirect( 'link_fail' );
 			}
 
-			$facebook->redirect( urldecode( $referer ) );
+			$facebook->success_redirect();
 
 			break;
 		case 'unlink':
@@ -173,11 +171,11 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			$facebook->unlink_user( get_current_user_id() );
-			$facebook->redirect( urldecode( $referer ) );
+			$facebook->success_redirect();
 
 			break;
 		default:
-			$facebook->redirect( urldecode( $referer ), 'unknown_action' );
+			$facebook->error_redirect( 'unknown_action' );
 	}
 }
 add_action( 'astoundify_simple_social_login_process_facebook', 'astoundify_simple_social_login_facebook_process_action', 10, 2 );

@@ -53,6 +53,15 @@ abstract class Provider {
 	public $option_name = '';
 
 	/**
+	 * Referer URL
+	 *
+	 * @since 1.0.0
+	 *
+	 * @var string $referer URL referer.
+	 */
+	public $referer = '';
+
+	/**
 	 * Label
 	 *
 	 * @since 1.0.0
@@ -62,6 +71,28 @@ abstract class Provider {
 	public function get_label() {
 		// Use ID as fallback.
 		return $this->id;
+	}
+
+	/**
+	 * Set Referer
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $url Referer URL.
+	 */
+	public function set_referer( $url ) {
+		$this->referer = $url;
+	}
+
+	/**
+	 * Get Referer URL
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_referer() {
+		return $this->referer;
 	}
 
 	/**
@@ -305,7 +336,7 @@ abstract class Provider {
 	 * @param array $data API data.
 	 * @return int|false
 	 */
-	public function insert_user( $data, $referer = false ) {
+	public function insert_user( $data ) {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
@@ -335,9 +366,6 @@ abstract class Provider {
 
 		// Email.
 		if ( $data['user_email'] && email_exists( $data['user_email'] ) ) {
-			if ( $referer ) {
-				$this->redirect( urldecode( $referer ), 'email_already_registered' );
-			}
 			return false;
 		}
 
@@ -489,15 +517,17 @@ abstract class Provider {
 	 */
 	public function get_error_codes() {
 		$errors = array(
-			'no_id'                    => esc_html__( 'Cannot retrieve social profile ID.', 'astoundify-simple-social-login' ),
-			'already_log_in'           => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
-			'api_error'                => esc_html__( 'API connection error.', 'astoundify-simple-social-login' ),
-			'connected_user_not_found' => esc_html__( 'Login failed. Your social profile is not registered to this website.', 'astoundify-simple-social-login' ),
-			'registration_fail'        => esc_html__( 'Fail to register user.', 'astoundify-simple-social-login' ),
-			'already_connected'        => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
-			'link_fail'                => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
-			'unknown_action'           => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
-			'email_already_registered' => esc_html__( 'Fail to register user. Email already registered.', 'astoundify-simple-social-login' ),
+			'no_id'                     => esc_html__( 'Cannot retrieve social profile ID.', 'astoundify-simple-social-login' ),
+			'already_logged_in'         => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
+			'not_logged_in'             => esc_html__( 'User need to login to connect.', 'astoundify-simple-social-login' ),
+			'api_error'                 => esc_html__( 'API connection error.', 'astoundify-simple-social-login' ),
+			'connected_user_not_found'  => esc_html__( 'Login failed. Your social profile is not registered to this website.', 'astoundify-simple-social-login' ),
+			'registration_fail'         => esc_html__( 'Fail to register user.', 'astoundify-simple-social-login' ),
+			'already_connected'         => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
+			'link_fail'                 => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
+			'unknown_action'            => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
+			'email_already_registered'  => esc_html__( 'Fail to register user. Email already registered.', 'astoundify-simple-social-login' ),
+			'another_already_connected' => esc_html__( 'Another user already connected to social account.', 'astoundify-simple-social-login' ),
 		);
 		return $errors;
 	}
@@ -512,7 +542,7 @@ abstract class Provider {
 	 */
 	public function error_redirect( $error_code, $redirect_url = false ) {
 		// Redirect URL.
-		$url = apply_filters( 'astoundify_simple_social_login_error_redirect_url', $redirect_url ? $redirect_url : wp_login_url(), $error_code, $redirect_url, $this );
+		$url = $redirect_url ? $redirect_url : wp_login_url();
 
 		// Error code.
 		$url = remove_query_arg( '_error', $url );
@@ -521,6 +551,9 @@ abstract class Provider {
 		// Provider info to get error code string/content.
 		$url = remove_query_arg( '_provider', $url );
 		$url = add_query_arg( '_provider', $this->id, $url );
+
+		// Add filter to modify url.
+		$url = apply_filters( 'astoundify_simple_social_login_error_redirect_url', $url, $error_code, $redirect_url, $this );
 
 		// Redirect with error code.
 		wp_safe_redirect( esc_url_raw( $url ) );
@@ -537,25 +570,6 @@ abstract class Provider {
 	public function success_redirect( $redirect_url = false ) {
 		$url = apply_filters( 'astoundify_simple_social_login_success_redirect_url', $redirect_url ? $redirect_url : home_url(), $redirect_url, $this );
 
-		wp_safe_redirect( esc_url_raw( $url ) );
-		exit;
-	}
-
-	/**
-	 * Redirect/Error Redirect
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $url Redirect URL.
-	 * @param string $error_code Error code.
-	 */
-	public function redirect( $url, $error_code = false ) {
-		$url = remove_query_arg( '_error', $url );
-		$url = remove_query_arg( '_provider', $url );
-		if ( $error_code ) {
-			$url = add_query_arg( '_error', $error_code, $url );
-			$url = add_query_arg( '_provider', $this->id, $url );
-		}
 		wp_safe_redirect( esc_url_raw( $url ) );
 		exit;
 	}
