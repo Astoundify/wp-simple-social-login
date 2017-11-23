@@ -165,35 +165,20 @@ class Provider_Facebook extends Provider {
 	}
 
 	/**
-	 * Add Additional Error Codes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array
-	 */
-	public function get_error_codes() {
-		$errors = parent::get_error_codes();
-		$errors['facebook_state_missing'] = esc_html__( 'Facebook SDK returned an error: Cross-site request forgery validation failed. Required param "state" missing from persistent data.', 'astoundify-simple-social-login' );
-		$errors['facebook_token_graph_error'] = esc_html__( 'Facebook Graph returned an error.', 'astoundify-simple-social-login' );
-		$errors['facebook_sdk_error'] = esc_html__( 'Facebook SDK returned an error.', 'astoundify-simple-social-login' );
-		return $errors;
-	}
-
-	/**
 	 * Get API Data
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return array
 	 */
-	public function api_get_data( $referer ) {
+	public function api_get_data() {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
 
 		// @link https://stackoverflow.com/questions/32029116
 		if ( ! isset( $_GET['state'] ) ) {
-			$this->redirect( urldecode( $referer ), 'facebook_state_missing' );
+			return false;
 		}
 
 		$fb = $this->api_init();
@@ -215,14 +200,14 @@ class Provider_Facebook extends Provider {
 		try {
 			$access_token = $helper->getAccessToken();
 		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			return false;
 		} catch( Facebook\Exceptions\FacebookSDKException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_sdk_error' );
+			return false;
 		}
 
 		// Bail if not set.
 		if ( ! isset( $access_token ) ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			return false;
 		}
 
 		// Add access token to data array.
@@ -237,7 +222,7 @@ class Provider_Facebook extends Provider {
 			$profile = $profile_request->getGraphUser();
 
 			if ( ! $profile->getProperty( 'id' ) ) {
-				$this->redirect( urldecode( $referer ), 'no_id' );
+				return false;
 			}
 
 			$data['id']            = $profile->getProperty( 'id' );
@@ -248,11 +233,11 @@ class Provider_Facebook extends Provider {
 			$data['last_name']     = $profile->getProperty( 'last_name' );
 
 		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			$this->redirect( urldecode( $referer ), 'facebook_token_graph_error' );
+			return false;
 		}
 
 		if ( ! $data['id'] ) {
-			$this->redirect( urldecode( $referer ), 'no_id' );
+			return false;
 		}
 
 		return $data;
