@@ -131,12 +131,12 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			break;
 		case 'link':
 			if ( ! is_user_logged_in() ) {
-				$twitter->error_redirect( 'not_logged_in' );
+				$twitter->error_redirect( 'not_logged_in', urldecode( $referer ) );
 			}
 
 			$is_connected = $twitter->is_user_connected( get_current_user_id() );
 			if ( $is_connected ) {
-				$twitter->error_redirect( 'already_connected' );
+				$twitter->error_redirect( 'already_connected', urldecode( $referer ) );
 			}
 
 			// Attempt to use stored oauth token if available.
@@ -172,7 +172,13 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 					);
 
 					if ( ! $data['id'] ) {
-						$twitter->error_redirect( 'no_id' );
+						$twitter->error_redirect( 'no_id', urldecode( $referer ) );
+					}
+
+					// Get connected user ID.
+					$user_id = $twitter->get_connected_user_id( $data['id'] );
+					if ( $user_id ) {
+						$twitter->error_redirect( 'another_already_connected', urldecode( $referer ) );
 					}
 
 					// Link user.
@@ -183,10 +189,10 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 					) );
 
 					if ( ! $link ) {
-						$twitter->error_redirect( 'link_fail' );
+						$twitter->error_redirect( 'link_fail', urldecode( $referer ) );
 					}
 
-					$twitter->success_redirect();
+					$twitter->success_redirect( urldecode( $referer ) );
 				}
 			}
 
@@ -232,7 +238,13 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			// Get twitter data.
 			$data = $twitter->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
-				$twitter->error_redirect( 'api_error' );
+				$twitter->error_redirect( 'api_error', urldecode( $referer ) );
+			}
+
+			// Get connected user ID.
+			$user_id = $twitter->get_connected_user_id( $data['id'] );
+			if ( $user_id ) {
+				$twitter->error_redirect( 'another_already_connected', urldecode( $referer ) );
 			}
 
 			// Link user.
@@ -243,20 +255,19 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			) );
 
 			if ( ! $link ) {
-				$twitter->error_redirect( 'link_fail' );
+				$twitter->error_redirect( 'link_fail', urldecode( $referer ) );
 			}
 
-			$twitter->success_redirect();
+			$twitter->success_redirect( urldecode( $referer ) );
 
 			break;
 		case 'unlink':
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-				exit;
+				$twitter->error_redirect( 'not_logged_in' );
 			}
 
 			$twitter->unlink_user( get_current_user_id() );
-			$twitter->success_redirect();
+			$twitter->success_redirect( urldecode( $referer ) );
 
 			break;
 		default:

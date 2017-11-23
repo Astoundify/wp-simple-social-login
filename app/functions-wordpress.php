@@ -97,7 +97,6 @@ function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $re
 	// Bail if user already logged-in.
 	if ( is_user_logged_in() ) {
 		$errors->add( 'already_logged_in', esc_html__( "You're already logged-in.", 'astoundify-simple-social-login' ), 'error' );
-		return $errors;
 	}
 	// Bail if not active.
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {

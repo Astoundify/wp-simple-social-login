@@ -109,12 +109,12 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			break;
 		case 'link':
 			if ( ! is_user_logged_in() ) {
-				$facebook->error_redirect( 'not_logged_in' );
+				$facebook->error_redirect( 'not_logged_in', urldecode( $referer ) );
 			}
 
 			$is_connected = $facebook->is_user_connected( get_current_user_id() );
 			if ( $is_connected ) {
-				$facebook->error_redirect( 'already_connected' );
+				$facebook->error_redirect( 'already_connected', urldecode( $referer ) );
 			}
 
 			$fb = $facebook->api_init();
@@ -137,19 +137,19 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			break;
 		case '_link':
 			if ( ! is_user_logged_in() ) {
-				$facebook->error_redirect( 'not_logged_in' );
+				$facebook->error_redirect( 'not_logged_in', urldecode( $referer ) );
 			}
 
 			// Get facebook data.
 			$data = $facebook->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
-				$facebook->error_redirect( 'api_error' );
+				$facebook->error_redirect( 'api_error', urldecode( $referer ) );
 			}
 
 			// Get connected user ID.
 			$user_id = $facebook->get_connected_user_id( $data['id'] );
 			if ( $user_id ) {
-				$facebook->error_redirect( 'another_already_connected' );
+				$facebook->error_redirect( 'another_already_connected', urldecode( $referer ) );
 			}
 
 			// Link user.
@@ -158,7 +158,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			) );
 
 			if ( ! $link ) {
-				$facebook->error_redirect( 'link_fail' );
+				$facebook->error_redirect( 'link_fail', urldecode( $referer ) );
 			}
 
 			$facebook->success_redirect();
@@ -166,8 +166,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			break;
 		case 'unlink':
 			if ( ! is_user_logged_in() ) {
-				wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-				exit;
+				$facebook->error_redirect( 'not_logged_in', urldecode( $referer ) );
 			}
 
 			$facebook->unlink_user( get_current_user_id() );
