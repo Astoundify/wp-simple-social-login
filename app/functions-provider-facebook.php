@@ -75,7 +75,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			// Get facebook data.
-			$data = $facebook->api_get_data( $referer );
+			$data = $facebook->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
 				$facebook->error_redirect( 'api_error' );
 			}
@@ -141,7 +141,7 @@ function astoundify_simple_social_login_facebook_process_action( $action, $refer
 			}
 
 			// Get facebook data.
-			$data = $facebook->api_get_data( $referer );
+			$data = $facebook->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
 				$facebook->error_redirect( 'api_error' );
 			}

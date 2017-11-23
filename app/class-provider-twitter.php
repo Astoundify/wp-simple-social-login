@@ -163,21 +163,6 @@ class Provider_Twitter extends Provider {
 	}
 
 	/**
-	 * Add Additional Error Codes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array
-	 */
-	public function get_error_codes() {
-		$errors = parent::get_error_codes();
-		$errors['twitter_oauth_unverified'] = esc_html__( 'Unable to verify Twitter oAuth request.', 'astoundify-simple-social-login' );
-		$errors['twitter_oauth_not_match'] = esc_html__( 'Twitter oAuth token do not match.', 'astoundify-simple-social-login' );
-		$errors['twitter_cannot_retrive_credentials'] = esc_html__( 'Cannot retrieve user credentials from Twitter profile.', 'astoundify-simple-social-login' );
-		return $errors;
-	}
-
-	/**
 	 * API Callback
 	 *
 	 * @since 1.0.0
@@ -197,15 +182,15 @@ class Provider_Twitter extends Provider {
 	 *
 	 * @return array
 	 */
-	public function api_get_data( $referer ) {
+	public function api_get_data() {
 		// Make sure all data available.
 		if ( ! isset( $_GET['oauth_token'], $_GET['oauth_verifier'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token'], $_SESSION['astoundify_simple_social_login_twitter_oauth_token_secret'] ) ) {
-			$this->error_redirect( 'twitter_oauth_unverified' );
+			return false;
 		}
 
 		// Check if token matches with previous request.
 		if ( $_GET['oauth_token'] !== $_SESSION['astoundify_simple_social_login_twitter_oauth_token'] ) {
-			$this->error_redirect( 'twitter_oauth_not_match' );
+			return false;
 		}
 
 		// Initiate request.
@@ -227,7 +212,7 @@ class Provider_Twitter extends Provider {
 		) );
 
 		if ( ! $profile || property_exists( $profile, 'errors' ) ) {
-			$this->error_redirect( 'twitter_cannot_retrive_credentials' );
+			return false;
 		}
 
 		// Format data.
@@ -244,7 +229,7 @@ class Provider_Twitter extends Provider {
 		);
 
 		if ( ! $data['id'] ) {
-			$this->error_redirect( 'no_id' );
+			return false;
 		}
 
 		return $data;

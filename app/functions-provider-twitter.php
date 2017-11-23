@@ -97,7 +97,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			}
 
 			// Get twitter data.
-			$data = $twitter->api_get_data( $referer );
+			$data = $twitter->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
 				$twitter->error_redirect( 'api_error' );
 			}
@@ -230,7 +230,7 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 			}
 
 			// Get twitter data.
-			$data = $twitter->api_get_data( $referer );
+			$data = $twitter->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
 				$twitter->error_redirect( 'api_error' );
 			}
