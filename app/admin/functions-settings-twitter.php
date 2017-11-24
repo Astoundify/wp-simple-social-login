@@ -77,7 +77,7 @@ function astoundify_simple_social_login_panel_twitter() {
 	$options = astoundify_simple_social_login_twitter_sanitize_settings( $options );
 ?>
 
-<p><?php esc_html_e( 'Need help setting up and configuring Twitter social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
+<p><?php esc_html_e( 'Need help setting up and configuring Twitter social login?', 'astoundify-simple-social-login' ); ?> <a href="https://astoundify.com/go/simple-social-login-twitter-setup/" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
 
 <p><?php esc_html_e( 'The callback URL is:', 'astoundify-simple-social-login' ); ?> <code><?php echo esc_url( home_url() ); ?></code></p>
 
@@ -116,7 +116,7 @@ function astoundify_simple_social_login_panel_twitter() {
 			<td>
 				<?php // translators: Do not translate {{unlink}} text. It'a a placeholder for unconnect link. ?>
 				<input placeholder="<?php esc_attr_e( 'Your account is connected to Twitter. {{unlink}}.', 'astoundify-simple-social-login' ); ?>" id="twitter-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_twitter[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
-				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if user already connected. Use <code>{{unlink}}</code> to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
+				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
 	</tbody>
