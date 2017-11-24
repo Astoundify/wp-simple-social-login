@@ -76,7 +76,7 @@ function astoundify_simple_social_login_panel_facebook() {
 	$options = astoundify_simple_social_login_facebook_sanitize_settings( $options );
 ?>
 
-<p><?php esc_html_e( 'Need help setting up and configuring Facebook social login?', 'astoundify-simple-social-login' ); ?> <a href="#" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
+<p><?php esc_html_e( 'Need help setting up and configuring Facebook social login?', 'astoundify-simple-social-login' ); ?> <a href="https://astoundify.com/go/simple-social-login-fb-setup/" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
 
 <table class="form-table">
 	<tbody>
@@ -113,7 +113,7 @@ function astoundify_simple_social_login_panel_facebook() {
 			<td>
 				<?php // translators: Do not translate {{unlink}} text. It'a a placeholder for unconnect link. ?>
 				<input placeholder="<?php esc_attr_e( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' ); ?>" id="facebook-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
-				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if user already connected. Use <code>{{unlink}}</code> to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
+				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
 	</tbody>
