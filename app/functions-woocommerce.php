@@ -22,7 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function astoundify_simple_social_login_woocommerce_login_register_error_redirect_url( $url, $error_code, $redirect_url, $provider ) {
 	// Only if not forced.
 	if ( ! $redirect_url ) {
-		$url = wc_get_page_permalink( 'myaccount' );
+		if ( is_checkout() ) {
+			$url = wc_get_checkout_url();
+		} else {
+			$url = wc_get_page_permalink( 'myaccount' );
+		}
 	}
 	return $url;
 }
