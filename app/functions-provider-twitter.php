@@ -90,12 +90,6 @@ function astoundify_simple_social_login_twitter_process_action( $action, $refere
 				$twitter->error_redirect( 'already_logged_in' );
 			}
 
-			// Success URL:
-			$url = urldecode( $referer );
-			if ( false !== strpos( $url, '/wp-login.php' ) ) {
-				$url = home_url();
-			}
-
 			// Get twitter data.
 			$data = $twitter->api_get_data();
 			if ( ! $data || ! isset( $data['id'] ) ) {
