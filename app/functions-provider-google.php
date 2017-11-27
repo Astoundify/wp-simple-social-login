@@ -61,21 +61,9 @@ function astoundify_simple_social_login_google_process_action( $action, $referer
 				'_referer'                       => $referer,
 			), home_url() );
 
-			$gclient = new Google_Client();
-			$gclient->setApplicationName( $google->get_login_register_button_text() );
-			$gclient->setClientId( $google->get_client_id() );
-			$gclient->setClientSecret( $google->get_client_secret() );
-			$gclient->setRedirectUri( esc_url_raw( $process_url ) );
-			$gclient->addScope( 'https://www.googleapis.com/auth/userinfo.email' );
-
-			// Redirect.
-			//$go = new Google_Service_Oauth2( $gclient );
-
-			$go_url = $gclient->createAuthUrl();
-
 			// Send request to Google.
-			wp_redirect( esc_url_raw( $go_url ) );
-			exit;
+			//wp_redirect( esc_url_raw( $go_url ) );
+			//exit;
 
 			break;
 		case '_login_register':
