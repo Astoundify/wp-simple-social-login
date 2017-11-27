@@ -9,7 +9,7 @@
 		}
 	],
 	"autoload": {
-		"classmap": ["app/","vendor/google"]
+		"classmap": ["app/"]
 	},
 	"require": {
 		"facebook/graph-sdk": "^5.6",
