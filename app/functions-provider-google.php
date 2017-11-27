@@ -51,13 +51,40 @@ function astoundify_simple_social_login_google_process_action( $action, $referer
 				$google->error_redirect( 'already_logged_in' );
 			}
 
-			$go = $google->api_init();
+			//$go = $google->api_init();
+
+			// Process URL.
+			$process_url = add_query_arg( array(
+				'astoundify_simple_social_login' => 'google',
+				'action'                         => '_login_register',
+				'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login_google' ),
+				'_referer'                       => $referer,
+			), home_url() );
+
+			$gclient = new Google_Client();
+			$gclient->setApplicationName( $google->get_login_register_button_text() );
+			$gclient->setClientId( $google->get_client_id() );
+			$gclient->setClientSecret( $google->get_client_secret() );
+			$gclient->setRedirectUri( esc_url_raw( $process_url ) );
+			$gclient->addScope( 'https://www.googleapis.com/auth/userinfo.email' );
+
+			// Redirect.
+			$go = new Google_Service_Plus( $gclient );
+
+
+			
+			
+			
+			
+			
 
 			break;
 		case '_login_register':
 			if ( is_user_logged_in() ) {
 				$google->error_redirect( 'already_logged_in' );
 			}
+
+			wp_die(); exit;
 
 			// Get google data.
 			$data = $google->api_get_data();

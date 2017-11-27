@@ -147,11 +147,22 @@ class Provider_Google extends Provider {
 	 *
 	 * @return object|false
 	 */
-	function api_init( $oauth_token = false, $oauth_token_secret = false ) {
+	function api_init( $redirect = false, $oauth_token = false, $oauth_token_secret = false ) {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 
@@ -168,3 +179,24 @@ class Provider_Google extends Provider {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
