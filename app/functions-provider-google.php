@@ -56,10 +56,38 @@ function astoundify_simple_social_login_google_process_action( $action, $referer
 			// Process URL.
 			$process_url = add_query_arg( array(
 				'astoundify_simple_social_login' => 'google',
-				'action'                         => '_login_register',
-				'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login_google' ),
+				'action'                         => 'login_register',
+				//'_nonce'                         => wp_create_nonce( 'astoundify_simple_social_login_google' ),
 				'_referer'                       => $referer,
 			), home_url() );
+
+			$process_url = 'http://beta.play?astoundify_simple_social_login=google&action=_login_register&_referer=http://beta.play/wp-login.php';
+			$config = array(
+				"base_url"  => $process_url,
+				"providers" => array(
+					"Google" => array(
+						"enabled" => true,
+						"keys"    => array(
+							"id"     => $google->get_client_id(),
+							"secret" => $google->get_client_secret(),
+						),
+						"scope"   => "email", // optional
+						"access_type"     => "offline",   // optional
+						"approval_prompt" => "force",     // optional
+					),
+				),
+			);
+
+			require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+
+			$hybridauth = new Hybrid_Auth( $config );
+
+			$adapter = $hybridauth->authenticate( "Google" );
+
+			$user_profile = $adapter->getUserProfile();
+
+			ccdd( $user_profile );
+			wp_die(); exit;
 
 			// Send request to Google.
 			//wp_redirect( esc_url_raw( $go_url ) );
@@ -71,6 +99,8 @@ function astoundify_simple_social_login_google_process_action( $action, $referer
 				$google->error_redirect( 'already_logged_in' );
 			}
 
+			require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+			Hybrid_Endpoint::process();
 			wp_die(); exit;
 
 			// Get google data.

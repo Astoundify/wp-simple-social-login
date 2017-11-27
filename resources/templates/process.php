@@ -24,8 +24,8 @@ if( ! session_id() ) {
  * @since 1.0.0
  */
 if ( ! isset( $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_nonce'], $_GET['_referer'] ) || ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$_GET['astoundify_simple_social_login']}" ) ) {
-	wp_safe_redirect( esc_url_raw( home_url() ) );
-	exit;
+	//wp_safe_redirect( esc_url_raw( home_url() ) );
+	//exit;
 }
 
 /**
