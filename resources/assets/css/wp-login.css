@@ -73,10 +73,6 @@
 	display: inline-block !important;
 }
 
-#loginform.regular-login label {
-	display: inline !important;
-}
-
 #loginform.regular-login #astoundify-simple-social-login-wordpress-wrap {
 	display: none !important;
 }
