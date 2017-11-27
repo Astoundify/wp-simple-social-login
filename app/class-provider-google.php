@@ -77,6 +77,21 @@ class Provider_Google extends Provider {
 	}
 
 	/**
+	 * Endpoint URL
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_endpoint_url() {
+		$args = array(
+			'astoundify_simple_social_login' => 'done',
+		);
+		$url = add_query_arg( $args, home_url() );
+		return $url;
+	}
+
+	/**
 	 * Is Active.
 	 *
 	 * @since 1.0.0
@@ -147,23 +162,34 @@ class Provider_Google extends Provider {
 	 *
 	 * @return object|false
 	 */
-	function api_init( $redirect = false, $oauth_token = false, $oauth_token_secret = false ) {
+	function api_init() {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		// Load library.
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+
+		$config = array(
+			'base_url'  => $this->get_endpoint_url(),
+			'providers' => array(
+				'Google' => array(
+					'enabled'         => true,
+					'keys'            => array(
+						'id'     => $this->get_client_id(),
+						'secret' => $this->get_client_secret(),
+					),
+					'scope'           => implode( ' ', array(
+						'https://www.googleapis.com/auth/userinfo.profile',
+						'https://www.googleapis.com/auth/userinfo.email'
+					) ),
+					'access_type'     => 'offline',
+					'approval_prompt' => 'force',
+				),
+			),
+		);
+
+		return new \Hybrid_Auth( $config );
 	}
 
 	/**
@@ -173,30 +199,21 @@ class Provider_Google extends Provider {
 	 *
 	 * @return array
 	 */
-	public function api_get_data( $user_token = false, $user_token_secret = false ) {
-		$data = array();
+	public function api_get_data() {
+		$hybridauth = $this->api_init();
+		$adapter = $hybridauth->authenticate( 'Google' );
+		$profile = $adapter->getUserProfile();
+
+		$data = array(
+			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
+			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
+			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+		);
+
 		return $data;
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

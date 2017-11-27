@@ -539,6 +539,9 @@ abstract class Provider {
 	public function success_redirect( $redirect_url = false ) {
 		$url = apply_filters( 'astoundify_simple_social_login_success_redirect_url', $redirect_url ? $redirect_url : home_url(), $redirect_url, $this );
 
+		if ( false !== strpos( $url, 'wp-login.php' ) ) {
+			$url = home_url();
+		}
 		wp_safe_redirect( esc_url_raw( add_query_arg( '_flush', time(), $url ) ) );
 		exit;
 	}
