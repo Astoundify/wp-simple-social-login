@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0789c23e00424846cc12d33d7af2b096",
+    "content-hash": "6978637119f1965eaa49c5c2c3ea19c9",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -117,6 +117,62 @@
                 "sdk"
             ],
             "time": "2017-08-16T17:28:07+00:00"
+        },
+        {
+            "name": "hybridauth/hybridauth",
+            "version": "v2.9.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hybridauth/hybridauth.git",
+                "reference": "8e17bdb8d28efedb008504550db230c985723d8a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hybridauth/hybridauth/zipball/8e17bdb8d28efedb008504550db230c985723d8a",
+                "reference": "8e17bdb8d28efedb008504550db230c985723d8a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "facebook/graph-sdk": "^5.4",
+                "php": ">=5.2.0"
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hybrid": "hybridauth/"
+                },
+                "classmap": [
+                    "hybridauth/Hybrid"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "(MIT or GPL-3.0+)"
+            ],
+            "authors": [
+                {
+                    "name": "Miled",
+                    "email": "hybridauth@gmail.com"
+                }
+            ],
+            "description": "Open source social sign on PHP library.",
+            "homepage": "http://hybridauth.sourceforge.net",
+            "keywords": [
+                "OpenId",
+                "facebook",
+                "google",
+                "hybridauth",
+                "login",
+                "oauth",
+                "social",
+                "twitter",
+                "yahoo"
+            ],
+            "time": "2017-07-09T07:14:21+00:00"
         }
     ],
     "packages-dev": [],
