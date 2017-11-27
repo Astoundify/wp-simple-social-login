@@ -69,9 +69,12 @@
 	display: block;
 }
 
-#loginform.regular-login #rememberme,
-#loginform.regular-login label {
+#loginform.regular-login #rememberme {
 	display: inline-block !important;
+}
+
+#loginform.regular-login label {
+	display: inline !important;
 }
 
 #loginform.regular-login #astoundify-simple-social-login-wordpress-wrap {
