@@ -141,7 +141,7 @@ class Provider_Twitter extends Provider {
 	}
 
 	/**
-	 * Connect via Facebook API
+	 * Connect via Twitter API
 	 *
 	 * @since 1.0.0
 	 *
@@ -160,19 +160,6 @@ class Provider_Twitter extends Provider {
 		} else {
 			return new \Abraham\TwitterOAuth\TwitterOAuth( $this->get_consumer_key(), $this->get_consumer_secret(), $oauth_token, $oauth_token_secret );
 		}
-	}
-
-	/**
-	 * API Callback
-	 *
-	 * @since 1.0.0
-	 */
-	public function get_api_callback_url() {
-		$url = add_query_arg( array(
-			'astoundify_simple_social_login' => $this->id,
-			'action' => 'done',
-		), home_url() );
-		return $url;
 	}
 
 	/**

@@ -15,6 +15,16 @@ if( ! session_id() ) {
 }
 
 /**
+ * HybridAuth Endpoint.
+ *
+ * @since 1.0.0
+ */
+if ( isset( $_GET['astoundify_simple_social_login'] ) && 'done' === $_GET['astoundify_simple_social_login'] ) {
+	do_action( 'astoundify_simple_social_login_process_done' );
+	exit;
+}
+
+/**
  * Check request, redirect back if not valid.
  * - Provider.
  * - Action.

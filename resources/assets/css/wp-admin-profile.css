@@ -54,3 +54,9 @@
 .astoundify-simple-social-login-button-twitter:focus {
 	background: #1DA1F3;
 }
+
+.astoundify-simple-social-login-button-google,
+.astoundify-simple-social-login-button-google:hover,
+.astoundify-simple-social-login-button-google:focus {
+	background: #CF4332;
+}
