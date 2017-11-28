@@ -100,7 +100,7 @@ class Provider_Facebook extends Provider {
 		$config = array(
 			'base_url'  => $this->get_endpoint_url(),
 			'providers' => array(
-				$this->id => array(
+				'Facebook' => array(
 					'enabled'         => true,
 					'keys'            => array(
 						'id'     => $this->get_app_id(),
@@ -119,7 +119,7 @@ class Provider_Facebook extends Provider {
 			return false;
 		}
 
-		$adapter = $hybridauth->authenticate( $this->id );
+		$adapter = $hybridauth->authenticate( 'Facebook' );
 		$profile = $adapter->getUserProfile();
 
 		$data = array(

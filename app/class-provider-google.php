@@ -100,7 +100,7 @@ class Provider_Google extends Provider {
 		$config = array(
 			'base_url'  => $this->get_endpoint_url(),
 			'providers' => array(
-				$this->id => array(
+				'Google' => array(
 					'enabled'         => true,
 					'keys'            => array(
 						'id'     => $this->get_app_id(),
@@ -117,7 +117,7 @@ class Provider_Google extends Provider {
 		);
 
 		$hybridauth = $this->api_init( $config );
-		$adapter = $hybridauth->authenticate( $this->id );
+		$adapter = $hybridauth->authenticate( 'Google' );
 		$profile = $adapter->getUserProfile();
 
 		$data = array(

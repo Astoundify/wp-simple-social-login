@@ -100,7 +100,7 @@ class Provider_Twitter extends Provider {
 		$config = array(
 			'base_url'  => $this->get_endpoint_url(),
 			'providers' => array(
-				$this->id => array(
+				'Twitter' => array(
 					'enabled'         => true,
 					'keys'            => array(
 						'key'     => $this->get_app_id(),
@@ -114,7 +114,7 @@ class Provider_Twitter extends Provider {
 		);
 
 		$hybridauth = $this->api_init( $config );
-		$adapter = $hybridauth->authenticate( $this->id );
+		$adapter = $hybridauth->authenticate( 'Twitter' );
 		$profile = $adapter->getUserProfile();
 
 		$data = array(
