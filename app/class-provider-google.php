@@ -168,7 +168,7 @@ class Provider_Google extends Provider {
 		}
 
 		// Load library.
-		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
 
 		$config = array(
 			'base_url'  => $this->get_endpoint_url(),
@@ -207,11 +207,11 @@ class Provider_Google extends Provider {
 		$data = array(
 			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
 			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
 			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ), // Gmail.
 		);
 
 		return $data;

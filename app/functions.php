@@ -158,6 +158,29 @@ function astoundify_simple_social_login_template_include( $template ) {
 add_filter( 'template_include', 'astoundify_simple_social_login_template_include' );
 
 /**
+ * Done Process. Endpoint For HybridAuth.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_process_done() {
+	// Bail if no active provider.
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		wp_redirect( home_url() );
+		exit;
+	}
+
+	// Load HybridAuth Library.
+	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+
+	// Process social account data.
+	Hybrid_Endpoint::process();
+	wp_die();
+	exit;
+}
+add_action( 'astoundify_simple_social_login_process_done', 'astoundify_simple_social_login_process_done' );
+
+/**
  * Log User In.
  *
  * @since 1.0.0
