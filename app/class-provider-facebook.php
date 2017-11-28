@@ -124,7 +124,6 @@ class Provider_Facebook extends Provider {
 			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
-			'screen_name'        => property_exists( $profile, 'displayName' ) ? $profile->displayName : '', // Twitter username.
 		);
 
 		if ( ! $data['id'] ) {

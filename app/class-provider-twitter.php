@@ -134,4 +134,20 @@ class Provider_Twitter extends Provider {
 		return $data;
 	}
 
+	/**
+	 * Link Data
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Full social data.
+	 * @return array
+	 */
+	public function get_link_data( $data ) {
+		$selected_data = array(
+			'id' => $data['id'],
+			'screen_name' => $data['screen_name'],
+		);
+		return $selected_data;
+	}
+
 }

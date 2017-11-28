@@ -15,12 +15,6 @@ namespace Astoundify\Simple_Social_Login;
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions.php' );
 require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-template.php' );
 
-// Providers.
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-provider-facebook.php' );
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-provider-twitter.php' );
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-provider-google.php' );
-
-
 /**
  * Initialize plugin.
  *

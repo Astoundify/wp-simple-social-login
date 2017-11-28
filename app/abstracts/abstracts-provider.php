@@ -640,4 +640,115 @@ abstract class Provider {
 		wp_safe_redirect( esc_url_raw( add_query_arg( '_flush', time(), $url ) ) );
 		exit;
 	}
+
+	/**
+	 * Link Data: Only store social account ID on link process.
+	 * Do not override account email, name, etc.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Full social data.
+	 * @return array
+	 */
+	public function get_link_data( $data ) {
+		$selected_data = array(
+			'id' => $data['id'],
+		);
+		return $selected_data;
+	}
+
+	/**
+	 * Process Action
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $action Request action.
+	 * @param string $referer URL.
+	 */
+	public function process_action( $action, $referer ) {
+
+		// Separate each action.
+		switch ( $action ) {
+			case 'login_register':
+				if ( is_user_logged_in() ) {
+					$this->error_redirect( 'already_logged_in' );
+				}
+
+				$data = $this->api_get_data();
+				if ( ! $data || ! isset( $data['id'] ) ) {
+					$this->error_redirect( 'api_error' );
+				}
+
+				// Get connected user ID.
+				$user_id = $this->get_connected_user_id( $data['id'] );
+
+				// User found. Log them in.
+				if ( $user_id ) {
+					astoundify_simple_social_login_log_user_in( $user_id );
+					$this->success_redirect( urldecode( $referer ) );
+				}
+
+				// If registration disabled. bail.
+				if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
+					$this->error_redirect( 'connected_user_not_found' );
+				}
+
+				// Register user.
+				$user_id = $this->insert_user( $data, $referer );
+				if ( ! $user_id ) {
+					$this->error_redirect( 'registration_fail' );
+				}
+
+				// Log them in.
+				astoundify_simple_social_login_log_user_in( $user_id );
+
+				// Redirect to home, if in login page.
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			case 'link':
+				if ( ! is_user_logged_in() ) {
+					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
+				}
+
+				$is_connected = $this->is_user_connected( get_current_user_id() );
+				if ( $is_connected ) {
+					$this->error_redirect( 'already_connected', urldecode( $referer ) );
+				}
+
+				$data = $this->api_get_data();
+				if ( ! $data || ! isset( $data['id'] ) ) {
+					$this->error_redirect( 'api_error' );
+				}
+
+				// Get connected user ID.
+				$user_id = $this->get_connected_user_id( $data['id'] );
+				if ( $user_id ) {
+					$this->error_redirect( 'another_already_connected', urldecode( $referer ) );
+				}
+
+				// Link user.
+				$link_data = $this->get_link_data( $data );
+				$link = $this->link_user( $link_data );
+
+				if ( ! $link ) {
+					$this->error_redirect( 'link_fail', urldecode( $referer ) );
+				}
+
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			case 'unlink':
+				if ( ! is_user_logged_in() ) {
+					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
+				}
+
+				$this->unlink_user( get_current_user_id() );
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			default:
+				$this->error_redirect( 'unknown_action' );
+		}
+	}
 }
