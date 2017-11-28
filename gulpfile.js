@@ -252,8 +252,9 @@ gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 		'vendor/autoload.php',
 		'vendor/composer/*',
 		'vendor/composer/**',
-		'vendor/astoundify/*',
 		'vendor/astoundify/**',
+		'vendor/facebook/**',
+		'vendor/hybridauth/**',
 		'LICENSE',
 		'readme.txt'
 	], {
@@ -270,7 +271,7 @@ gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'zip', function() {
-	gulp.src( [ '<%= slug %>/**' ], {
+	gulp.src( [ 'astoundify-simple-social-login/**' ], {
 		base: './'
  	} )
 		.pipe( zip( 'astoundify-simple-social-login-' + pkg.version + '.zip' ) )

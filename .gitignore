@@ -10,4 +10,4 @@ vendor/abraham
 vendor/hybridauth
 vendor/autoload.php
 public
-astoundify-plugin
+astoundify-simple-social-login
