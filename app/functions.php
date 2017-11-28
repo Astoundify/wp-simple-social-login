@@ -170,6 +170,9 @@ function astoundify_simple_social_login_process_done() {
 		exit;
 	}
 
+	// Load Facebook Library.
+	//require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/facebook/graph-sdk/src/Facebook/autoload.php' );
+
 	// Load HybridAuth Library.
 	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
 

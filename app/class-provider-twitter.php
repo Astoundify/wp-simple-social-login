@@ -197,6 +197,9 @@ class Provider_Twitter extends Provider {
 	 * @return array
 	 */
 	public function api_get_data() {
+		if ( ! $this->is_active() ) {
+			return false;
+		}
 		$hybridauth = $this->api_init();
 		$adapter = $hybridauth->authenticate( 'Twitter' );
 		$profile = $adapter->getUserProfile();

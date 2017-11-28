@@ -77,6 +77,21 @@ class Provider_Facebook extends Provider {
 	}
 
 	/**
+	 * Endpoint URL
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_endpoint_url() {
+		$args = array(
+			'astoundify_simple_social_login' => 'done',
+		);
+		$url = add_query_arg( $args, user_trailingslashit( home_url() ) );
+		return $url;
+	}
+
+	/**
 	 * Is Active.
 	 *
 	 * @since 1.0.0
@@ -152,16 +167,26 @@ class Provider_Facebook extends Provider {
 			return false;
 		}
 
-		// Load Facebook SDK.
-		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/facebook/graph-sdk/src/Facebook/autoload.php' );
+		// Load library.
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
 
 		$config = array(
-			'app_id'                => $this->get_app_id(),
-			'app_secret'            => $this->get_app_secret(),
-			'default_graph_version' => 'v2.8',
+			'base_url'  => $this->get_endpoint_url(),
+			'providers' => array(
+				'Facebook' => array(
+					'enabled'         => true,
+					'keys'            => array(
+						'id'     => $this->get_app_id(),
+						'secret'  => $this->get_app_secret(),
+					),
+					'scope'           => 'email',
+					'access_type'     => 'offline',
+					'approval_prompt' => 'force',
+				),
+			),
 		);
 
-		return new \Facebook\Facebook( $config );
+		return new \Hybrid_Auth( $config );
 	}
 
 	/**
@@ -175,65 +200,19 @@ class Provider_Facebook extends Provider {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
+		$hybridauth = $this->api_init();
+		$adapter = $hybridauth->authenticate( 'Facebook' );
+		$profile = $adapter->getUserProfile();
 
-		// @link https://stackoverflow.com/questions/32029116
-		if ( ! isset( $_GET['state'] ) ) {
-			return false;
-		}
-
-		$fb = $this->api_init();
-		$helper = $fb->getRedirectLoginHelper();
-
-		// Default data.
 		$data = array(
-			'access_token'  => '',
-			'id'            => '',
-			'user_email'    => '',
-			'display_name'  => '',
-			'nickname'      => '',
-			'first_name'    => '',
-			'last_name'     => '',
+			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
+			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
+			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'screen_name'        => property_exists( $profile, 'displayName' ) ? $profile->displayName : '', // Twitter username.
 		);
-
-		// Get access token.
-		try {
-			$access_token = $helper->getAccessToken();
-		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			return false;
-		} catch( Facebook\Exceptions\FacebookSDKException $e ) {
-			return false;
-		}
-
-		// Bail if not set.
-		if ( ! isset( $access_token ) ) {
-			return false;
-		}
-
-		// Add access token to data array.
-		$data['access_token'] = $access_token->getValue();
-
-		// Process token.
-		$fb->setDefaultAccessToken( $access_token->getValue() ) ;
-
-		// Get Facebook user data using token.
-		try {
-			$profile_request = $fb->get( '/me?fields=name,first_name,last_name,email' );
-			$profile = $profile_request->getGraphUser();
-
-			if ( ! $profile->getProperty( 'id' ) ) {
-				return false;
-			}
-
-			$data['id']            = $profile->getProperty( 'id' );
-			$data['user_email']    = $profile->getProperty( 'email' );
-			$data['display_name']  = $profile->getProperty( 'name' );
-			$data['nickname']      = $profile->getProperty( 'name' );
-			$data['first_name']    = $profile->getProperty( 'first_name' );
-			$data['last_name']     = $profile->getProperty( 'last_name' );
-
-		} catch( Facebook\Exceptions\FacebookResponseException $e ) {
-			return false;
-		}
 
 		if ( ! $data['id'] ) {
 			return false;

@@ -200,6 +200,9 @@ class Provider_Google extends Provider {
 	 * @return array
 	 */
 	public function api_get_data() {
+		if ( ! $this->is_active() ) {
+			return false;
+		}
 		$hybridauth = $this->api_init();
 		$adapter = $hybridauth->authenticate( 'Google' );
 		$profile = $adapter->getUserProfile();
