@@ -85,7 +85,7 @@ function astoundify_simple_social_login_panel_google() {
 		<tr>
 			<th scope="row"><label for="google-cb-url"><?php esc_html_e( 'Callback URL', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<input id="google-cb-url" type="url" class="large-text" readonly="readonly" value="<?php echo esc_url( add_query_arg( 'hauth.done', 'google', $provider->get_endpoint_url() ) ); ?>">
+				<input id="google-cb-url" type="url" class="large-text" readonly="readonly" value="<?php echo esc_url( add_query_arg( 'hauth.done', 'Google', $provider->get_endpoint_url() ) ); ?>">
 				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
