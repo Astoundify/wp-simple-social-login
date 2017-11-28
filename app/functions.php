@@ -179,7 +179,12 @@ function astoundify_simple_social_login_process_done() {
 	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
 
 	// Process social account data.
-	Hybrid_Endpoint::process();
+	try {
+		\Hybrid_Endpoint::process();
+	} catch( \Exception $e ) {
+		wp_die();
+		exit;
+	}
 	wp_die();
 	exit;
 }

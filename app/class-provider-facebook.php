@@ -113,7 +113,12 @@ class Provider_Facebook extends Provider {
 			),
 		);
 
+
 		$hybridauth = $this->api_init( $config );
+		if ( ! $hybridauth ) {
+			return false;
+		}
+
 		$adapter = $hybridauth->authenticate( $this->id );
 		$profile = $adapter->getUserProfile();
 

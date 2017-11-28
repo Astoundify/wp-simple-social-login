@@ -556,7 +556,15 @@ abstract class Provider {
 
 		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
 
-		return new \Hybrid_Auth( $config );
+		$hybridauth = false;
+
+		try {
+			$hybridauth = new \Hybrid_Auth( $config );
+		} catch( \Exception $e ) {
+			return false;
+		}
+
+		return $hybridauth;
 	}
 
 	/**
