@@ -69,8 +69,7 @@
 	display: block;
 }
 
-#loginform.regular-login #rememberme,
-#loginform.regular-login label {
+#loginform.regular-login #rememberme {
 	display: inline-block !important;
 }
 
