@@ -96,7 +96,7 @@ add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profi
 function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $redirect_to ) {
 	// Bail if user already logged-in.
 	if ( is_user_logged_in() ) {
-		$errors->add( 'already_logged_in', esc_html__( "You're already logged-in.", 'astoundify-simple-social-login' ), 'error' );
+		$errors->add( 'already_logged_in', esc_html__( "You're already logged-in.", 'astoundify-simple-social-login' ) . ' <a href="' . wp_logout_url() . '">' . esc_html__( 'Logout?', 'astoundify-simple-social-login' ) . '</a>', 'error' );
 	}
 	// Bail if not active.
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
