@@ -22,7 +22,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function astoundify_simple_social_login_get_providers() {
-	return apply_filters( 'astoundify_simple_social_login_providers', array() );
+	$providers = array(
+		'facebook' => '\Astoundify\Simple_Social_Login\Provider_Facebook',
+		'twitter'  => '\Astoundify\Simple_Social_Login\Provider_Twitter',
+		'google'   => '\Astoundify\Simple_Social_Login\Provider_Google',
+	);
+	return apply_filters( 'astoundify_simple_social_login_providers', $providers );
 }
 
 /**
@@ -156,6 +161,56 @@ function astoundify_simple_social_login_template_include( $template ) {
 	return $template;
 }
 add_filter( 'template_include', 'astoundify_simple_social_login_template_include' );
+
+/**
+ * Done Process. Endpoint For HybridAuth.
+ *
+ * @since 1.0.0
+ */
+function astoundify_simple_social_login_process_done() {
+	// Bail if no active provider.
+	$providers = astoundify_simple_social_login_get_active_providers();
+	if ( ! $providers || ! is_array( $providers ) ) {
+		wp_redirect( home_url() );
+		exit;
+	}
+
+	// Load HybridAuth Library.
+	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+
+	// Process social account data.
+	try {
+		\Hybrid_Endpoint::process();
+	} catch( \Exception $e ) {
+		wp_die();
+		exit;
+	}
+	wp_die();
+	exit;
+}
+add_action( 'astoundify_simple_social_login_process_done', 'astoundify_simple_social_login_process_done' );
+
+/**
+ * Action Process
+ *
+ * @since 1.0.0
+ *
+ * @param string $provider Login provider.
+ * @param string $action   Request action.
+ * @param string $referer  URL.
+ */
+function astoundify_simple_social_login_process( $provider, $action, $referer ) {
+	// Bail if invalid or not active.
+	$provider = astoundify_simple_social_login_get_provider( $provider );
+	if ( ! $provider || ! $provider->is_active() ) {
+		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
+		exit;
+	}
+
+	// Process action.
+	$provider->process_action( $action, $referer );
+}
+add_action( 'astoundify_simple_social_login_process', 'astoundify_simple_social_login_process', 10, 3 );
 
 /**
  * Log User In.

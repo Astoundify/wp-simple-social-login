@@ -43,5 +43,5 @@ if ( ! isset( $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_
  *
  * @since 1.0.0
  */
-do_action( 'astoundify_simple_social_login_process_' . $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_referer'] );
+do_action( 'astoundify_simple_social_login_process', $_GET['astoundify_simple_social_login'], $_GET['action'], $_GET['_referer'] );
 exit;

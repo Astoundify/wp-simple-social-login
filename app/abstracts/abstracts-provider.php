@@ -65,24 +65,14 @@ abstract class Provider {
 	}
 
 	/**
-	 * Is Active?
+	 * Get SVG Icon
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	public function is_active() {
-		// Is selected as active provider?
-		$options = get_option( 'astoundify_simple_social_login', array() );
-		$options = is_array( $options ) ? $options : array();
-
-		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-
-		if ( ! in_array( $this->id, $providers, true ) ) {
-			return false;
-		}
-
-		return true;
+	public function get_icon() {
+		return astoundify_simple_social_login_get_svg( $this->id );
 	}
 
 	/**
@@ -106,18 +96,83 @@ abstract class Provider {
 		return $url;
 	}
 
+	/* === APP CREDENTIALS === */
+
 	/**
-	 * Get SVG Icon
+	 * App ID.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_icon() {
-		return astoundify_simple_social_login_get_svg( $this->id );
+	public function get_app_id() {
+		$option = get_option( $this->option_name, array() );
+		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
+	}
+
+	/**
+	 * App Secret.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_app_secret() {
+		$option = get_option( $this->option_name, array() );
+		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
+	}
+
+	/**
+	 * Endpoint URL (HybridAuth Process)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_endpoint_url() {
+		return add_query_arg( 'astoundify_simple_social_login', 'done', user_trailingslashit( home_url() ) );
+	}
+
+	/**
+	 * Is Active?
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_active() {
+		// Is selected as active provider?
+		$options = get_option( 'astoundify_simple_social_login', array() );
+		$options = is_array( $options ) ? $options : array();
+
+		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
+
+		if ( ! in_array( $this->id, $providers, true ) ) {
+			return false;
+		}
+
+		// Check API requirements.
+		$app_id = $this->get_app_id();
+		$app_secret = $this->get_app_secret();
+		if ( ! $app_id || ! $app_secret ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/* === LOGIN/REGISTER === */
+
+	/**
+	 * Default Login Register Button Text.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_login_register_button_text_default() {
+		return '';
+	}
 
 	/**
 	 * Login Register Button Text
@@ -128,7 +183,7 @@ abstract class Provider {
 	 */
 	public function get_login_register_button_text() {
 		$option = get_option( $this->option_name, array() );
-		return isset( $option['login_button_text'] ) && $option['login_button_text'] ? esc_attr( $option['login_button_text'] ) : '';
+		return isset( $option['login_button_text'] ) && $option['login_button_text'] ? esc_attr( $option['login_button_text'] ) : $this->get_login_register_button_text_default();
 	}
 
 	/**
@@ -185,6 +240,17 @@ abstract class Provider {
 	}
 
 	/**
+	 * Link Button Text Default.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_link_button_text_default() {
+		return '';
+	}
+
+	/**
 	 * Link Button Text.
 	 *
 	 * @since 1.0.0
@@ -193,7 +259,7 @@ abstract class Provider {
 	 */
 	public function get_link_button_text() {
 		$option = get_option( $this->option_name, array() );
-		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : '';
+		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : $this->get_link_button_text_default();
 	}
 
 	/**
@@ -213,6 +279,17 @@ abstract class Provider {
 	}
 
 	/**
+	 * Connected Info Text Default
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_connected_info_text_default() {
+		return '';
+	}
+
+	/**
 	 * Connected Info Text
 	 *
 	 * @since 1.0.0
@@ -221,7 +298,8 @@ abstract class Provider {
 	 */
 	public function get_connected_info_text() {
 		$option = get_option( $this->option_name, array() );
-		$text = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : '';
+		$text = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : $this->get_connected_info_text_default();
+		$text = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
 		return $text;
 	}
 
@@ -465,6 +543,31 @@ abstract class Provider {
 	/* === API === */
 
 	/**
+	 * Connect via HybridAuth
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Hybrid_Auth|false
+	 */
+	function api_init( $config ) {
+		if ( ! $this->is_active() ) {
+			return false;
+		}
+
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
+
+		$hybridauth = false;
+
+		try {
+			$hybridauth = new \Hybrid_Auth( $config );
+		} catch( \Exception $e ) {
+			return false;
+		}
+
+		return $hybridauth;
+	}
+
+	/**
 	 * Get Error
 	 *
 	 * @since 1.0.0
@@ -544,5 +647,116 @@ abstract class Provider {
 		}
 		wp_safe_redirect( esc_url_raw( add_query_arg( '_flush', time(), $url ) ) );
 		exit;
+	}
+
+	/**
+	 * Link Data: Only store social account ID on link process.
+	 * Do not override account email, name, etc.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Full social data.
+	 * @return array
+	 */
+	public function get_link_data( $data ) {
+		$selected_data = array(
+			'id' => $data['id'],
+		);
+		return $selected_data;
+	}
+
+	/**
+	 * Process Action
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $action Request action.
+	 * @param string $referer URL.
+	 */
+	public function process_action( $action, $referer ) {
+
+		// Separate each action.
+		switch ( $action ) {
+			case 'login_register':
+				if ( is_user_logged_in() ) {
+					$this->error_redirect( 'already_logged_in' );
+				}
+
+				$data = $this->api_get_data();
+				if ( ! $data || ! isset( $data['id'] ) ) {
+					$this->error_redirect( 'api_error' );
+				}
+
+				// Get connected user ID.
+				$user_id = $this->get_connected_user_id( $data['id'] );
+
+				// User found. Log them in.
+				if ( $user_id ) {
+					astoundify_simple_social_login_log_user_in( $user_id );
+					$this->success_redirect( urldecode( $referer ) );
+				}
+
+				// If registration disabled. bail.
+				if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
+					$this->error_redirect( 'connected_user_not_found' );
+				}
+
+				// Register user.
+				$user_id = $this->insert_user( $data, $referer );
+				if ( ! $user_id ) {
+					$this->error_redirect( 'registration_fail' );
+				}
+
+				// Log them in.
+				astoundify_simple_social_login_log_user_in( $user_id );
+
+				// Redirect to home, if in login page.
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			case 'link':
+				if ( ! is_user_logged_in() ) {
+					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
+				}
+
+				$is_connected = $this->is_user_connected( get_current_user_id() );
+				if ( $is_connected ) {
+					$this->error_redirect( 'already_connected', urldecode( $referer ) );
+				}
+
+				$data = $this->api_get_data();
+				if ( ! $data || ! isset( $data['id'] ) ) {
+					$this->error_redirect( 'api_error' );
+				}
+
+				// Get connected user ID.
+				$user_id = $this->get_connected_user_id( $data['id'] );
+				if ( $user_id ) {
+					$this->error_redirect( 'another_already_connected', urldecode( $referer ) );
+				}
+
+				// Link user.
+				$link_data = $this->get_link_data( $data );
+				$link = $this->link_user( $link_data );
+
+				if ( ! $link ) {
+					$this->error_redirect( 'link_fail', urldecode( $referer ) );
+				}
+
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			case 'unlink':
+				if ( ! is_user_logged_in() ) {
+					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
+				}
+
+				$this->unlink_user( get_current_user_id() );
+				$this->success_redirect( urldecode( $referer ) );
+
+				break;
+			default:
+				$this->error_redirect( 'unknown_action' );
+		}
 	}
 }

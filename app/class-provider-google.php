@@ -53,122 +53,49 @@ class Provider_Google extends Provider {
 	}
 
 	/**
-	 * Client ID
+	 * Login Register Button Text Default
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_client_id() {
-		$option = get_option( $this->option_name, array() );
-		return isset( $option['client_id'] ) ? esc_attr( trim( $option['client_id'] ) ) : '';
+	public function get_login_register_button_text_default() {
+		return esc_html__( 'Log in with Google', 'astoundify-simple-social-login' );
 	}
 
 	/**
-	 * Client Secret
+	 * Link Button Text Default
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_client_secret() {
-		$option = get_option( $this->option_name, array() );
-		return isset( $option['client_secret'] ) ? esc_attr( trim( $option['client_secret'] ) ) : '';
+	public function get_link_button_text_default() {
+		return esc_html__( 'Link your account to Google', 'astoundify-simple-social-login' );
 	}
 
 	/**
-	 * Endpoint URL
+	 * Connected Info Text Default.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_endpoint_url() {
-		$args = array(
-			'astoundify_simple_social_login' => 'done',
-		);
-		$url = add_query_arg( $args, home_url() );
-		return $url;
+	public function get_connected_info_text_default() {
+		return esc_html__( 'Your account is connected to Google. {{unlink}}.' );
 	}
 
 	/**
-	 * Is Active.
-	 *
-	 * @since 1.0.0
-	 */
-	public function is_active() {
-		// Check if selected.
-		$is_active = parent::is_active();
-
-		if ( ! $is_active ) {
-			return false;
-		}
-
-		// Check API requirements.
-		$consumer_key = $this->get_client_id();
-		$consumer_secret = $this->get_client_secret();
-		if ( ! $consumer_key || ! $consumer_secret ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Login Register Button Text
+	 * Get API Data
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string
+	 * @return array
 	 */
-	public function get_login_register_button_text() {
-		$text = parent::get_login_register_button_text();
-		return $text ? esc_attr( $text ) : esc_html__( 'Log in with Google', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Link Button Text.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_link_button_text() {
-		$text = parent::get_link_button_text();
-		return $text ? esc_attr( $text ) : esc_html__( 'Link your account to Google', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Connected Info Text
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_connected_info_text() {
-		$text = parent::get_connected_info_text();
-		// translators: {{unlink}} is a placeholder for unlink account link. Do not translate.
-		$text = $text ? $text : esc_html__( 'Your account is connected to Google. {{unlink}}.' );
-
-		$text = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
-
-		return $text;
-	}
-
-	/**
-	 * Connect via Google API
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return object|false
-	 */
-	function api_init() {
+	public function api_get_data() {
 		if ( ! $this->is_active() ) {
 			return false;
 		}
-
-		// Load library.
-		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
 
 		$config = array(
 			'base_url'  => $this->get_endpoint_url(),
@@ -176,8 +103,8 @@ class Provider_Google extends Provider {
 				'Google' => array(
 					'enabled'         => true,
 					'keys'            => array(
-						'id'     => $this->get_client_id(),
-						'secret' => $this->get_client_secret(),
+						'id'     => $this->get_app_id(),
+						'secret' => $this->get_app_secret(),
 					),
 					'scope'           => implode( ' ', array(
 						'https://www.googleapis.com/auth/userinfo.profile',
@@ -189,31 +116,36 @@ class Provider_Google extends Provider {
 			),
 		);
 
-		return new \Hybrid_Auth( $config );
-	}
-
-	/**
-	 * Get API Data
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array
-	 */
-	public function api_get_data() {
-		$hybridauth = $this->api_init();
+		$hybridauth = $this->api_init( $config );
 		$adapter = $hybridauth->authenticate( 'Google' );
 		$profile = $adapter->getUserProfile();
 
 		$data = array(
 			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
 			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
 			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ), // Gmail.
 		);
 
 		return $data;
+	}
+
+	/**
+	 * Link Data
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $data Full social data.
+	 * @return array
+	 */
+	public function get_link_data( $data ) {
+		$selected_data = array(
+			'id' => $data['id'],
+			'gmail' => $data['gmail'],
+		);
+		return $selected_data;
 	}
 }
