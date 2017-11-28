@@ -74,12 +74,20 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
 function astoundify_simple_social_login_panel_facebook() {
 	$options = get_option( 'astoundify_simple_social_login_facebook', array() );
 	$options = astoundify_simple_social_login_facebook_sanitize_settings( $options );
+	$provider = astoundify_simple_social_login_get_provider( 'facebook' );
 ?>
 
 <p><?php esc_html_e( 'Need help setting up and configuring Facebook social login?', 'astoundify-simple-social-login' ); ?> <a href="https://astoundify.com/go/simple-social-login-fb-setup/" target="_blank"><?php esc_html_e( 'Read the docs', 'astoundify-simple-social-login' ); ?></a>.</p>
 
 <table class="form-table">
 	<tbody>
+		<tr>
+			<th scope="row"><label for="facebook-cb-url"><?php esc_html_e( 'Callback URL', 'astoundify-simple-social-login' ); ?></label></th>
+			<td>
+				<input id="facebook-cb-url" type="url" class="large-text" readonly="readonly" value="<?php echo esc_url( $provider->get_endpoint_url() ); ?>">
+				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
+			</td>
+		</tr>
 		<tr>
 			<th scope="row"><label for="facebook-app-id"><?php esc_html_e( 'App ID', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -97,22 +105,21 @@ function astoundify_simple_social_login_panel_facebook() {
 		<tr>
 			<th scope="row"><label for="facebook-login-button-text"><?php esc_html_e( 'Login Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<input placeholder="<?php esc_attr_e( 'Log in with Facebook', 'astoundify-simple-social-login' ); ?>" id="facebook-login-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[login_button_text]" value="<?php echo esc_attr( $options['login_button_text'] ); ?>">
+				<input placeholder="<?php echo esc_attr( $provider->get_login_register_button_text_default() ); ?>" id="facebook-login-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[login_button_text]" value="<?php echo esc_attr( $options['login_button_text'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the login button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="facebook-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<input placeholder="<?php esc_attr_e( 'Link your account to Facebook', 'astoundify-simple-social-login' ); ?>" id="facebook-link-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[link_button_text]" value="<?php echo esc_attr( $options['link_button_text'] ); ?>">
+				<input placeholder="<?php echo esc_attr( $provider->get_link_button_text_default() ); ?>" id="facebook-link-button-text" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[link_button_text]" value="<?php echo esc_attr( $options['link_button_text'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
 		<tr>
 			<th scope="row"><label for="facebook-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
-				<?php // translators: Do not translate {{unlink}} text. It'a a placeholder for unconnect link. ?>
-				<input placeholder="<?php esc_attr_e( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' ); ?>" id="facebook-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
+				<input placeholder="<?php echo esc_attr( $provider->get_connected_info_text_default() ); ?>" id="facebook-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
 				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>

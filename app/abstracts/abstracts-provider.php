@@ -65,24 +65,14 @@ abstract class Provider {
 	}
 
 	/**
-	 * Is Active?
+	 * Get SVG Icon
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool
+	 * @return string
 	 */
-	public function is_active() {
-		// Is selected as active provider?
-		$options = get_option( 'astoundify_simple_social_login', array() );
-		$options = is_array( $options ) ? $options : array();
-
-		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-
-		if ( ! in_array( $this->id, $providers, true ) ) {
-			return false;
-		}
-
-		return true;
+	public function get_icon() {
+		return astoundify_simple_social_login_get_svg( $this->id );
 	}
 
 	/**
@@ -106,18 +96,83 @@ abstract class Provider {
 		return $url;
 	}
 
+	/* === APP CREDENTIALS === */
+
 	/**
-	 * Get SVG Icon
+	 * App ID.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @return string
 	 */
-	public function get_icon() {
-		return astoundify_simple_social_login_get_svg( $this->id );
+	public function get_app_id() {
+		$option = get_option( $this->option_name, array() );
+		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
+	}
+
+	/**
+	 * App Secret.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_app_secret() {
+		$option = get_option( $this->option_name, array() );
+		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
+	}
+
+	/**
+	 * Endpoint URL (HybridAuth Process)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_endpoint_url() {
+		return add_query_arg( 'astoundify_simple_social_login', 'done', user_trailingslashit( home_url() ) );
+	}
+
+	/**
+	 * Is Active?
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	public function is_active() {
+		// Is selected as active provider?
+		$options = get_option( 'astoundify_simple_social_login', array() );
+		$options = is_array( $options ) ? $options : array();
+
+		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
+
+		if ( ! in_array( $this->id, $providers, true ) ) {
+			return false;
+		}
+
+		// Check API requirements.
+		$app_id = $this->get_app_id();
+		$app_secret = $this->get_app_secret();
+		if ( ! $app_id || ! $app_secret ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/* === LOGIN/REGISTER === */
+
+	/**
+	 * Default Login Register Button Text.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_login_register_button_text_default() {
+		return '';
+	}
 
 	/**
 	 * Login Register Button Text
@@ -128,7 +183,7 @@ abstract class Provider {
 	 */
 	public function get_login_register_button_text() {
 		$option = get_option( $this->option_name, array() );
-		return isset( $option['login_button_text'] ) && $option['login_button_text'] ? esc_attr( $option['login_button_text'] ) : '';
+		return isset( $option['login_button_text'] ) && $option['login_button_text'] ? esc_attr( $option['login_button_text'] ) : $this->get_login_register_button_text_default();
 	}
 
 	/**
@@ -185,6 +240,17 @@ abstract class Provider {
 	}
 
 	/**
+	 * Link Button Text Default.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_link_button_text_default() {
+		return '';
+	}
+
+	/**
 	 * Link Button Text.
 	 *
 	 * @since 1.0.0
@@ -193,7 +259,7 @@ abstract class Provider {
 	 */
 	public function get_link_button_text() {
 		$option = get_option( $this->option_name, array() );
-		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : '';
+		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : $this->get_link_button_text_default();
 	}
 
 	/**
@@ -213,6 +279,17 @@ abstract class Provider {
 	}
 
 	/**
+	 * Connected Info Text Default
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_connected_info_text_default() {
+		return '';
+	}
+
+	/**
 	 * Connected Info Text
 	 *
 	 * @since 1.0.0
@@ -221,7 +298,8 @@ abstract class Provider {
 	 */
 	public function get_connected_info_text() {
 		$option = get_option( $this->option_name, array() );
-		$text = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : '';
+		$text = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : $this->get_connected_info_text_default();
+		$text = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
 		return $text;
 	}
 
@@ -463,6 +541,23 @@ abstract class Provider {
 	}
 
 	/* === API === */
+
+	/**
+	 * Connect via HybridAuth
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Hybrid_Auth|false
+	 */
+	function api_init( $config ) {
+		if ( ! $this->is_active() ) {
+			return false;
+		}
+
+		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
+
+		return new \Hybrid_Auth( $config );
+	}
 
 	/**
 	 * Get Error
