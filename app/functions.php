@@ -45,7 +45,7 @@ function astoundify_simple_social_login_get_active_providers() {
 
 	// Get active providers.
 	$providers = array();
-	foreach( $_providers as $id => $v ) {
+	foreach ( $_providers as $id => $v ) {
 		$provider = astoundify_simple_social_login_get_provider( $id );
 		if ( $provider && $provider->is_active() ) {
 			$providers[ $id ] = $provider;
@@ -108,9 +108,11 @@ function astoundify_simple_social_login_get_login_register_buttons() {
 
 	ob_start();
 
-	astoundify_simple_social_login_get_template( 'login-register-buttons.php', array(
-		'providers' => $providers,
-	) );
+	astoundify_simple_social_login_get_template(
+		'login-register-buttons.php', array(
+			'providers' => $providers,
+		)
+	);
 
 	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
 }
@@ -130,9 +132,11 @@ function astoundify_simple_social_login_get_link_unlink_buttons() {
 
 	ob_start();
 
-	astoundify_simple_social_login_get_template( 'link-unlink-buttons.php', array(
-		'providers' => $providers,
-	) );
+	astoundify_simple_social_login_get_template(
+		'link-unlink-buttons.php', array(
+			'providers' => $providers,
+		)
+	);
 
 	return apply_filters( 'astoundify_simple_social_login_link_unlink_buttons', ob_get_clean() );
 }
@@ -176,12 +180,12 @@ function astoundify_simple_social_login_process_done() {
 	}
 
 	// Load HybridAuth Library.
-	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php" );
+	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
 
 	// Process social account data.
 	try {
 		\Hybrid_Endpoint::process();
-	} catch( \Exception $e ) {
+	} catch ( \Exception $e ) {
 		wp_die();
 		exit;
 	}
@@ -224,8 +228,8 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
 	}
 
 	// Get user data.
-	$user        = get_userdata( $user_id );
-	$user_login  = $user->user_login;
+	$user       = get_userdata( $user_id );
+	$user_login = $user->user_login;
 
 	// Enable remember me cookie.
 	$remember_me = apply_filters( 'astoundify_simple_social_login_remember_me', true, $user_id );
@@ -264,7 +268,7 @@ function astoundify_simple_social_login_get_setup_profile_url() {
  */
 function astoundify_simple_social_login_is_registration_enabled() {
 	$options = get_option( 'astoundify_simple_social_login', array() );
-	$enable = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
+	$enable  = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
 	return apply_filters( 'astoundify_simple_social_login_registration_enabled', $enable );
 }
 
@@ -332,7 +336,13 @@ function astoundify_simple_social_login_is_wp_register_page() {
  * @param string $icon Icon name.
  */
 function astoundify_simple_social_login_get_svg( $icon ) {
-	$file = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "public/images/{$icon}.svg";
+	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$file  = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "public/images/{$icon}.svg";
+
+	if ( $debug ) {
+		$file = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "resources/assets/images/{$icon}.svg";
+	}
+
 	$file = apply_filters( 'astoundify_simple_social_login_svg', $file, $icon );
 
 	if ( file_exists( $file ) ) {

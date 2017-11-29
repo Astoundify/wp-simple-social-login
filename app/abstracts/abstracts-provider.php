@@ -87,9 +87,9 @@ abstract class Provider {
 			'astoundify_simple_social_login' => $this->id,
 			'action'                         => '',
 			'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$this->id}" ),
-			'_referer'                       => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?'  ) ), // Remove all query vars from URL.
+			'_referer'                       => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?' ) ), // Remove all query vars from URL.
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args     = wp_parse_args( $args, $defaults );
 
 		$url = add_query_arg( $args, home_url() );
 
@@ -152,7 +152,7 @@ abstract class Provider {
 		}
 
 		// Check API requirements.
-		$app_id = $this->get_app_id();
+		$app_id     = $this->get_app_id();
 		$app_secret = $this->get_app_secret();
 		if ( ! $app_id || ! $app_secret ) {
 			return false;
@@ -199,10 +199,12 @@ abstract class Provider {
 			return '';
 		}
 
-		$text = $this->get_login_register_button_text();
-		$url = $this->get_action_url( array(
-			'action' => 'login_register',
-		) );
+		$text    = $this->get_login_register_button_text();
+		$url     = $this->get_action_url(
+			array(
+				'action' => 'login_register',
+			)
+		);
 		$classes = array(
 			'astoundify-simple-social-login-button',
 			'astoundify-simple-social-login-button-' . $this->id,
@@ -210,9 +212,9 @@ abstract class Provider {
 			'astoundify-simple-social-login-login-register-button-' . $this->id,
 		);
 		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
-		$icon = $this->get_icon();
+		$icon    = $this->get_icon();
 
-		$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
+		$html = "<a class='{$classes}' href='{$url}'>{$icon} {$text}</a>";
 
 		return $html;
 	}
@@ -230,7 +232,7 @@ abstract class Provider {
 			return '';
 		}
 
-		$time = '';
+		$time      = '';
 		$timestamp = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_timestamp", true );
 		if ( $timestamp ) {
 			$time = sprintf( esc_html__( 'Last connected: %1$s @ %2$s', 'astoundify-simple-social-login' ), date_i18n( astoundify_simple_social_login_get_date_format(), $timestamp ), date_i18n( astoundify_simple_social_login_get_time_format(), $timestamp ) );
@@ -270,11 +272,13 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_unlink_button() {
-		$text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
+		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
 		$title = $this->get_last_connected_time_text();
-		$url = $this->get_action_url( array(
-			'action' => 'unlink',
-		) );
+		$url   = $this->get_action_url(
+			array(
+				'action' => 'unlink',
+			)
+		);
 		return "<a href='{$url}' title='{$title}'>{$text}</a>";
 	}
 
@@ -298,8 +302,8 @@ abstract class Provider {
 	 */
 	public function get_connected_info_text() {
 		$option = get_option( $this->option_name, array() );
-		$text = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : $this->get_connected_info_text_default();
-		$text = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
+		$text   = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : $this->get_connected_info_text_default();
+		$text   = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
 		return $text;
 	}
 
@@ -319,10 +323,12 @@ abstract class Provider {
 		if ( ! $this->is_user_connected() ) {
 			$is_connected = false;
 
-			$text = $this->get_link_button_text();
-			$url = $this->get_action_url( array(
-				'action' => 'link',
-			) );
+			$text    = $this->get_link_button_text();
+			$url     = $this->get_action_url(
+				array(
+					'action' => 'link',
+				)
+			);
 			$classes = array(
 				'astoundify-simple-social-login-button',
 				'astoundify-simple-social-login-button-' . $this->id,
@@ -330,16 +336,18 @@ abstract class Provider {
 				'astoundify-simple-social-login-link-button-' . $this->id,
 			);
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
-			$icon = $this->get_icon();
+			$icon    = $this->get_icon();
 
 			$html = "<p><a class='{$classes}' href='{$url}'>{$icon} {$text}</a></p>";
 		} else { // Already connected, show connected info.
 			$is_connected = true;
 
-			$text = $this->get_connected_info_text();
-			$url = $this->get_action_url( array(
-				'action' => 'unlink',
-			) );
+			$text    = $this->get_connected_info_text();
+			$url     = $this->get_action_url(
+				array(
+					'action' => 'unlink',
+				)
+			);
 			$classes = array(
 				'astoundify-simple-social-login-unlink-text',
 				'astoundify-simple-social-login-unlink-text-' . $this->id,
@@ -370,7 +378,7 @@ abstract class Provider {
 		}
 
 		// Is connected status.
-		$is_connected = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_connected" , true );
+		$is_connected = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_connected", true );
 
 		return $is_connected ? true : false;
 	}
@@ -398,7 +406,7 @@ abstract class Provider {
 			'first_name'   => '',
 			'last_name'    => '',
 		);
-		$data = wp_parse_args( $data, $defaults );
+		$data     = wp_parse_args( $data, $defaults );
 
 		// Bail if no ID.
 		if ( ! $data['id'] || ! $data['display_name'] ) {
@@ -417,7 +425,7 @@ abstract class Provider {
 		}
 
 		$inserted = wp_insert_user( $data );
-		$user_id = $inserted && is_wp_error( $inserted ) ? false : intval( $inserted );
+		$user_id  = $inserted && is_wp_error( $inserted ) ? false : intval( $inserted );
 
 		if ( ! $user_id ) {
 			return false;
@@ -430,10 +438,10 @@ abstract class Provider {
 		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected", 1 );
 
 		// Unset defaults data, save extra datas as user meta.
-		foreach( $defaults as $k => $v ) {
+		foreach ( $defaults as $k => $v ) {
 			unset( $data[ $k ] );
 		}
-		foreach( $data as $k => $v ) {
+		foreach ( $data as $k => $v ) {
 			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
 		}
 
@@ -463,7 +471,7 @@ abstract class Provider {
 		$defaults = array(
 			'id' => time(),
 		);
-		$data = wp_parse_args( $data, $defaults );
+		$data     = wp_parse_args( $data, $defaults );
 
 		// Bail if no ID.
 		if ( ! $data['id'] ) {
@@ -477,10 +485,10 @@ abstract class Provider {
 		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected", 1 );
 
 		// Unset defaults data, save extra datas as user meta.
-		foreach( $defaults as $k => $v ) {
+		foreach ( $defaults as $k => $v ) {
 			unset( $data[ $k ] );
 		}
-		foreach( $data as $k => $v ) {
+		foreach ( $data as $k => $v ) {
 			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
 		}
 
@@ -520,17 +528,17 @@ abstract class Provider {
 	 * @return false|int
 	 */
 	public function get_connected_user_id( $id ) {
-		$args = array(
-			'meta_key'    => "_astoundify_simple_social_login_{$this->id}_id",
-			'meta_value'  => esc_html( $id ),
-			'number'      => -1,
-			'fields'      => 'ID',
+		$args  = array(
+			'meta_key'   => "_astoundify_simple_social_login_{$this->id}_id",
+			'meta_value' => esc_html( $id ),
+			'number'     => -1,
+			'fields'     => 'ID',
 		);
 		$users = get_users( $args );
 
 		// If user found, return it.
 		if ( $users ) {
-			if ( 1 === count( $users )  ) {
+			if ( 1 === count( $users ) ) {
 				return intval( $users[0] );
 			} else {
 				// More than one users connected to the same account ? Maybe notice admin.
@@ -560,7 +568,7 @@ abstract class Provider {
 
 		try {
 			$hybridauth = new \Hybrid_Auth( $config );
-		} catch( \Exception $e ) {
+		} catch ( \Exception $e ) {
 			return false;
 		}
 
@@ -737,7 +745,7 @@ abstract class Provider {
 
 				// Link user.
 				$link_data = $this->get_link_data( $data );
-				$link = $this->link_user( $link_data );
+				$link      = $this->link_user( $link_data );
 
 				if ( ! $link ) {
 					$this->error_redirect( 'link_fail', urldecode( $referer ) );

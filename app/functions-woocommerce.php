@@ -71,7 +71,7 @@ function astoundify_simple_social_login_woocommerce_link_unlink_buttons() {
 ?>
 <div id="astoundify-simple-social-login-woocommerce-profile-wrap">
 	<h2><?php esc_html_e( 'Connected Social Accounts', 'astoundify-simple-social-login' ); ?></h2>
-	<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:', 'astoundify-simple-social-login' )?></p>
+	<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:', 'astoundify-simple-social-login' ); ?></p>
 	<?php echo $buttons; ?>
 </div><!-- #astoundify-simple-social-login-woocommerce-profile-wrap -->
 <?php
@@ -113,7 +113,6 @@ function astoundify_simple_social_login_woocommerce_add_error_notice() {
 			} else { // Edit account page, add notice.
 				wc_add_notice( esc_html__( 'Please setup your email to activate your account.', 'astoundify-simple-social-login' ) . ' <a href="' . esc_url( wc_customer_edit_account_url() ) . '#account_email">' . esc_html__( 'Add Email', 'astoundify-simple-social-login' ) . '</a>', 'error' );
 			}
-
 		}
 	}
 }
@@ -150,7 +149,9 @@ function astoundify_simple_social_login_woocommerce_scripts() {
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'woocommerce' ) ) {
 		return;
 	}
+
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return;
 	}

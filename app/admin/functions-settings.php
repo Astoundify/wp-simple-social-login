@@ -38,11 +38,11 @@ add_action( 'admin_init', 'astoundify_simple_social_login_register_settings' );
  */
 function astoundify_simple_social_login_sanitize_settings( $input ) {
 	$defaults = array(
-		'display'             => array(),
-		'providers'           => array(),
-		'users_can_register'  => get_option( 'users_can_register', false ),
+		'display'            => array(),
+		'providers'          => array(),
+		'users_can_register' => get_option( 'users_can_register', false ),
 	);
-	$output = wp_parse_args( (array)$input, $defaults );
+	$output   = wp_parse_args( (array) $input, $defaults );
 	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $output );
 }
 
@@ -54,11 +54,11 @@ function astoundify_simple_social_login_sanitize_settings( $input ) {
  */
 function astoundify_simple_social_login_add_menu_page() {
 	add_options_page(
-		$page_title  = esc_html( 'Astoundify Simple Social Login', 'astoundify-simple-social-login' ),
-		$menu_title  = esc_html( 'Simple Social Login', 'astoundify-simple-social-login' ),
-		$capability  = 'manage_options',
-		$menu_slug   = 'astoundify-simple-social-login',
-		$function    = 'astoundify_simple_social_login_settings'
+		$page_title = esc_html( 'Astoundify Simple Social Login', 'astoundify-simple-social-login' ),
+		$menu_title = esc_html( 'Simple Social Login', 'astoundify-simple-social-login' ),
+		$capability = 'manage_options',
+		$menu_slug  = 'astoundify-simple-social-login',
+		$function   = 'astoundify_simple_social_login_settings'
 	);
 }
 add_action( 'admin_menu', 'astoundify_simple_social_login_add_menu_page' );
@@ -70,10 +70,10 @@ add_action( 'admin_menu', 'astoundify_simple_social_login_add_menu_page' );
  */
 function astoundify_simple_social_login_settings() {
 	// Settings array.
-	$tabs = array(
+	$tabs  = array(
 		'settings' => esc_html( 'Settings', 'astoundify-simple-social-login' ),
 	);
-	$tabs = apply_filters( 'astoundify_simple_social_login_settings_tabs', $tabs );
+	$tabs  = apply_filters( 'astoundify_simple_social_login_settings_tabs', $tabs );
 ?>
 <div id="astoundify-simple-social-login-settings" class="wrap">
 
@@ -123,19 +123,19 @@ function astoundify_simple_social_login_panel_settings() {
 	$options = is_array( $options ) ? $options : array();
 ?>
 
-<h3><?php esc_html_e( 'Astoundify Simple Social Login Settings', 'astoundify-simple-social-login' ); ?></h3>
+<h3><?php esc_html_e( 'Simple Social Login', 'astoundify-simple-social-login' ); ?></h3>
 
 <table class="form-table">
 	<tbody>
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Display Social Login Buttons', 'astoundify-simple-social-login' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Output', 'astoundify-simple-social-login' ); ?></th>
 			<td>
 				<?php
 				$display_options = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
-				$choices = array(
-					'wp_login'    => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
+				$choices         = array(
+					'wp_login' => esc_html( 'WordPress Login Form', 'astoundify-simple-social-login' ),
 				);
-				$choices = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
+				$choices         = apply_filters( 'astoundify_simple_social_login_display_choices', $choices );
 				?>
 
 				<?php foreach ( $choices as $key => $label ) : ?>
@@ -148,9 +148,9 @@ function astoundify_simple_social_login_panel_settings() {
 			<td>
 				<?php
 				$provider_options = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
-				$choices = array();
-				$providers = astoundify_simple_social_login_get_providers();
-				foreach( $providers as $id => $class ) {
+				$choices          = array();
+				$providers        = astoundify_simple_social_login_get_providers();
+				foreach ( $providers as $id => $class ) {
 					$provider = astoundify_simple_social_login_get_provider( $id );
 					if ( $provider ) {
 						$choices[ $id ] = $provider->get_label();
@@ -194,12 +194,12 @@ add_action( 'astoundify_simple_social_login_panel_settings', 'astoundify_simple_
  */
 function astoundify_simple_social_login_admin_enqueue_scripts( $hook_suffix ) {
 	// Do not load if not in settings page.
-	if ( 'settings_page_astoundify-simple-social-login' !== $hook_suffix  ) {
+	if ( 'settings_page_astoundify-simple-social-login' !== $hook_suffix ) {
 		return;
 	}
 
 	// Script Vars.
-	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$debug   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
 	// Settings JS.

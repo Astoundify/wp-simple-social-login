@@ -104,7 +104,7 @@ class Provider_Facebook extends Provider {
 					'enabled'         => true,
 					'keys'            => array(
 						'id'     => $this->get_app_id(),
-						'secret'  => $this->get_app_secret(),
+						'secret' => $this->get_app_secret(),
 					),
 					'scope'           => 'email',
 					'access_type'     => 'offline',
@@ -112,7 +112,6 @@ class Provider_Facebook extends Provider {
 				),
 			),
 		);
-
 
 		$hybridauth = $this->api_init( $config );
 		if ( ! $hybridauth ) {
@@ -123,12 +122,12 @@ class Provider_Facebook extends Provider {
 		$profile = $adapter->getUserProfile();
 
 		$data = array(
-			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
-			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
-			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
+			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'nickname'     => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
+			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
 		);
 
 		if ( ! $data['id'] ) {

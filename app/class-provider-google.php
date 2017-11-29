@@ -106,10 +106,12 @@ class Provider_Google extends Provider {
 						'id'     => $this->get_app_id(),
 						'secret' => $this->get_app_secret(),
 					),
-					'scope'           => implode( ' ', array(
-						'https://www.googleapis.com/auth/userinfo.profile',
-						'https://www.googleapis.com/auth/userinfo.email'
-					) ),
+					'scope'           => implode(
+						' ', array(
+							'https://www.googleapis.com/auth/userinfo.profile',
+							'https://www.googleapis.com/auth/userinfo.email',
+						)
+					),
 					'access_type'     => 'offline',
 					'approval_prompt' => 'force',
 				),
@@ -117,17 +119,17 @@ class Provider_Google extends Provider {
 		);
 
 		$hybridauth = $this->api_init( $config );
-		$adapter = $hybridauth->authenticate( 'Google' );
-		$profile = $adapter->getUserProfile();
+		$adapter    = $hybridauth->authenticate( 'Google' );
+		$profile    = $adapter->getUserProfile();
 
 		$data = array(
-			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
-			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
-			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
-			'gmail'              => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ), // Gmail.
+			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
+			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'nickname'     => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
+			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'gmail'        => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ), // Gmail.
 		);
 
 		return $data;
@@ -143,7 +145,7 @@ class Provider_Google extends Provider {
 	 */
 	public function get_link_data( $data ) {
 		$selected_data = array(
-			'id' => $data['id'],
+			'id'    => $data['id'],
 			'gmail' => $data['gmail'],
 		);
 		return $selected_data;

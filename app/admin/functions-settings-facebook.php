@@ -72,8 +72,8 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
  * @since 1.0.0
  */
 function astoundify_simple_social_login_panel_facebook() {
-	$options = get_option( 'astoundify_simple_social_login_facebook', array() );
-	$options = astoundify_simple_social_login_facebook_sanitize_settings( $options );
+	$options  = get_option( 'astoundify_simple_social_login_facebook', array() );
+	$options  = astoundify_simple_social_login_facebook_sanitize_settings( $options );
 	$provider = astoundify_simple_social_login_get_provider( 'facebook' );
 ?>
 

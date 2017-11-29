@@ -73,8 +73,8 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
  * @since 1.0.0
  */
 function astoundify_simple_social_login_panel_twitter() {
-	$options = get_option( 'astoundify_simple_social_login_twitter', array() );
-	$options = astoundify_simple_social_login_twitter_sanitize_settings( $options );
+	$options  = get_option( 'astoundify_simple_social_login_twitter', array() );
+	$options  = astoundify_simple_social_login_twitter_sanitize_settings( $options );
 	$provider = astoundify_simple_social_login_get_provider( 'twitter' );
 ?>
 

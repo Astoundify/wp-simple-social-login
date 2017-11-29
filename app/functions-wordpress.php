@@ -41,13 +41,15 @@ function astoundify_simple_social_login_wordpress_login_form() {
 <?php
 
 	// Add "back to social login" link in login footer.
-	add_action( 'login_footer', function() {
-	?>
+	add_action(
+		'login_footer', function() {
+		?>
 	<p id="astoundify-simple-social-login-wordpress-back">
-		<a style="display:none;" href="#"><?php _e( 'Login with social account?', 'astoundify-simple-social-login' );?></a>
+		<a style="display:none;" href="#"><?php _e( 'Login with social account?', 'astoundify-simple-social-login' ); ?></a>
 	</p><!-- #astoundify-simple-social-login-wordpress-back -->
 	<?php
-	} );
+		}
+	);
 }
 add_action( 'login_form', 'astoundify_simple_social_login_wordpress_login_form' );
 
@@ -74,7 +76,7 @@ function astoundify_simple_social_login_wordpress_profile() {
 				<label><?php esc_html_e( 'Social Profiles', 'astoundify-simple-social-login' ); ?></label>
 			</th>
 			<td>
-				<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:' )?></p>
+				<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:' ); ?></p>
 				<?php echo astoundify_simple_social_login_get_link_unlink_buttons(); ?>
 			</td>
 		</tr>

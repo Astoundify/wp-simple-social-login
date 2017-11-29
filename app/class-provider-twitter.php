@@ -103,8 +103,8 @@ class Provider_Twitter extends Provider {
 				'Twitter' => array(
 					'enabled'         => true,
 					'keys'            => array(
-						'key'     => $this->get_app_id(),
-						'secret'  => $this->get_app_secret(),
+						'key'    => $this->get_app_id(),
+						'secret' => $this->get_app_secret(),
 					),
 					'includeEmail'    => true,
 					'access_type'     => 'offline',
@@ -114,17 +114,17 @@ class Provider_Twitter extends Provider {
 		);
 
 		$hybridauth = $this->api_init( $config );
-		$adapter = $hybridauth->authenticate( 'Twitter' );
-		$profile = $adapter->getUserProfile();
+		$adapter    = $hybridauth->authenticate( 'Twitter' );
+		$profile    = $adapter->getUserProfile();
 
 		$data = array(
-			'id'                 => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
-			'user_email'         => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'display_name'       => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'nickname'           => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'first_name'         => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
-			'last_name'          => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
-			'screen_name'        => property_exists( $profile, 'displayName' ) ? $profile->displayName : '', // Twitter username.
+			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
+			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
+			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'nickname'     => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
+			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
+			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'screen_name'  => property_exists( $profile, 'displayName' ) ? $profile->displayName : '', // Twitter username.
 		);
 
 		if ( ! $data['id'] ) {
@@ -144,7 +144,7 @@ class Provider_Twitter extends Provider {
 	 */
 	public function get_link_data( $data ) {
 		$selected_data = array(
-			'id' => $data['id'],
+			'id'          => $data['id'],
 			'screen_name' => $data['screen_name'],
 		);
 		return $selected_data;
