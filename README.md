@@ -3,7 +3,7 @@
 ### Install
 
 ```
-$ git clone --recursive git@github.com:Astoundify/simple-social-login.git
+$ git clone --recursive git@github.com:Astoundify/wp-simple-social-login.git
 ```
 
 ### Setup
