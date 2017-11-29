@@ -1,7 +1,7 @@
 {
   "name": "astoundify-simple-social-login",
-  "version": "1.0.0",
-  "description": "Simple social login for WooCommerce.",
+  "version": "1.0.0-beta",
+  "description": "Facebook, Twitter, and Google login options for WordPress.",
   "main": "gulpfile.js",
   "devDependencies": {
     "fs": "0.0.1-security",

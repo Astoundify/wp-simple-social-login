@@ -1,4 +1,5 @@
-=== Astoundify WC Simple Social Login ===
+=== Simple Social Login by Astoundify ===
+
 Contributors: astoundify
 Requires at least: 4.8.0
 Tested up to: 4.9.1
@@ -6,7 +7,7 @@ Stable tag: 1.0.0
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
-Simple social login options for WordPress. Currently supports:
+Facebook, Twitter, and Google login options for WordPress. Currently supports:
 
 - Facebook
 - Twitter
