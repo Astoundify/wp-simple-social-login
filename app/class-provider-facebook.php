@@ -82,7 +82,7 @@ class Provider_Facebook extends Provider {
 	 * @return string
 	 */
 	public function get_connected_info_text_default() {
-		return esc_html__( 'Your account is connected to Facebook. {{unlink}}.' );
+		return esc_html__( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' );
 	}
 
 	/**

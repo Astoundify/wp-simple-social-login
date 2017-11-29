@@ -30,6 +30,10 @@ msgstr ""
 msgid "Link your account to Facebook"
 msgstr ""
 
+#: app/class-provider-facebook.php:85
+msgid "Your account is connected to Facebook. {{unlink}}."
+msgstr ""
+
 #: app/class-provider-google.php:52
 msgid "Google"
 msgstr ""
@@ -40,6 +44,10 @@ msgstr ""
 
 #: app/class-provider-google.php:74
 msgid "Link your account to Google"
+msgstr ""
+
+#: app/class-provider-google.php:85
+msgid "Your account is connected to Google. {{unlink}}."
 msgstr ""
 
 #: app/class-provider-twitter.php:52
@@ -54,6 +62,10 @@ msgstr ""
 msgid "Link your account to Twitter"
 msgstr ""
 
+#: app/class-provider-twitter.php:85
+msgid "Your account is connected to Twitter. {{unlink}}."
+msgstr ""
+
 #: app/functions-template.php:34
 msgid "%s does not exist."
 msgstr ""
@@ -62,19 +74,19 @@ msgstr ""
 msgid "Use a social account for faster login or easy registration."
 msgstr ""
 
-#: app/functions-woocommerce.php:73, app/functions-wordpress.php:68
+#: app/functions-woocommerce.php:73, app/functions-wordpress.php:70
 msgid "Connected Social Accounts"
 msgstr ""
 
-#: app/functions-woocommerce.php:74
+#: app/functions-woocommerce.php:74, app/functions-wordpress.php:79
 msgid "You can connect your account to the following social login providers:"
 msgstr ""
 
-#: app/functions-woocommerce.php:114, app/functions-wordpress.php:156
+#: app/functions-woocommerce.php:114, app/functions-wordpress.php:158
 msgid "Please setup your email to activate your account."
 msgstr ""
 
-#: app/functions-woocommerce.php:114, app/functions-wordpress.php:156
+#: app/functions-woocommerce.php:114, app/functions-wordpress.php:158
 msgid "Add Email"
 msgstr ""
 
@@ -86,71 +98,75 @@ msgstr ""
 msgid "Log in with username and password"
 msgstr ""
 
-#: app/functions-wordpress.php:47
+#: app/functions-wordpress.php:48
 msgid "Login with social account?"
 msgstr ""
 
-#: app/functions-wordpress.php:74
+#: app/functions-wordpress.php:76
 msgid "Social Profiles"
 msgstr ""
 
-#: app/functions-wordpress.php:99
+#: app/functions-wordpress.php:101
 msgid "You're already logged-in."
 msgstr ""
 
-#: app/functions-wordpress.php:99
+#: app/functions-wordpress.php:101
 msgid "Logout?"
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:236
+#: app/abstracts/abstracts-provider.php:238
 msgid "Last connected: %1$s @ %2$s"
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:580
+#: app/abstracts/abstracts-provider.php:275
+msgid "Unlink"
+msgstr ""
+
+#: app/abstracts/abstracts-provider.php:588
 msgid "Unknown Error: %s"
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:592
+#: app/abstracts/abstracts-provider.php:600
 msgid "Cannot retrieve social profile ID."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:593
+#: app/abstracts/abstracts-provider.php:601
 msgid "User already logged-in."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:594
+#: app/abstracts/abstracts-provider.php:602
 msgid "User need to login to connect."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:595
+#: app/abstracts/abstracts-provider.php:603
 msgid "API connection error."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:596
+#: app/abstracts/abstracts-provider.php:604
 msgid "Login failed. Your social profile is not registered to this website."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:597
+#: app/abstracts/abstracts-provider.php:605
 msgid "Fail to register user."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:598
+#: app/abstracts/abstracts-provider.php:606
 msgid "User already connected."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:599
+#: app/abstracts/abstracts-provider.php:607
 msgid "Fail to link account with social profile."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:600
+#: app/abstracts/abstracts-provider.php:608
 msgid "Error. Action unknown."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:601
+#: app/abstracts/abstracts-provider.php:609
 msgid "Fail to register user. Email already registered."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:602
+#: app/abstracts/abstracts-provider.php:610
 msgid "Another user already connected to social account."
 msgstr ""
 
@@ -231,15 +247,19 @@ msgid "Consumer Secret"
 msgstr ""
 
 #: app/admin/functions-settings.php:126
-msgid "Astoundify Simple Social Login Settings"
+msgid "Simple Social Login"
 msgstr ""
 
 #: app/admin/functions-settings.php:131
-msgid "Display Social Login Buttons"
+msgid "Output"
 msgstr ""
 
 #: app/admin/functions-settings.php:147
 msgid "Providers"
+msgstr ""
+
+#: app/admin/functions-settings.php:166
+msgid "No provider available."
 msgstr ""
 
 #: app/admin/functions-settings.php:171

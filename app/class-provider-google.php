@@ -82,7 +82,7 @@ class Provider_Google extends Provider {
 	 * @return string
 	 */
 	public function get_connected_info_text_default() {
-		return esc_html__( 'Your account is connected to Google. {{unlink}}.' );
+		return esc_html__( 'Your account is connected to Google. {{unlink}}.', 'astoundify-simple-social-login' );
 	}
 
 	/**

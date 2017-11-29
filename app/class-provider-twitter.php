@@ -82,7 +82,7 @@ class Provider_Twitter extends Provider {
 	 * @return string
 	 */
 	public function get_connected_info_text_default() {
-		return esc_html__( 'Your account is connected to Twitter. {{unlink}}.' );
+		return esc_html__( 'Your account is connected to Twitter. {{unlink}}.', 'astoundify-simple-social-login' );
 	}
 
 	/**

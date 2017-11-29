@@ -272,7 +272,7 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_unlink_button() {
-		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink' ) );
+		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
 		$title = $this->get_last_connected_time_text();
 		$url   = $this->get_action_url(
 			array(

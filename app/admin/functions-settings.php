@@ -163,7 +163,7 @@ function astoundify_simple_social_login_panel_settings() {
 						<label><input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
 					<?php endforeach; ?>
 				<?php else : ?>
-					<p class="description"><?php esc_html_e( 'No provider available.', 'astoundify-simple-socia-login' ); ?></p>
+					<p class="description"><?php esc_html_e( 'No provider available.', 'astoundify-simple-social-login' ); ?></p>
 				<?php endif; ?>
 			</td>
 		</tr>
