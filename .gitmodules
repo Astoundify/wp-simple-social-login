@@ -1,3 +1,0 @@
-[submodule "vendor/astoundify/plugin-updater"]
-	path = vendor/astoundify/plugin-updater
-	url = https://github.com/Astoundify/plugin-updater

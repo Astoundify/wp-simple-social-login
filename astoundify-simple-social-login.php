@@ -6,8 +6,8 @@
  * Version: 1.0.0
  * Author: Astoundify
  * Author URI: https://astoundify.com/
- * Requires at least: 4.8.0
- * Tested up to: 4.8
+ * Requires at least: 4.9.0
+ * Tested up to: 4.9.1
  * Text Domain: astoundify-plugin-scaffold
  * Domain Path: resources/languages/
  *
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function astoundify_simple_social_login_php_notice() {
 	// Translators: %1$s minimum PHP version, %2$s current PHP version.
-	$notice = sprintf( __( 'Astoundify WC Simple Social Login plugin requires at least PHP %1$s. You are running PHP %2$s. Please upgrade and try again.', 'astoundify-simple-social-login' ), '<code>5.4.0</code>', '<code>' . PHP_VERSION . '</code>' );
+	$notice = sprintf( __( 'Astoundify WC Simple Social Login plugin requires at least PHP %1$s. You are running PHP %2$s. Please upgrade and try again.', 'astoundify-simple-social-login' ), '<code>5.6.0</code>', '<code>' . PHP_VERSION . '</code>' );
 ?>
 
 <div class="notice notice-error">
@@ -43,7 +43,7 @@ function astoundify_simple_social_login_php_notice() {
 }
 
 // Check for PHP version..
-if ( version_compare( PHP_VERSION, '5.4', '<' ) ) {
+if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
 	add_action( 'admin_notices', 'astoundify_simple_social_login_php_notice' );
 
 	return;
@@ -56,18 +56,6 @@ define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PLUGIN', plugin_basename( __FILE__ ) );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH', trailingslashit( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'resources/templates' ) );
-
-/**
- * Plugin Updater.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_updater() {
-	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/astoundify/plugin-updater/astoundify-pluginupdater.php' );
-
-	new Astoundify_PluginUpdater( __FILE__ );
-}
-add_action( 'admin_init', 'astoundify_simple_social_login_updater', 9 );
 
 /**
  * Load auto loader.
