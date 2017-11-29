@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Astoundify/simple-social-login.git"
+    "url": "git+https://github.com/Astoundify/wp-simple-social-login.git"
   },
   "author": "Astoundify",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Astoundify/simple-social-login/issues"
+    "url": "https://github.com/Astoundify/wp-simple-social-login/issues"
   },
-  "homepage": "https://astoundify.com/"
+  "homepage": "https://astoundify.com/products/simple-social-login/"
 }
