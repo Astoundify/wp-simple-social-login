@@ -156,15 +156,6 @@ function astoundify_simple_social_login_woocommerce_scripts() {
 		return;
 	}
 
-	// Script Vars.
-	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
-	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
-
-	// CSS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/woocommerce.min.css';
-	if ( $debug ) {
-		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/woocommerce.css';
-	}
-	wp_enqueue_style( 'astoundify-simple-social-login-woocommerce', $url, array(), $version );
+	astoundify_simple_social_login_enqueue_styles( 'woocommerce' );
 }
 add_action( 'wp_enqueue_scripts', 'astoundify_simple_social_login_woocommerce_scripts' );

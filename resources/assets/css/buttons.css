@@ -1,0 +1,57 @@
+.astoundify-simple-social-login--login-register-buttons {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-width: 400px;
+}
+
+.astoundify-simple-social-login--login-register-buttons li {
+	margin-bottom: 10px;
+}
+
+.astoundify-simple-social-login-button {
+	color: #fff;
+	text-decoration: none;
+	font-weight: bold;
+	white-space: nowrap;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	background: #333;
+	border-radius: 2px;
+	box-sizing: content-box;
+	cursor: pointer;
+	padding: 10px;
+}
+
+.astoundify-simple-social-login-button:hover {
+	color: #fff;
+}
+
+.astoundify-simple-social-login-icon {
+	width: 18px;
+	height: 18px;
+	margin: 0 10px 0 0;
+	fill: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.astoundify-simple-social-login-button:hover .astoundify-simple-social-login-icon {
+	opacity: 0.8;
+}
+
+.astoundify-simple-social-login-button-facebook {
+	background: #3B5998;
+}
+
+.astoundify-simple-social-login-button-twitter {
+	background: #1DA1F3;
+}
+
+.astoundify-simple-social-login-button-google {
+	background: #CF4332;
+}

@@ -210,21 +210,19 @@ function astoundify_simple_social_login_wordpress_login_scripts() {
 	}
 
 	// Script Vars.
-	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
+	$debug   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
-	// CSS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-login.min.css';
-	if ( $debug ) {
-		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/wp-login.css';
-	}
-	wp_enqueue_style( 'astoundify-simple-social-login-wordpress', $url, array(), $version );
+	astoundify_simple_social_login_enqueue_styles( 'wp-login' );
 
 	// JS.
 	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/wp-login.min.js';
+
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/wp-login.js';
+		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', array(), $version );
 	}
+
 	wp_enqueue_script( 'astoundify-simple-social-login-wordpress', $url, array( 'jquery' ), $version );
 }
 add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_login_scripts' );
@@ -237,23 +235,16 @@ add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_l
  * @param string $hook_suffix Page context.
  */
 function astoundify_simple_social_login_wordpress_admin_scripts( $hook_suffix ) {
-	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' )  || 'profile.php' !== $hook_suffix ) {
+	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) || 'profile.php' !== $hook_suffix ) {
 		return;
 	}
+
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return;
 	}
 
-	// Script Vars.
-	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
-	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
-
-	// CSS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-admin-profile.min.css';
-	if ( $debug ) {
-		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/wp-admin-profile.css';
-	}
-	wp_enqueue_style( 'astoundify-simple-social-login-wordpress-profile', $url, array(), $version );
+	astoundify_simple_social_login_enqueue_styles();
 }
 add_action( 'admin_enqueue_scripts', 'astoundify_simple_social_login_wordpress_admin_scripts' );

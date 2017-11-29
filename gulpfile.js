@@ -90,29 +90,13 @@ gulp.task( 'css:lint', function( cb ) {
  * @since 1.0.0
  */
 gulp.task( 'css:minify', function() {
-	gulp.src( 'resources/assets/css/wp-login.css' )
+	gulp.src( [
+		'resources/assets/css/buttons.css',
+		'resources/assets/css/wp-login.css',
+		'resources/assets/css/woocommerce.css',
+	] )
 		.pipe( sourcemaps.init() )
-		.pipe( concat( 'wp-login.min.css' ) )
-		.pipe( cleanCss() )
-		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
-			return 'resources/assets/css/' + sourcePath;
-		}))
-		.pipe( sourcemaps.write( './' ) )
-		.pipe( gulp.dest( 'public/css' ) );
-
-	gulp.src( 'resources/assets/css/wp-admin-profile.css' )
-		.pipe( sourcemaps.init() )
-		.pipe( concat( 'wp-admin-profile.min.css' ) )
-		.pipe( cleanCss() )
-		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
-			return 'resources/assets/css/' + sourcePath;
-		}))
-		.pipe( sourcemaps.write( './' ) )
-		.pipe( gulp.dest( 'public/css' ) );
-
-	gulp.src( 'resources/assets/css/woocommerce.css' )
-		.pipe( sourcemaps.init() )
-		.pipe( concat( 'woocommerce.min.css' ) )
+		.pipe( concat( 'wp-simple-social-login.min.css' ) )
 		.pipe( cleanCss() )
 		.pipe( sourcemaps.mapSources( function( sourcePath, file ) {
 			return 'resources/assets/css/' + sourcePath;
@@ -228,7 +212,7 @@ gulp.task( 'php', function() {
  * @since 1.0.0
  */
 gulp.task( 'clean', function() {
-	gulp.src( [ './astoundify-simple-social-login', '*.zip' ], {
+	gulp.src( [ './astoundify-simple-social-login' ], {
 		read: false
 	} )
 		.pipe( clean() );
