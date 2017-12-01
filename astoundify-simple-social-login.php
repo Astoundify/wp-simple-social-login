@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Astoundify Simple Social Login
+ * Plugin Name: Simple Social Login
  * Plugin URI: https://astoundify.com/
- * Description: Simple social login for WooCommerce.
+ * Description: Simple Social Login by Astoundify for WooCommerce.
  * Version: 1.0.0
  * Author: Astoundify
  * Author URI: https://astoundify.com/
