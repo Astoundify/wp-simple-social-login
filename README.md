@@ -1,4 +1,4 @@
-# Astoundify WC Simple Social Login
+# Simple Social Login by Astoundify
 
 ### Install
 
