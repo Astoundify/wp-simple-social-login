@@ -49,10 +49,11 @@ function astoundify_simple_social_login_woocommerce_login_register_buttons() {
 <div id="astoundify-simple-social-login-woocommerce-wrap">
 	<p><?php esc_html_e( 'Use a social account for faster login or easy registration.', 'astoundify-simple-social-login' ); ?></p>
 	<?php echo $buttons; ?>
+	<p class="login-or"><span><?php _e( 'Or', 'astoundify-simple-social-login' ); ?></span></p>
 </div><!-- #astoundify-simple-social-login-woocommerce-wrap -->
 <?php
 }
-add_action( 'woocommerce_login_form_end', 'astoundify_simple_social_login_woocommerce_login_register_buttons' );
+add_action( 'woocommerce_login_form_start', 'astoundify_simple_social_login_woocommerce_login_register_buttons' );
 
 
 /**
