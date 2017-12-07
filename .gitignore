@@ -4,10 +4,6 @@ node_modules
 *.log
 *.zip
 *.js.map
-vendor/composer
-vendor/facebook
-vendor/abraham
-vendor/hybridauth
-vendor/autoload.php
+vendor
 public
 astoundify-simple-social-login
