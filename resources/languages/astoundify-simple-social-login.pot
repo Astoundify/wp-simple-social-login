@@ -74,24 +74,24 @@ msgstr ""
 msgid "Use a social account for faster login or easy registration."
 msgstr ""
 
-#: app/functions-woocommerce.php:73, app/functions-wordpress.php:70
+#: app/functions-woocommerce.php:52, app/functions-wordpress.php:37
+msgid "Or"
+msgstr ""
+
+#: app/functions-woocommerce.php:74, app/functions-wordpress.php:70
 msgid "Connected Social Accounts"
 msgstr ""
 
-#: app/functions-woocommerce.php:74, app/functions-wordpress.php:79
+#: app/functions-woocommerce.php:75, app/functions-wordpress.php:79
 msgid "You can connect your account to the following social login providers:"
 msgstr ""
 
-#: app/functions-woocommerce.php:114, app/functions-wordpress.php:158
+#: app/functions-woocommerce.php:115, app/functions-wordpress.php:158
 msgid "Please setup your email to activate your account."
 msgstr ""
 
-#: app/functions-woocommerce.php:114, app/functions-wordpress.php:158
+#: app/functions-woocommerce.php:115, app/functions-wordpress.php:158
 msgid "Add Email"
-msgstr ""
-
-#: app/functions-wordpress.php:37
-msgid "Or"
 msgstr ""
 
 #: app/functions-wordpress.php:38
