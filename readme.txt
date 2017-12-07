@@ -7,7 +7,7 @@ Stable tag: 1.0.0
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
-Facebook, Twitter, and Google login options for WordPress. Currently supports:
+Social login options for WordPress. Currently supports:
 
 - Facebook
 - Twitter
