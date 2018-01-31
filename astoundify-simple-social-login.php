@@ -3,11 +3,11 @@
  * Plugin Name: Simple Social Login
  * Plugin URI: https://astoundify.com/products/simple-social-login/
  * Description: Simple Social Login by Astoundify for WooCommerce.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Astoundify
  * Author URI: https://astoundify.com/
  * Requires at least: 4.9.0
- * Tested up to: 4.9.1
+ * Tested up to: 4.9.2
  * Text Domain: astoundify-plugin-scaffold
  * Domain Path: resources/languages/
  *
@@ -50,7 +50,7 @@ if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
 }
 
 // Plugin can be loaded... define some constants.
-define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION', '1.1.0' );
+define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION', '1.2.0' );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_FILE', __FILE__ );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PLUGIN', plugin_basename( __FILE__ ) );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );

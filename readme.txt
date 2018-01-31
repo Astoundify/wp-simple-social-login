@@ -2,8 +2,8 @@
 
 Contributors: astoundify
 Requires at least: 4.8.0
-Tested up to: 4.9.1
-Stable tag: 1.1.0
+Tested up to: 4.9.2
+Stable tag: 1.2.0
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
@@ -28,6 +28,10 @@ To install this plugin, please refer to the guide here: [http://codex.wordpress.
 Visit Settings > Simple Social Login and complete configuration.
 
 == Changelog ==
+
+= 1.2.0: January 31, 2018 =
+
+* Fix: Ensure build contains all vendor files.
 
 = 1.1.0: December 7, 2017 =
 

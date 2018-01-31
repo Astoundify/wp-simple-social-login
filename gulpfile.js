@@ -233,10 +233,8 @@ gulp.task( 'bundle', [ 'clean', 'assets', 'makepot' ], function( cb ) {
 		'resources/**',
 		'public/*',
 		'public/**',
-		'vendor/autoload.php',
-		'vendor/composer/*',
-		'vendor/composer/**',
-		'vendor/hybridauth/**',
+		'vendor/*',
+		'vendor/**',
 		'LICENSE',
 		'readme.txt'
 	], {

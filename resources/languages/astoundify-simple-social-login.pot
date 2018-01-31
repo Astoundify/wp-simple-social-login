@@ -1,4 +1,4 @@
-# Copyright (C) 2017 astoundify-simple-social-login
+# Copyright (C) 2018 astoundify-simple-social-login
 # This file is distributed under the same license as the astoundify-simple-social-login package.
 msgid ""
 msgstr ""
