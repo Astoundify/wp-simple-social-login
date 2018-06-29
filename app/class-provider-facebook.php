@@ -54,39 +54,6 @@ class Provider_Facebook extends Provider {
 	}
 
 	/**
-	 * Login Register Button Text Default
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_login_register_button_text_default() {
-		return esc_html__( 'Log in with Facebook', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Link Button Text.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_link_button_text_default() {
-		return esc_html__( 'Link your account to Facebook', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Connected Info Text
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_connected_info_text_default() {
-		return esc_html__( 'Your account is connected to Facebook. {{unlink}}.', 'astoundify-simple-social-login' );
-	}
-
-	/**
 	 * Get API config data.
 	 *
 	 * @since 2.0.0
@@ -96,7 +63,7 @@ class Provider_Facebook extends Provider {
 	public function get_config() {
 		return wp_parse_args(
 			[
-				'scope'           => 'email, user_about_me',
+				'scope'           => 'email',
 				'access_type'     => 'offline',
 				'approval_prompt' => 'force',
 			],

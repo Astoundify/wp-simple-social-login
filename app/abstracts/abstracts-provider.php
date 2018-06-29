@@ -72,8 +72,10 @@ abstract class Provider {
 	 */
 	public function get_config() {
 		return [
-			'callback'  => $this->get_endpoint_url(),
-			'keys'      => [
+			'callback'        => $this->get_endpoint_url(),
+			'access_type'     => 'offline',
+			'approval_prompt' => 'force',
+			'keys'            => [
 				'id'     => $this->get_app_id(),
 				'secret' => $this->get_app_secret(),
 			],
@@ -81,14 +83,30 @@ abstract class Provider {
 	}
 
 	/**
-	 * Get SVG Icon
+	 * Normalize profile data.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
-	 * @return string
+	 * @param $adapter Provider HyrbidAuth provider.
+	 * @return array
 	 */
-	public function get_icon() {
-		return astoundify_simple_social_login_get_svg( $this->id );
+	public function get_profile_data( $adapter ) {
+		$profile = $adapter->getUserProfile();
+
+		$data = [
+			'id'           => isset( $profile->identifier ) ? $profile->identifier : '',
+			'user_email'   => isset( $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
+			'display_name' => isset( $profile->displayName ) ? $profile->displayName : '',
+			'nickname'     => isset( $profile->displayName ) ? $profile->displayName : '',
+			'first_name'   => isset( $profile->firstName ) ? $profile->firstName : '',
+			'last_name'    => isset( $profile->lastName ) ? $profile->lastName : '',
+		];
+
+		if ( ! $data['id'] ) {
+			return false;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -181,6 +199,50 @@ abstract class Provider {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Login Register Button Text Default
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_login_register_button_text_default() {
+		return sprintf( esc_html__( 'Log in with %s', 'astoundify-simple-social-login' ), $this->get_label() );
+	}
+
+	/**
+	 * Link Button Text.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_link_button_text_default() {
+		return sprintf( esc_html__( 'Link your account to %s', 'astoundify-simple-social-login' ), $this->get_label() );
+	}
+
+	/**
+	 * Connected Info Text
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_connected_info_text_default() {
+		return sprintf( esc_html__( 'Your account is connected to %s. {{unlink}}', 'astoundify-simple-social-login' ), $this->get_label() );
+	}
+
+	/**
+	 * Get SVG Icon
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		return astoundify_simple_social_login_get_svg( $this->id );
 	}
 
 	/**
@@ -349,12 +411,11 @@ abstract class Provider {
 		return $html;
 	}
 
-	/* === USER === */
-
 	/**
 	 * Is user connected?
 	 *
 	 * @since 1.0.0
+	 * @todo Move to function.
 	 *
 	 * @return bool
 	 */
@@ -370,180 +431,6 @@ abstract class Provider {
 		$is_connected = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_connected", true );
 
 		return $is_connected ? true : false;
-	}
-
-	/**
-	 * Insert User.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param  array $data API data.
-	 * @return int|false
-	 */
-	public function insert_user( $data ) {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		$defaults = [
-			'id'           => '',
-			'user_login'   => '',
-			'user_pass'    => wp_generate_password(),
-			'user_email'   => '',
-			'display_name' => '',
-			'nickname'     => '',
-			'first_name'   => '',
-			'last_name'    => '',
-		];
-
-		$data = wp_parse_args( $data, $defaults );
-
-		// Bail if no ID.
-		if ( ! $data['id'] || ! $data['display_name'] ) {
-			return false;
-		}
-
-		// User Login.
-		$data['user_login'] = sanitize_title( $data['display_name'] );
-
-		if ( username_exists( $data['user_login'] ) ) {
-			$data['user_login'] = $data['user_login'] . '_' . time();
-		}
-
-		// Email.
-		if ( $data['user_email'] && email_exists( $data['user_email'] ) ) {
-			return false;
-		}
-
-		$inserted = wp_insert_user( $data );
-		$user_id  = $inserted && is_wp_error( $inserted ) ? false : intval( $inserted );
-
-		if ( ! $user_id ) {
-			return false;
-		}
-
-		// Success. Add user meta.
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_id", esc_html( $data['id'] ) );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_timestamp", current_time( 'timestamp' ) );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_timestamp_gmt", time() );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected", 1 );
-
-		// Unset defaults data, save extra datas as user meta.
-		foreach ( $defaults as $k => $v ) {
-			unset( $data[ $k ] );
-		}
-
-		foreach ( $data as $k => $v ) {
-			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
-		}
-
-		return $user_id;
-	}
-
-	/**
-	 * Link User
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param  array $data API data.
-	 * @return int|false
-	 */
-	public function link_user( $data ) {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		$user = wp_get_current_user();
-		if ( ! $user || ! $user->ID ) {
-			return false;
-		}
-
-		$user_id = $user->ID;
-
-		$defaults = [
-			'id' => time(),
-		];
-
-		$data = wp_parse_args( $data, $defaults );
-
-		// Bail if no ID.
-		if ( ! $data['id'] ) {
-			return false;
-		}
-
-		// Add user meta.
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_id", esc_html( $data['id'] ) );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_timestamp", current_time( 'timestamp' ) );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_timestamp_gmt", time() );
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected", 1 );
-
-		// Unset defaults data, save extra datas as user meta.
-		foreach ( $defaults as $k => $v ) {
-			unset( $data[ $k ] );
-		}
-
-		foreach ( $data as $k => $v ) {
-			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
-		}
-
-		return $user->ID;
-	}
-
-	/**
-	 * Unlink User
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return bool
-	 */
-	public function unlink_user( $user_id ) {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		$user = $user_id ? get_userdata( $user_id ) : wp_get_current_user();
-
-		// Bail if user not set.
-		if ( ! $user ) {
-			return false;
-		}
-
-		$user_id = $user->ID;
-
-		delete_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_id" );
-		delete_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected" );
-
-		return true;
-	}
-
-	/**
-	 * Get Connected User ID
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return false|int
-	 */
-	public function get_connected_user_id( $id ) {
-		$args  = [
-			'meta_key'   => "_astoundify_simple_social_login_{$this->id}_id",
-			'meta_value' => esc_html( $id ),
-			'number'     => -1,
-			'fields'     => 'ID',
-		];
-
-		$users = get_users( $args );
-
-		// If user found, return it.
-		if ( $users ) {
-			if ( 1 === count( $users ) ) {
-				return intval( $users[0] );
-			} else {
-				// More than one users connected to the same account ? Maybe notice admin.
-				return false;
-			}
-		}
-
-		return false;
 	}
 
 }
