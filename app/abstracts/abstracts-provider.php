@@ -271,17 +271,6 @@ abstract class Provider {
 	}
 
 	/**
-	 * Default Login Register Button Text.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_login_register_button_text_default() {
-		return '';
-	}
-
-	/**
 	 * Login Register Button Text
 	 *
 	 * @since 1.0.0
@@ -326,17 +315,6 @@ abstract class Provider {
 	}
 
 	/**
-	 * Link Button Text Default.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_link_button_text_default() {
-		return '';
-	}
-
-	/**
 	 * Link Button Text.
 	 *
 	 * @since 1.0.0
@@ -362,17 +340,6 @@ abstract class Provider {
 		$url   = $this->get_action_url( 'unlink' );
 
 		return "<a href='{$url}' title='{$title}'>{$text}</a>";
-	}
-
-	/**
-	 * Connected Info Text Default
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_connected_info_text_default() {
-		return '';
 	}
 
 	/**
@@ -403,7 +370,7 @@ abstract class Provider {
 		}
 
 		// User not connected, show connect button.
-		if ( astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() );
+		if ( astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() ) ) {
 			$is_connected = false;
 
 			$text    = $this->get_link_button_text();

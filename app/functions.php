@@ -283,7 +283,7 @@ function astoundify_simple_social_login_register_user( $provider_data, $provider
  * @return bool
  */
 function astoundify_simple_social_login_set_user_data( $user_id, $provider_profile, $provider ) {
-	if ( astoundify_simple_social_login_get_existing_user( $provider_data['id'], $provider ) {
+	if ( astoundify_simple_social_login_get_existing_user( $provider_data['id'], $provider ) ) {
 		return false;
 	}
 
