@@ -60,8 +60,24 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_label() {
-		// Use ID as fallback.
 		return $this->id;
+	}
+
+	/**
+	 * Get base config.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return array
+	 */
+	public function get_config() {
+		return [
+			'callback'  => $this->get_endpoint_url(),
+			'keys'      => [
+				'id'     => $this->get_app_id(),
+				'secret' => $this->get_app_secret(),
+			],
+		];
 	}
 
 	/**
@@ -94,8 +110,6 @@ abstract class Provider {
 
 		return add_query_arg( $args, home_url() );
 	}
-
-	/* === APP CREDENTIALS === */
 
 	/**
 	 * App ID.
@@ -133,7 +147,7 @@ abstract class Provider {
 	public function get_endpoint_url() {
 		return add_query_arg(
 			[
-				'astoundify_simple_social_login' => 'done',
+				'astoundify_simple_social_login' => 'authenticate',
 				'provider'                       => $this->id,
 			],
 			user_trailingslashit( home_url() )
@@ -168,8 +182,6 @@ abstract class Provider {
 
 		return true;
 	}
-
-	/* === LOGIN/REGISTER === */
 
 	/**
 	 * Default Login Register Button Text.
@@ -226,30 +238,6 @@ abstract class Provider {
 		return $html;
 	}
 
-	/* === LINK/UNLINK === */
-
-	/**
-	 * Get Last Connected Time
-	 *
-	 * @since 1.0.0
-	 */
-	public function get_last_connected_time_text( $user_id = null ) {
-		$user = null !== $user_id ? get_userdata( intval( $user_id ) ) : wp_get_current_user();
-
-		if ( ! $user ) {
-			return '';
-		}
-
-		$time      = '';
-		$timestamp = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_timestamp", true );
-
-		if ( $timestamp ) {
-			$time = sprintf( esc_html__( 'Last connected: %1$s @ %2$s', 'astoundify-simple-social-login' ), date_i18n( astoundify_simple_social_login_get_date_format(), $timestamp ), date_i18n( astoundify_simple_social_login_get_time_format(), $timestamp ) );
-		}
-
-		return $time;
-	}
-
 	/**
 	 * Link Button Text Default.
 	 *
@@ -270,6 +258,7 @@ abstract class Provider {
 	 */
 	public function get_link_button_text() {
 		$option = get_option( $this->option_name, [] );
+
 		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : $this->get_link_button_text_default();
 	}
 
@@ -283,11 +272,8 @@ abstract class Provider {
 	public function get_unlink_button() {
 		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
 		$title = $this->get_last_connected_time_text();
-		$url   = $this->get_action_url(
-			[
-				'action' => 'unlink',
-			]
-		);
+		$url   = $this->get_action_url( 'unlink' );
+
 		return "<a href='{$url}' title='{$title}'>{$text}</a>";
 	}
 
@@ -334,11 +320,8 @@ abstract class Provider {
 			$is_connected = false;
 
 			$text    = $this->get_link_button_text();
-			$url     = $this->get_action_url(
-				[
-					'action' => 'link',
-				]
-			);
+			$url     = $this->get_action_url( 'link' );
+
 			$classes = [
 				'astoundify-simple-social-login-button',
 				'astoundify-simple-social-login-button-' . $this->id,
@@ -353,11 +336,7 @@ abstract class Provider {
 			$is_connected = true;
 
 			$text    = $this->get_connected_info_text();
-			$url     = $this->get_action_url(
-				[
-					'action' => 'unlink',
-				]
-			);
+			$url     = $this->get_action_url( 'unlink' );
 			$classes = [
 				'astoundify-simple-social-login-unlink-text',
 				'astoundify-simple-social-login-unlink-text-' . $this->id,
@@ -567,121 +546,4 @@ abstract class Provider {
 		return false;
 	}
 
-	/* === API === */
-
-	/**
-	 * Get Error
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param  string $code Error Code.
-	 * @return string
-	 */
-	public function get_error( $code ) {
-		$error_codes = $this->get_error_codes();
-
-		return isset( $error_codes[ $code ] ) ? $error_codes[ $code ] : printf( esc_html__( 'Unknown Error: %s', 'astoundify-simple-social-login' ), $code );
-	}
-
-	/**
-	 * Error Codes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return array
-	 */
-	public function get_error_codes() {
-		$errors = [
-			'no_id'                     => esc_html__( 'Cannot retrieve social profile ID.', 'astoundify-simple-social-login' ),
-			'already_logged_in'         => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
-			'not_logged_in'             => esc_html__( 'User need to login to connect.', 'astoundify-simple-social-login' ),
-			'api_error'                 => esc_html__( 'API connection error.', 'astoundify-simple-social-login' ),
-			'connected_user_not_found'  => esc_html__( 'Login failed. Your social profile is not registered to this website.', 'astoundify-simple-social-login' ),
-			'registration_fail'         => esc_html__( 'Fail to register user.', 'astoundify-simple-social-login' ),
-			'already_connected'         => esc_html__( 'User already connected.', 'astoundify-simple-social-login' ),
-			'link_fail'                 => esc_html__( 'Fail to link account with social profile.', 'astoundify-simple-social-login' ),
-			'unknown_action'            => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
-			'email_already_registered'  => esc_html__( 'Fail to register user. Email already registered.', 'astoundify-simple-social-login' ),
-			'another_already_connected' => esc_html__( 'Another user already connected to social account.', 'astoundify-simple-social-login' ),
-		];
-
-		return $errors;
-	}
-
-	/**
-	 * Error Redirect
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $error_code   Error code.
-	 * @param string $redirect_url Force redirect URL, optional.
-	 */
-	public function error_redirect( $error_code, $redirect_url = false ) {
-		// Redirect URL.
-		$url = $redirect_url ? $redirect_url : wp_login_url();
-
-		// Error code.
-		$url = remove_query_arg( '_error', $url );
-		$url = add_query_arg( '_error', $error_code, $url );
-
-		// Provider info to get error code string/content.
-		$url = remove_query_arg( '_provider', $url );
-		$url = add_query_arg( '_provider', $this->id, $url );
-
-		// Add filter to modify url.
-		$url = apply_filters( 'astoundify_simple_social_login_error_redirect_url', $url, $error_code, $redirect_url, $this );
-
-		// Redirect with error code.
-		wp_safe_redirect( esc_url_raw( $url ) );
-
-		exit;
-	}
-
-	/**
-	 * Success Redirect
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $redirect_url Force redirect URL, optional.
-	 */
-	public function success_redirect( $redirect_url = false ) {
-		$url = apply_filters( 'astoundify_simple_social_login_success_redirect_url', $redirect_url ? $redirect_url : home_url(), $redirect_url, $this );
-
-		if ( false !== strpos( $url, 'wp-login.php' ) ) {
-			$url = home_url();
-		}
-
-		wp_safe_redirect( esc_url_raw( add_query_arg( '_flush', time(), $url ) ) );
-
-		exit;
-	}
-
-	/**
-	 * Link Data: Only store social account ID on link process.
-	 * Do not override account email, name, etc.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param  array $data Full social data.
-	 * @return array
-	 */
-	public function get_link_data( $data ) {
-		$selected_data = [
-			'id' => $data['id'],
-		];
-
-		return $selected_data;
-	}
-
-	/**
-	 * Process Action
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $action  Request action.
-	 * @param string $referer URL.
-	 */
-	public function process_action( $action, $referer ) {
-
-	}
 }

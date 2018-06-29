@@ -78,20 +78,34 @@ function astoundify_simple_social_login_get_active_providers() {
  * @since 1.0.0
  */
 function astoundify_simple_social_login_template_redirect() {
-	$get = get_query_var( 'astoundify_simple_social_login' );
+	$action   = isset( $_GET['astoundify_simple_social_login'] ) ? $_GET['astoundify_simple_social_login'] : false;
+	$provider = isset( $_GET['provider'] ) ? $_GET['provider'] : false;
 
-	if ( ! isset( $get ) ) {
+	if ( ! $action || ! $provider ) {
 		return;
 	}
 
-	switch ( $get ) {
+	$provider = astoundify_simple_social_login_get_provider( $provider );
+
+	switch ( $action ) {
 		case 'authenticate':
-			var_dump( 'auth' );
+			try {
+				$class    = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->id ) );
+				$adapter  = new $class( $provider->get_config() );
+
+				// Send to provider.
+				$adapter->authenticate( $provider );
+
+				// Come back and fetch profile data from adapter.
+				$profile = $provider->get_profile_data( $adapter );
+
+				var_dump( $profile );
+			} catch ( \Exception $e ) {
+				wp_die( $e->getMessage() );
+			}
+
 			break;
 		case 'process':
-			var_dump( 'wat' );
-			break;
-		case 'done':
 			var_dump( 'wat' );
 			break;
 	}
@@ -175,18 +189,6 @@ function astoundify_simple_social_login_get_link_unlink_buttons() {
 
 	return apply_filters( 'astoundify_simple_social_login_link_unlink_buttons', ob_get_clean() );
 }
-
-/**
- * Add Query Vars
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_add_query_vars( $vars ) {
-	$vars[] = 'astoundify_simple_social_login';
-
-	return $vars;
-}
-add_filter( 'query_vars', 'astoundify_simple_social_login_add_query_vars', 1 );
 
 /**
  * Log User In.

@@ -87,39 +87,32 @@ class Provider_Facebook extends Provider {
 	}
 
 	/**
-	 * Get API Data
+	 * Get API config data.
 	 *
-	 * @since 1.0.0
+	 * @since 2.0.0
 	 *
 	 * @return array
 	 */
-	public function api_get_data() {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		$config = [
-			'base_url'  => $this->get_endpoint_url(),
-			'providers' => [
-				'Facebook' => [
-					'enabled'         => true,
-					'keys'            => [
-						'id'     => $this->get_app_id(),
-						'secret' => $this->get_app_secret(),
-					],
-					'scope'           => 'email',
-					'access_type'     => 'offline',
-					'approval_prompt' => 'force',
-				],
+	public function get_config() {
+		return wp_parse_args(
+			[
+				'scope'           => 'email',
+				'access_type'     => 'offline',
+				'approval_prompt' => 'force',
 			],
-		];
+			parent::get_config()
+		);
+	}
 
-		$hybridauth = $this->api_init( $config );
-		if ( ! $hybridauth ) {
-			return false;
-		}
-
-		$adapter = $hybridauth->authenticate( 'Facebook' );
+	/**
+	 * Get API Data
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param $adapter Provider HyrbidAuth provider.
+	 * @return array
+	 */
+	public function get_profile_data( $adapter ) {
 		$profile = $adapter->getUserProfile();
 
 		$data = [
