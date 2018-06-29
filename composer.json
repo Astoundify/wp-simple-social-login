@@ -11,7 +11,13 @@
 	"autoload": {
 		"classmap": ["app/"]
 	},
+	"minimum-stability": "dev",
+	"scripts": {
+		"lint": "phpcs",
+		"lint:fix": "phpcbf"
+	},
 	"require": {
-		"hybridauth/hybridauth" : "^2.9.6"
+		"hybridauth/hybridauth" : "v3.0.0-rc.6",
+		"bigboxwc/wp-template-loader": "dev-master"
 	}
 }

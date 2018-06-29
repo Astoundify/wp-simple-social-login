@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Abstracts
+ * @package  Abstracts
  * @category Core
- * @author Astoundify
+ * @author   Astoundify
  */
 
 namespace Astoundify\Simple_Social_Login;
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Provider_Twitter extends Provider {
+
 
 	/**
 	 * Provider ID.
@@ -97,27 +98,27 @@ class Provider_Twitter extends Provider {
 			return false;
 		}
 
-		$config = array(
+		$config = [
 			'base_url'  => $this->get_endpoint_url(),
-			'providers' => array(
-				'Twitter' => array(
+			'providers' => [
+				'Twitter' => [
 					'enabled'         => true,
-					'keys'            => array(
+					'keys'            => [
 						'key'    => $this->get_app_id(),
 						'secret' => $this->get_app_secret(),
-					),
+					],
 					'includeEmail'    => true,
 					'access_type'     => 'offline',
 					'approval_prompt' => 'force',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$hybridauth = $this->api_init( $config );
 		$adapter    = $hybridauth->authenticate( 'Twitter' );
 		$profile    = $adapter->getUserProfile();
 
-		$data = array(
+		$data = [
 			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
 			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
 			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
@@ -125,7 +126,7 @@ class Provider_Twitter extends Provider {
 			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
 			'screen_name'  => property_exists( $profile, 'displayName' ) ? $profile->displayName : '', // Twitter username.
-		);
+		];
 
 		if ( ! $data['id'] ) {
 			return false;
@@ -139,14 +140,14 @@ class Provider_Twitter extends Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Full social data.
+	 * @param  array $data Full social data.
 	 * @return array
 	 */
 	public function get_link_data( $data ) {
-		$selected_data = array(
+		$selected_data = [
 			'id'          => $data['id'],
 			'screen_name' => $data['screen_name'],
-		);
+		];
 		return $selected_data;
 	}
 

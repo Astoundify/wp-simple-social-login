@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Abstracts
+ * @package  Abstracts
  * @category Core
- * @author Astoundify
+ * @author   Astoundify
  */
 
 namespace Astoundify\Simple_Social_Login;
@@ -82,18 +82,17 @@ abstract class Provider {
 	 *
 	 * @return string
 	 */
-	public function get_action_url( $args ) {
-		$defaults = array(
-			'astoundify_simple_social_login' => $this->id,
-			'action'                         => '',
+	public function get_action_url( $action ) {
+		$defaults = [
+			'astoundify_simple_social_login' => $action,
+			'provider'                       => $this->id,
 			'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$this->id}" ),
 			'_referer'                       => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?' ) ), // Remove all query vars from URL.
-		);
-		$args     = wp_parse_args( $args, $defaults );
+		];
 
-		$url = add_query_arg( $args, home_url() );
+		$args = wp_parse_args( $args, $defaults );
 
-		return $url;
+		return add_query_arg( $args, home_url() );
 	}
 
 	/* === APP CREDENTIALS === */
@@ -106,7 +105,8 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_app_id() {
-		$option = get_option( $this->option_name, array() );
+		$option = get_option( $this->option_name, [] );
+
 		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
 	}
 
@@ -118,7 +118,8 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_app_secret() {
-		$option = get_option( $this->option_name, array() );
+		$option = get_option( $this->option_name, [] );
+
 		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
 	}
 
@@ -130,7 +131,13 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_endpoint_url() {
-		return add_query_arg( 'astoundify_simple_social_login', 'done', user_trailingslashit( home_url() ) );
+		return add_query_arg(
+			[
+				'astoundify_simple_social_login' => 'done',
+				'provider'                       => $this->id,
+			],
+			user_trailingslashit( home_url() )
+		);
 	}
 
 	/**
@@ -142,10 +149,10 @@ abstract class Provider {
 	 */
 	public function is_active() {
 		// Is selected as active provider?
-		$options = get_option( 'astoundify_simple_social_login', array() );
-		$options = is_array( $options ) ? $options : array();
+		$options = get_option( 'astoundify_simple_social_login', [] );
+		$options = is_array( $options ) ? $options : [];
 
-		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : array();
+		$providers = isset( $options['providers'] ) && is_array( $options['providers'] ) ? $options['providers'] : [];
 
 		if ( ! in_array( $this->id, $providers, true ) ) {
 			return false;
@@ -154,6 +161,7 @@ abstract class Provider {
 		// Check API requirements.
 		$app_id     = $this->get_app_id();
 		$app_secret = $this->get_app_secret();
+
 		if ( ! $app_id || ! $app_secret ) {
 			return false;
 		}
@@ -182,7 +190,8 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_login_register_button_text() {
-		$option = get_option( $this->option_name, array() );
+		$option = get_option( $this->option_name, [] );
+
 		return isset( $option['login_button_text'] ) && $option['login_button_text'] ? esc_attr( $option['login_button_text'] ) : $this->get_login_register_button_text_default();
 	}
 
@@ -200,17 +209,15 @@ abstract class Provider {
 		}
 
 		$text    = $this->get_login_register_button_text();
-		$url     = $this->get_action_url(
-			array(
-				'action' => 'login_register',
-			)
-		);
-		$classes = array(
+		$url     = $this->get_action_url( 'authenticate' );
+
+		$classes = [
 			'astoundify-simple-social-login-button',
 			'astoundify-simple-social-login-button-' . $this->id,
 			'astoundify-simple-social-login-login-register-button',
 			'astoundify-simple-social-login-login-register-button-' . $this->id,
-		);
+		];
+
 		$classes = implode( ' ', array_map( 'sanitize_html_class', $classes ) );
 		$icon    = $this->get_icon();
 
@@ -228,12 +235,14 @@ abstract class Provider {
 	 */
 	public function get_last_connected_time_text( $user_id = null ) {
 		$user = null !== $user_id ? get_userdata( intval( $user_id ) ) : wp_get_current_user();
+
 		if ( ! $user ) {
 			return '';
 		}
 
 		$time      = '';
 		$timestamp = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_timestamp", true );
+
 		if ( $timestamp ) {
 			$time = sprintf( esc_html__( 'Last connected: %1$s @ %2$s', 'astoundify-simple-social-login' ), date_i18n( astoundify_simple_social_login_get_date_format(), $timestamp ), date_i18n( astoundify_simple_social_login_get_time_format(), $timestamp ) );
 		}
@@ -260,7 +269,7 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_link_button_text() {
-		$option = get_option( $this->option_name, array() );
+		$option = get_option( $this->option_name, [] );
 		return isset( $option['link_button_text'] ) && $option['link_button_text'] ? esc_attr( $option['link_button_text'] ) : $this->get_link_button_text_default();
 	}
 
@@ -275,9 +284,9 @@ abstract class Provider {
 		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
 		$title = $this->get_last_connected_time_text();
 		$url   = $this->get_action_url(
-			array(
+			[
 				'action' => 'unlink',
-			)
+			]
 		);
 		return "<a href='{$url}' title='{$title}'>{$text}</a>";
 	}
@@ -301,9 +310,10 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_connected_info_text() {
-		$option = get_option( $this->option_name, array() );
+		$option = get_option( $this->option_name, [] );
 		$text   = isset( $option['connected_info'] ) && $option['connected_info'] ? esc_attr( $option['connected_info'] ) : $this->get_connected_info_text_default();
 		$text   = str_replace( '{{unlink}}', $this->get_unlink_button(), $text );
+
 		return $text;
 	}
 
@@ -325,16 +335,16 @@ abstract class Provider {
 
 			$text    = $this->get_link_button_text();
 			$url     = $this->get_action_url(
-				array(
+				[
 					'action' => 'link',
-				)
+				]
 			);
-			$classes = array(
+			$classes = [
 				'astoundify-simple-social-login-button',
 				'astoundify-simple-social-login-button-' . $this->id,
 				'astoundify-simple-social-login-link-button',
 				'astoundify-simple-social-login-link-button-' . $this->id,
-			);
+			];
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 			$icon    = $this->get_icon();
 
@@ -344,14 +354,14 @@ abstract class Provider {
 
 			$text    = $this->get_connected_info_text();
 			$url     = $this->get_action_url(
-				array(
+				[
 					'action' => 'unlink',
-				)
+				]
 			);
-			$classes = array(
+			$classes = [
 				'astoundify-simple-social-login-unlink-text',
 				'astoundify-simple-social-login-unlink-text-' . $this->id,
-			);
+			];
 			$classes = esc_attr( implode( ' ', array_map( 'sanitize_html_class', $classes ) ) );
 
 			$html = "<p class='{$classes}'>{$text}</p>";
@@ -388,7 +398,7 @@ abstract class Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data API data.
+	 * @param  array $data API data.
 	 * @return int|false
 	 */
 	public function insert_user( $data ) {
@@ -396,7 +406,7 @@ abstract class Provider {
 			return false;
 		}
 
-		$defaults = array(
+		$defaults = [
 			'id'           => '',
 			'user_login'   => '',
 			'user_pass'    => wp_generate_password(),
@@ -405,8 +415,9 @@ abstract class Provider {
 			'nickname'     => '',
 			'first_name'   => '',
 			'last_name'    => '',
-		);
-		$data     = wp_parse_args( $data, $defaults );
+		];
+
+		$data = wp_parse_args( $data, $defaults );
 
 		// Bail if no ID.
 		if ( ! $data['id'] || ! $data['display_name'] ) {
@@ -415,6 +426,7 @@ abstract class Provider {
 
 		// User Login.
 		$data['user_login'] = sanitize_title( $data['display_name'] );
+
 		if ( username_exists( $data['user_login'] ) ) {
 			$data['user_login'] = $data['user_login'] . '_' . time();
 		}
@@ -441,6 +453,7 @@ abstract class Provider {
 		foreach ( $defaults as $k => $v ) {
 			unset( $data[ $k ] );
 		}
+
 		foreach ( $data as $k => $v ) {
 			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
 		}
@@ -453,7 +466,7 @@ abstract class Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data API data.
+	 * @param  array $data API data.
 	 * @return int|false
 	 */
 	public function link_user( $data ) {
@@ -468,10 +481,11 @@ abstract class Provider {
 
 		$user_id = $user->ID;
 
-		$defaults = array(
+		$defaults = [
 			'id' => time(),
-		);
-		$data     = wp_parse_args( $data, $defaults );
+		];
+
+		$data = wp_parse_args( $data, $defaults );
 
 		// Bail if no ID.
 		if ( ! $data['id'] ) {
@@ -488,6 +502,7 @@ abstract class Provider {
 		foreach ( $defaults as $k => $v ) {
 			unset( $data[ $k ] );
 		}
+
 		foreach ( $data as $k => $v ) {
 			update_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_{$k}", $v );
 		}
@@ -515,8 +530,10 @@ abstract class Provider {
 		}
 
 		$user_id = $user->ID;
+
 		delete_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_id" );
 		delete_user_meta( $user_id, "_astoundify_simple_social_login_{$this->id}_connected" );
+
 		return true;
 	}
 
@@ -528,12 +545,13 @@ abstract class Provider {
 	 * @return false|int
 	 */
 	public function get_connected_user_id( $id ) {
-		$args  = array(
+		$args  = [
 			'meta_key'   => "_astoundify_simple_social_login_{$this->id}_id",
 			'meta_value' => esc_html( $id ),
 			'number'     => -1,
 			'fields'     => 'ID',
-		);
+		];
+
 		$users = get_users( $args );
 
 		// If user found, return it.
@@ -545,46 +563,23 @@ abstract class Provider {
 				return false;
 			}
 		}
+
 		return false;
 	}
 
 	/* === API === */
 
 	/**
-	 * Connect via HybridAuth
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return Hybrid_Auth|false
-	 */
-	function api_init( $config ) {
-		if ( ! $this->is_active() ) {
-			return false;
-		}
-
-		require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
-
-		$hybridauth = false;
-
-		try {
-			$hybridauth = new \Hybrid_Auth( $config );
-		} catch ( \Exception $e ) {
-			return false;
-		}
-
-		return $hybridauth;
-	}
-
-	/**
 	 * Get Error
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $code Error Code.
+	 * @param  string $code Error Code.
 	 * @return string
 	 */
 	public function get_error( $code ) {
 		$error_codes = $this->get_error_codes();
+
 		return isset( $error_codes[ $code ] ) ? $error_codes[ $code ] : printf( esc_html__( 'Unknown Error: %s', 'astoundify-simple-social-login' ), $code );
 	}
 
@@ -596,7 +591,7 @@ abstract class Provider {
 	 * @return array
 	 */
 	public function get_error_codes() {
-		$errors = array(
+		$errors = [
 			'no_id'                     => esc_html__( 'Cannot retrieve social profile ID.', 'astoundify-simple-social-login' ),
 			'already_logged_in'         => esc_html__( 'User already logged-in.', 'astoundify-simple-social-login' ),
 			'not_logged_in'             => esc_html__( 'User need to login to connect.', 'astoundify-simple-social-login' ),
@@ -608,7 +603,8 @@ abstract class Provider {
 			'unknown_action'            => esc_html__( 'Error. Action unknown.', 'astoundify-simple-social-login' ),
 			'email_already_registered'  => esc_html__( 'Fail to register user. Email already registered.', 'astoundify-simple-social-login' ),
 			'another_already_connected' => esc_html__( 'Another user already connected to social account.', 'astoundify-simple-social-login' ),
-		);
+		];
+
 		return $errors;
 	}
 
@@ -637,6 +633,7 @@ abstract class Provider {
 
 		// Redirect with error code.
 		wp_safe_redirect( esc_url_raw( $url ) );
+
 		exit;
 	}
 
@@ -653,7 +650,9 @@ abstract class Provider {
 		if ( false !== strpos( $url, 'wp-login.php' ) ) {
 			$url = home_url();
 		}
+
 		wp_safe_redirect( esc_url_raw( add_query_arg( '_flush', time(), $url ) ) );
+
 		exit;
 	}
 
@@ -663,13 +662,14 @@ abstract class Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Full social data.
+	 * @param  array $data Full social data.
 	 * @return array
 	 */
 	public function get_link_data( $data ) {
-		$selected_data = array(
+		$selected_data = [
 			'id' => $data['id'],
-		);
+		];
+
 		return $selected_data;
 	}
 
@@ -678,93 +678,10 @@ abstract class Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $action Request action.
+	 * @param string $action  Request action.
 	 * @param string $referer URL.
 	 */
 	public function process_action( $action, $referer ) {
 
-		// Separate each action.
-		switch ( $action ) {
-			case 'login_register':
-				if ( is_user_logged_in() ) {
-					$this->error_redirect( 'already_logged_in' );
-				}
-
-				$data = $this->api_get_data();
-				if ( ! $data || ! isset( $data['id'] ) ) {
-					$this->error_redirect( 'api_error' );
-				}
-
-				// Get connected user ID.
-				$user_id = $this->get_connected_user_id( $data['id'] );
-
-				// User found. Log them in.
-				if ( $user_id ) {
-					astoundify_simple_social_login_log_user_in( $user_id );
-					$this->success_redirect( urldecode( $referer ) );
-				}
-
-				// If registration disabled. bail.
-				if ( ! astoundify_simple_social_login_is_registration_enabled() ) {
-					$this->error_redirect( 'connected_user_not_found' );
-				}
-
-				// Register user.
-				$user_id = $this->insert_user( $data, $referer );
-				if ( ! $user_id ) {
-					$this->error_redirect( 'registration_fail' );
-				}
-
-				// Log them in.
-				astoundify_simple_social_login_log_user_in( $user_id );
-
-				// Redirect to home, if in login page.
-				$this->success_redirect( urldecode( $referer ) );
-
-				break;
-			case 'link':
-				if ( ! is_user_logged_in() ) {
-					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
-				}
-
-				$is_connected = $this->is_user_connected( get_current_user_id() );
-				if ( $is_connected ) {
-					$this->error_redirect( 'already_connected', urldecode( $referer ) );
-				}
-
-				$data = $this->api_get_data();
-				if ( ! $data || ! isset( $data['id'] ) ) {
-					$this->error_redirect( 'api_error' );
-				}
-
-				// Get connected user ID.
-				$user_id = $this->get_connected_user_id( $data['id'] );
-				if ( $user_id ) {
-					$this->error_redirect( 'another_already_connected', urldecode( $referer ) );
-				}
-
-				// Link user.
-				$link_data = $this->get_link_data( $data );
-				$link      = $this->link_user( $link_data );
-
-				if ( ! $link ) {
-					$this->error_redirect( 'link_fail', urldecode( $referer ) );
-				}
-
-				$this->success_redirect( urldecode( $referer ) );
-
-				break;
-			case 'unlink':
-				if ( ! is_user_logged_in() ) {
-					$this->error_redirect( 'not_logged_in', urldecode( $referer ) );
-				}
-
-				$this->unlink_user( get_current_user_id() );
-				$this->success_redirect( urldecode( $referer ) );
-
-				break;
-			default:
-				$this->error_redirect( 'unknown_action' );
-		}
 	}
 }

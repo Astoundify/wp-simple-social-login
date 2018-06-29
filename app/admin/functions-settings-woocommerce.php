@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Admin
+ * @package  Admin
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.

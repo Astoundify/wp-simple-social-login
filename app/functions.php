@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Functions
+ * @package  Functions
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -22,12 +22,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function astoundify_simple_social_login_get_providers() {
-	$providers = array(
+	$providers = [
 		'facebook' => '\Astoundify\Simple_Social_Login\Provider_Facebook',
 		'twitter'  => '\Astoundify\Simple_Social_Login\Provider_Twitter',
 		'google'   => '\Astoundify\Simple_Social_Login\Provider_Google',
-	);
+	];
 	return apply_filters( 'astoundify_simple_social_login_providers', $providers );
+}
+
+/**
+ * Get Provider.
+ *
+ * @since 1.0.0
+ *
+ * @param  string $id Provider ID.
+ * @return Astoundify\Simple_Social_Login\Provider|false
+ */
+function astoundify_simple_social_login_get_provider( $id ) {
+	$providers = astoundify_simple_social_login_get_providers();
+
+	return isset( $providers[ $id ] ) && class_exists( $providers[ $id ] ) ? new $providers[ $id ]() : false;
 }
 
 /**
@@ -39,33 +53,52 @@ function astoundify_simple_social_login_get_providers() {
  */
 function astoundify_simple_social_login_get_active_providers() {
 	$_providers = astoundify_simple_social_login_get_providers();
+
 	if ( ! $_providers || ! is_array( $_providers ) ) {
-		return array();
+		return [];
 	}
 
 	// Get active providers.
-	$providers = array();
+	$providers = [];
+
 	foreach ( $_providers as $id => $v ) {
 		$provider = astoundify_simple_social_login_get_provider( $id );
+
 		if ( $provider && $provider->is_active() ) {
 			$providers[ $id ] = $provider;
 		}
 	}
+
 	return $providers;
 }
 
 /**
- * Get Provider.
+ * Process a provider.
  *
  * @since 1.0.0
- *
- * @param string $id Provider ID.
- * @return Astoundify\Simple_Social_Login\Provider|false
  */
-function astoundify_simple_social_login_get_provider( $id ) {
-	$providers = astoundify_simple_social_login_get_providers();
-	return isset( $providers[ $id ] ) && class_exists( $providers[ $id ] ) ? new $providers[ $id ] : false;
+function astoundify_simple_social_login_template_redirect() {
+	$get = get_query_var( 'astoundify_simple_social_login' );
+
+	if ( ! isset( $get ) ) {
+		return;
+	}
+
+	switch ( $get ) {
+		case 'authenticate':
+			var_dump( 'auth' );
+			break;
+		case 'process':
+			var_dump( 'wat' );
+			break;
+		case 'done':
+			var_dump( 'wat' );
+			break;
+	}
+
+	die();
 }
+add_action( 'template_redirect', 'astoundify_simple_social_login_template_redirect' );
 
 /**
  * Get active display location.
@@ -75,8 +108,9 @@ function astoundify_simple_social_login_get_provider( $id ) {
  * @return array
  */
 function astoundify_simple_social_login_get_display_locations() {
-	$options = get_option( 'astoundify_simple_social_login', array() );
-	$display = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
+	$options = get_option( 'astoundify_simple_social_login', [] );
+	$display = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : [];
+
 	return $display;
 }
 
@@ -85,11 +119,12 @@ function astoundify_simple_social_login_get_display_locations() {
  *
  * @since 1.0.0
  *
- * @param string $location Display location.
+ * @param  string $location Display location.
  * @return array
  */
 function astoundify_simple_social_login_is_display_location_selected( $location ) {
 	$locations = astoundify_simple_social_login_get_display_locations();
+
 	return in_array( $location, $locations, true );
 }
 
@@ -109,9 +144,9 @@ function astoundify_simple_social_login_get_login_register_buttons() {
 	ob_start();
 
 	astoundify_simple_social_login_get_template(
-		'login-register-buttons.php', array(
+		'login-register-buttons.php', [
 			'providers' => $providers,
-		)
+		]
 	);
 
 	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
@@ -133,9 +168,9 @@ function astoundify_simple_social_login_get_link_unlink_buttons() {
 	ob_start();
 
 	astoundify_simple_social_login_get_template(
-		'link-unlink-buttons.php', array(
+		'link-unlink-buttons.php', [
 			'providers' => $providers,
-		)
+		]
 	);
 
 	return apply_filters( 'astoundify_simple_social_login_link_unlink_buttons', ob_get_clean() );
@@ -148,73 +183,10 @@ function astoundify_simple_social_login_get_link_unlink_buttons() {
  */
 function astoundify_simple_social_login_add_query_vars( $vars ) {
 	$vars[] = 'astoundify_simple_social_login';
+
 	return $vars;
 }
 add_filter( 'query_vars', 'astoundify_simple_social_login_add_query_vars', 1 );
-
-/**
- * Register Custom Template When visiting Query Vars.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_template_include( $template ) {
-	$get = get_query_var( 'astoundify_simple_social_login' );
-	if ( $get ) {
-		$template = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH . 'process.php';
-	}
-	return $template;
-}
-add_filter( 'template_include', 'astoundify_simple_social_login_template_include' );
-
-/**
- * Done Process. Endpoint For HybridAuth.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_process_done() {
-	// Bail if no active provider.
-	$providers = astoundify_simple_social_login_get_active_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		wp_redirect( home_url() );
-		exit;
-	}
-
-	// Load HybridAuth Library.
-	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
-
-	// Process social account data.
-	try {
-		\Hybrid_Endpoint::process();
-	} catch ( \Exception $e ) {
-		wp_die();
-		exit;
-	}
-	wp_die();
-	exit;
-}
-add_action( 'astoundify_simple_social_login_process_done', 'astoundify_simple_social_login_process_done' );
-
-/**
- * Action Process
- *
- * @since 1.0.0
- *
- * @param string $provider Login provider.
- * @param string $action   Request action.
- * @param string $referer  URL.
- */
-function astoundify_simple_social_login_process( $provider, $action, $referer ) {
-	// Bail if invalid or not active.
-	$provider = astoundify_simple_social_login_get_provider( $provider );
-	if ( ! $provider || ! $provider->is_active() ) {
-		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-		exit;
-	}
-
-	// Process action.
-	$provider->process_action( $action, $referer );
-}
-add_action( 'astoundify_simple_social_login_process', 'astoundify_simple_social_login_process', 10, 3 );
 
 /**
  * Log User In.
@@ -249,7 +221,8 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
 }
 
 /**
- * Setup Profile URL
+ * Setup Profile URL.
+ *
  * In case cannot capture email from social account. User will need to setup email in their user account.
  * As default it will use WordPress admin profile edit page.
  *
@@ -267,8 +240,9 @@ function astoundify_simple_social_login_get_setup_profile_url() {
  * @return bool
  */
 function astoundify_simple_social_login_is_registration_enabled() {
-	$options = get_option( 'astoundify_simple_social_login', array() );
+	$options = get_option( 'astoundify_simple_social_login', [] );
 	$enable  = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
+
 	return apply_filters( 'astoundify_simple_social_login_registration_enabled', $enable );
 }
 
@@ -307,9 +281,11 @@ function astoundify_simple_social_login_is_wp_login_page() {
 	if ( astoundify_simple_social_login_is_wp_register_page() ) {
 		return false;
 	}
+
 	if ( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
 		return true;
 	}
+
 	return false;
 }
 
@@ -341,14 +317,14 @@ function astoundify_simple_social_login_enqueue_styles( $page = false ) {
 
 	if ( $debug ) {
 		// If in debug load button base separately.
-		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', array(), $version );
+		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', [], $version );
 
 		// Load supplemental styles if needed.
 		if ( $page ) {
-			wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css', array(), $version );
+			wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css', [], $version );
 		}
 	} else {
-		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css', array(), $version );
+		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css', [], $version );
 	}
 }
 
@@ -371,9 +347,9 @@ function astoundify_simple_social_login_get_svg( $icon ) {
 
 	if ( file_exists( $file ) ) {
 		ob_start();
-?>
+	?>
 
-<span class="astoundify-simple-social-login-icon"><?php require( $file ); ?></span>
+   <span class="astoundify-simple-social-login-icon"><?php include $file; ?></span>
 
 <?php
 		return ob_get_clean();

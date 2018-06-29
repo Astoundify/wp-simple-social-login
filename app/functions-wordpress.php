@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Functions
+ * @package  Functions
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -42,7 +42,7 @@ function astoundify_simple_social_login_wordpress_login_form() {
 
 	// Add "back to social login" link in login footer.
 	add_action(
-		'login_footer', function() {
+		'login_footer', function () {
 		?>
 	<p id="astoundify-simple-social-login-wordpress-back">
 		<a style="display:none;" href="#"><?php _e( 'Login with social account?', 'astoundify-simple-social-login' ); ?></a>
@@ -91,8 +91,8 @@ add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profi
  *
  * @since 1.0.0
  *
- * @param WP_Error $errors      Errors.
- * @param string   $redirect_to Redirect URL.
+ * @param  WP_Error $errors      Errors.
+ * @param  string   $redirect_to Redirect URL.
  * @return array
  */
 function astoundify_simple_social_login_wordpress_login_add_errors( $errors, $redirect_to ) {
@@ -141,7 +141,7 @@ function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
 		?>
 
 		<div class="notice notice-error">
-			<p><?php echo $provider->get_error( $_GET['_error'] ); ?></p>
+		 <p><?php echo $provider->get_error( $_GET['_error'] ); ?></p>
 		</div>
 
 		<?php
@@ -155,7 +155,7 @@ function astoundify_simple_social_login_wordpress_admin_add_error_notices() {
 		?>
 
 		<div class="notice notice-error">
-			<p><?php esc_html_e( 'Please setup your email to activate your account.', 'astoundify-simple-social-login' ); ?> <a href="<?php echo esc_url( admin_url( 'profile.php' ) ); ?>#email"><?php esc_html_e( 'Add Email', 'astoundify-simple-social-login' ); ?></a></p>
+		 <p><?php esc_html_e( 'Please setup your email to activate your account.', 'astoundify-simple-social-login' ); ?> <a href="<?php echo esc_url( admin_url( 'profile.php' ) ); ?>#email"><?php esc_html_e( 'Add Email', 'astoundify-simple-social-login' ); ?></a></p>
 		</div>
 
 		<?php
@@ -220,10 +220,10 @@ function astoundify_simple_social_login_wordpress_login_scripts() {
 
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/wp-login.js';
-		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', array(), $version );
+		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', [], $version );
 	}
 
-	wp_enqueue_script( 'astoundify-simple-social-login-wordpress', $url, array( 'jquery' ), $version );
+	wp_enqueue_script( 'astoundify-simple-social-login-wordpress', $url, [ 'jquery' ], $version );
 }
 add_action( 'login_enqueue_scripts', 'astoundify_simple_social_login_wordpress_login_scripts' );
 

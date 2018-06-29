@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Abstracts
+ * @package  Abstracts
  * @category Core
- * @author Astoundify
+ * @author   Astoundify
  */
 
 namespace Astoundify\Simple_Social_Login;
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Provider_Facebook extends Provider {
+
 
 	/**
 	 * Provider ID.
@@ -97,21 +98,21 @@ class Provider_Facebook extends Provider {
 			return false;
 		}
 
-		$config = array(
+		$config = [
 			'base_url'  => $this->get_endpoint_url(),
-			'providers' => array(
-				'Facebook' => array(
+			'providers' => [
+				'Facebook' => [
 					'enabled'         => true,
-					'keys'            => array(
+					'keys'            => [
 						'id'     => $this->get_app_id(),
 						'secret' => $this->get_app_secret(),
-					),
+					],
 					'scope'           => 'email',
 					'access_type'     => 'offline',
 					'approval_prompt' => 'force',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$hybridauth = $this->api_init( $config );
 		if ( ! $hybridauth ) {
@@ -121,14 +122,14 @@ class Provider_Facebook extends Provider {
 		$adapter = $hybridauth->authenticate( 'Facebook' );
 		$profile = $adapter->getUserProfile();
 
-		$data = array(
+		$data = [
 			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
 			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
 			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'nickname'     => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
 			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
-		);
+		];
 
 		if ( ! $data['id'] ) {
 			return false;

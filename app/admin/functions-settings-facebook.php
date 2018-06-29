@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Admin
+ * @package  Admin
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -33,11 +33,11 @@ add_action( 'admin_init', 'astoundify_simple_social_login_facebook_register_sett
  *
  * @since 1.0.0
  *
- * @param mixed $input Data input.
+ * @param  mixed $input Data input.
  * @return array
  */
 function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
-	$output = array();
+	$output = [];
 
 	$output['app_id'] = isset( $input['app_id'] ) ? esc_attr( trim( $input['app_id'] ) ) : '';
 
@@ -57,7 +57,7 @@ function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
  *
  * @since 1.0.0
  *
- * @param array $settings Settings Section.
+ * @param  array $settings Settings Section.
  * @return array
  */
 function astoundify_simple_social_login_facebook_add_settings_tab( $settings ) {
@@ -72,7 +72,7 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
  * @since 1.0.0
  */
 function astoundify_simple_social_login_panel_facebook() {
-	$options  = get_option( 'astoundify_simple_social_login_facebook', array() );
+	$options  = get_option( 'astoundify_simple_social_login_facebook', [] );
 	$options  = astoundify_simple_social_login_facebook_sanitize_settings( $options );
 	$provider = astoundify_simple_social_login_get_provider( 'facebook' );
 ?>

@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Plugin Scaffold
+ * @package  Plugin Scaffold
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 /**
@@ -19,7 +19,7 @@
  * @param string $template_path (default: '') Load from a different area.
  * @param string $default_path  (default: '') Default path.
  */
-function astoundify_simple_social_login_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+function astoundify_simple_social_login_get_template( $template_name, $args = [], $template_path = '', $default_path = '' ) {
 	// Extract variable to use in template file.
 	if ( ! empty( $args ) && is_array( $args ) ) {
 		extract( $args ); // WPCS: ok.
@@ -35,7 +35,7 @@ function astoundify_simple_social_login_get_template( $template_name, $args = ar
 		return;
 	}
 
-	include( $located );
+	include $located;
 }
 
 /**
@@ -49,9 +49,9 @@ function astoundify_simple_social_login_get_template( $template_name, $args = ar
  *
  * @since 1.0.0
  *
- * @param string $template_name Name of template file.
- * @param string $template_path (default: '') Load from a different area.
- * @param string $default_path  (default: '') Default path.
+ * @param  string $template_name Name of template file.
+ * @param  string $template_path (default: '') Load from a different area.
+ * @param  string $default_path  (default: '') Default path.
  * @return string
  */
 function astoundify_simple_social_login_locate_template( $template_name, $template_path = '', $default_path = '' ) {

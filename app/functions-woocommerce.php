@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Functions
+ * @package  Functions
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -124,7 +124,7 @@ add_action( 'template_redirect', 'astoundify_simple_social_login_woocommerce_add
  *
  * @since 1.0.0
  *
- * @param string $url Profile URL.
+ * @param  string $url Profile URL.
  * @return string
  */
 function astoundidy_simple_social_login_woocommerce_setup_profile_url( $url ) {

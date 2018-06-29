@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Abstracts
+ * @package  Abstracts
  * @category Core
- * @author Astoundify
+ * @author   Astoundify
  */
 
 namespace Astoundify\Simple_Social_Login;
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Provider_Google extends Provider {
+
 
 	/**
 	 * Provider ID.
@@ -97,32 +98,32 @@ class Provider_Google extends Provider {
 			return false;
 		}
 
-		$config = array(
+		$config = [
 			'base_url'  => $this->get_endpoint_url(),
-			'providers' => array(
-				'Google' => array(
+			'providers' => [
+				'Google' => [
 					'enabled'         => true,
-					'keys'            => array(
+					'keys'            => [
 						'id'     => $this->get_app_id(),
 						'secret' => $this->get_app_secret(),
-					),
+					],
 					'scope'           => implode(
-						' ', array(
+						' ', [
 							'https://www.googleapis.com/auth/userinfo.profile',
 							'https://www.googleapis.com/auth/userinfo.email',
-						)
+						]
 					),
 					'access_type'     => 'offline',
 					'approval_prompt' => 'force',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$hybridauth = $this->api_init( $config );
 		$adapter    = $hybridauth->authenticate( 'Google' );
 		$profile    = $adapter->getUserProfile();
 
-		$data = array(
+		$data = [
 			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
 			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
 			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
@@ -130,7 +131,7 @@ class Provider_Google extends Provider {
 			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
 			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
 			'gmail'        => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ), // Gmail.
-		);
+		];
 
 		return $data;
 	}
@@ -140,14 +141,14 @@ class Provider_Google extends Provider {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Full social data.
+	 * @param  array $data Full social data.
 	 * @return array
 	 */
 	public function get_link_data( $data ) {
-		$selected_data = array(
+		$selected_data = [
 			'id'    => $data['id'],
 			'gmail' => $data['gmail'],
-		);
+		];
 		return $selected_data;
 	}
 }
