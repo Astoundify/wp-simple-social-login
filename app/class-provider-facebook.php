@@ -96,7 +96,7 @@ class Provider_Facebook extends Provider {
 	public function get_config() {
 		return wp_parse_args(
 			[
-				'scope'           => 'email',
+				'scope'           => 'email, user_about_me',
 				'access_type'     => 'offline',
 				'approval_prompt' => 'force',
 			],
@@ -116,12 +116,12 @@ class Provider_Facebook extends Provider {
 		$profile = $adapter->getUserProfile();
 
 		$data = [
-			'id'           => property_exists( $profile, 'identifier' ) ? $profile->identifier : '',
-			'user_email'   => property_exists( $profile, 'emailVerified' ) ? $profile->emailVerified : ( property_exists( $profile, 'email' ) ? $profile->email : '' ),
-			'display_name' => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'nickname'     => property_exists( $profile, 'displayName' ) ? $profile->displayName : '',
-			'first_name'   => property_exists( $profile, 'firstName' ) ? $profile->firstName : '',
-			'last_name'    => property_exists( $profile, 'lastName' ) ? $profile->lastName : '',
+			'id'           => isset( $profile->identifier ) ? $profile->identifier : '',
+			'user_email'   => isset( $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
+			'display_name' => isset( $profile->displayName ) ? $profile->displayName : '',
+			'nickname'     => isset( $profile->displayName ) ? $profile->displayName : '',
+			'first_name'   => isset( $profile->firstName ) ? $profile->firstName : '',
+			'last_name'    => isset( $profile->lastName ) ? $profile->lastName : '',
 		];
 
 		if ( ! $data['id'] ) {

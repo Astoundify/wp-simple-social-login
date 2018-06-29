@@ -13,6 +13,7 @@ namespace Astoundify\Simple_Social_Login;
 
 // Load helper functions.
 require_once ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions.php';
+require_once ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-display.php';
 require_once ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'app/functions-template.php';
 
 /**
