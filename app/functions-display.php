@@ -37,6 +37,7 @@ function astoundify_simple_social_login_is_display_location_selected( $location 
  */
 function astoundify_simple_social_login_get_login_register_buttons() {
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return false;
 	}

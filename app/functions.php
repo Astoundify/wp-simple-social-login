@@ -92,7 +92,7 @@ function astoundify_simple_social_login_watch() {
 
 	try {
 		// Cheating.
-		if ( ! wp_verify_nonce( "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
+		if ( ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
 			throw new Exception( esc_html__( 'Invalid operation.', 'astoundify-simple-social-login' ) );
 		}
 
@@ -122,7 +122,7 @@ function astoundify_simple_social_login_watch() {
 					return astoundify_simple_social_login_log_user_in( $user_id, $provider->get_id() );
 				}
 
-				throw new Exception( esc_html__( 'Unable to authenticate. Please try again', 'astoundify-simple-social-login' ) );
+				throw new Exception( esc_html__( 'Unable to authenticate. Please try again.', 'astoundify-simple-social-login' ) );
 
 				break;
 
@@ -132,21 +132,38 @@ function astoundify_simple_social_login_watch() {
 					throw new Exception( esc_html__( 'You are not logged in.', 'astoundify-simple-social-login' ) );
 				}
 
+				// Try and find an existing user.
+				$user_id = astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider->get_id() );
+
+				if ( $user_id ) {
+					throw new Exception( esc_html__( 'This social account is already linked to an existing user account.', 'astoundify-simple-social-login' ) );
+				}
+
 				$link = astoundify_simple_social_login_set_user_data( get_current_user_id(), $provider_profile, $provider->get_id() );
 
 				if ( ! $link ) {
-					throw new Exception( esc_html__( 'Unable to link account. Please try again', 'astoundify-simple-social-login' ) );
+					throw new Exception( esc_html__( 'Unable to link account. Please try again.', 'astoundify-simple-social-login' ) );
 				}
 
 				break;
 
 			// Remove an association.
 			case 'unlink':
-				var_dump( 'wat' );
+				if ( ! is_user_logged_in() ) {
+					throw new Exception( esc_html__( 'You are not logged in.', 'astoundify-simple-social-login' ) );
+				}
+
+				astoundify_simple_social_login_unset_user_data( get_current_user_id(), $provider->get_id() );
+
 				break;
 		}
 	} catch ( \Exception $e ) {
 		wp_die( $e->getMessage() );
+	}
+
+	if ( isset( $_GET['_referrer'] ) ) {
+		wp_safe_redirect( esc_url( $_GET['_referrer'] ) );
+		exit();
 	}
 }
 add_action( 'template_redirect', 'astoundify_simple_social_login_watch' );
@@ -295,6 +312,23 @@ function astoundify_simple_social_login_set_user_data( $user_id, $provider_profi
 	do_action( 'astoundify_simple_social_login_set_user_data', $user_id, $provider_profile, $provider );
 
 	return true;
+}
+
+/**
+ * Unset a user's provider meta data.
+ *
+ * @since 1.0.0
+ *
+ * @param int $user_id User ID.
+ * @param string $provider Provider ID.
+ */
+function astoundify_simple_social_login_unset_user_data( $user_id, $provider ) {
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_id" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected" );
+
+	do_action( 'astoundify_simple_social_login_unset_user_data', $user_id, $provider_profile, $provider );
 }
 
 /**

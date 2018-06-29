@@ -14,9 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <ul class="astoundify-simple-social-login--link-unlink-buttons">
+
 	<?php foreach ( $providers as $provider_id => $provider ) : ?>
-
 		<li><?php echo $provider->get_link_unlink_button(); ?></li>
-
 	<?php endforeach; ?>
+
 </ul><!-- .astoundify-simple-social-login--link-unlink-buttons -->

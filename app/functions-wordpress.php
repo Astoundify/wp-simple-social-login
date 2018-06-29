@@ -23,10 +23,16 @@ function astoundify_simple_social_login_wordpress_login_form() {
 	if ( is_user_logged_in() ) {
 		return false;
 	}
-	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) && astoundify_simple_social_login_is_wp_login_page() ) {
+
+	if (
+		! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) &&
+		astoundify_simple_social_login_is_wp_login_page()
+	) {
 		return;
 	}
+
 	$buttons = astoundify_simple_social_login_get_login_register_buttons();
+
 	if ( ! $buttons ) {
 		return;
 	}
@@ -43,11 +49,13 @@ function astoundify_simple_social_login_wordpress_login_form() {
 	// Add "back to social login" link in login footer.
 	add_action(
 		'login_footer', function () {
-		?>
-	<p id="astoundify-simple-social-login-wordpress-back">
-		<a style="display:none;" href="#"><?php _e( 'Login with social account?', 'astoundify-simple-social-login' ); ?></a>
-	</p><!-- #astoundify-simple-social-login-wordpress-back -->
-	<?php
+?>
+
+<p id="astoundify-simple-social-login-wordpress-back">
+	<a style="display:none;" href="#"><?php esc_html_e( 'Login with social account?', 'astoundify-simple-social-login' ); ?></a>
+</p><!-- #astoundify-simple-social-login-wordpress-back -->
+
+<?php
 		}
 	);
 }
@@ -62,11 +70,14 @@ function astoundify_simple_social_login_wordpress_profile() {
 	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
 		return;
 	}
+
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return;
 	}
 ?>
+
 <h2><?php esc_html_e( 'Connected Social Accounts', 'astoundify-simple-social-login' ); ?></h2>
 
 <table class="form-table">
@@ -82,37 +93,10 @@ function astoundify_simple_social_login_wordpress_profile() {
 		</tr>
 	</tbody>
 </table>
+
 <?php
 }
 add_action( 'show_user_profile', 'astoundify_simple_social_login_wordpress_profile', 20 );
-
-/**
- * Redirect to admin profile if email is not yet set.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_wordpress_email_setup_redirect() {
-	// Bail if not active.
-	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) ) {
-		return;
-	}
-	$providers = astoundify_simple_social_login_get_active_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		return;
-	}
-
-	// Display error if user do not have email in their account.
-	if ( apply_filters( 'astoundify_simple_social_login_wordpress_admin_email_setup_redirect', true ) ) {
-		if ( is_user_logged_in() ) {
-			$user = wp_get_current_user();
-			if ( ! $user->user_email ) {
-				wp_safe_redirect( esc_url_raw( admin_url( 'profile.php' ) ) );
-				exit;
-			}
-		}
-	}
-}
-add_action( 'template_redirect', 'astoundify_simple_social_login_wordpress_email_setup_redirect', 999 ); // Need to be very late to make sure WC or other can redirect it.
 
 /**
  * Scripts in WordPress Login Page.
@@ -123,10 +107,16 @@ function astoundify_simple_social_login_wordpress_login_scripts() {
 	if ( is_user_logged_in() ) {
 		return;
 	}
-	if ( ! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) && astoundify_simple_social_login_is_wp_login_page() ) {
+
+	if (
+		! astoundify_simple_social_login_is_display_location_selected( 'wp_login' ) &&
+		astoundify_simple_social_login_is_wp_login_page()
+	) {
 		return;
 	}
+
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return;
 	}

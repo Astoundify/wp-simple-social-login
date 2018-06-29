@@ -336,10 +336,9 @@ abstract class Provider {
 	 */
 	public function get_unlink_button() {
 		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
-		$title = $this->get_last_connected_time_text();
 		$url   = $this->get_action_url( 'unlink' );
 
-		return "<a href='{$url}' title='{$title}'>{$text}</a>";
+		return sprintf( '<a href="%s">%s</a>', esc_url( $url ), $text );
 	}
 
 	/**
@@ -370,7 +369,7 @@ abstract class Provider {
 		}
 
 		// User not connected, show connect button.
-		if ( astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() ) ) {
+		if ( ! astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() ) ) {
 			$is_connected = false;
 
 			$text    = $this->get_link_button_text();
