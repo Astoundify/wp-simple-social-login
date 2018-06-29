@@ -115,6 +115,10 @@ function astoundify_simple_social_login_watch() {
 				// If no account exists register one.
 				if ( ! $user_id ) {
 					$user_id = astoundify_simple_social_login_register_user( $provider_profile, $provider->get_id() );
+
+					if ( ! $user_id ) {
+						throw new Exception( esc_html__( 'Unable to create user account. Please contact the website administrator.', 'astoundify-simple-social-login' ) );
+					}
 				}
 
 				// Log in if all is good.
