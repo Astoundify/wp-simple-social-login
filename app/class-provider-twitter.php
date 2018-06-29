@@ -27,45 +27,34 @@ class Provider_Twitter extends Provider {
 	 * Provider ID.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @var string $id Provider ID.
 	 */
 	public $id = 'twitter';
 
 	/**
+	 * Provider label.
+	 *
+	 * @since 2.0.0
+	 * @var string $label Provider label.
+	 */
+	public $label = 'Twitter';
+
+	/**
 	 * Option Name
 	 *
 	 * @since 1.0.0
-	 *
 	 * @var string $option_name Option Name.
 	 */
 	public $option_name = 'astoundify_simple_social_login_twitter';
 
 	/**
-	 * Label
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_label() {
-		return esc_html__( 'Twitter', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Get API config data.
+	 * Config
 	 *
 	 * @since 2.0.0
-	 *
-	 * @return array
+	 * @var array $config Provider configuration.
 	 */
-	public function get_config() {
-		return wp_parse_args(
-			[
-				'includeEmail' => true,
-			],
-			parent::get_config()
-		);
-	}
+	public $config = [
+		'includeEmail' => true,
+	];
 
 }

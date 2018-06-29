@@ -38,19 +38,44 @@ abstract class Provider {
 	 * Provider ID.
 	 *
 	 * @since 1.0.0
-	 *
 	 * @var string $id Provider ID.
 	 */
-	public $id = '';
+	public $id;
+
+	/**
+	 * Provider label.
+	 *
+	 * @since 2.0.0
+	 * @var string $label Provider label.
+	 */
+	public $label;
 
 	/**
 	 * Option Name
 	 *
 	 * @since 1.0.0
-	 *
 	 * @var string $option_name Option Name.
 	 */
-	public $option_name = '';
+	public $option_name;
+
+	/**
+	 * Config
+	 *
+	 * @since 2.0.0
+	 * @var array $config Provider configuration.
+	 */
+	public $config;
+
+	/**
+	 * Return ID.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return string
+	 */
+	public function get_id() {
+		return esc_html( $this->id );
+	}
 
 	/**
 	 * Label
@@ -60,7 +85,7 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_label() {
-		return $this->id;
+		return esc_html( $this->label );
 	}
 
 	/**
@@ -71,7 +96,7 @@ abstract class Provider {
 	 * @return array
 	 */
 	public function get_config() {
-		return [
+		return wp_parse_args( $this->config, [
 			'callback'        => $this->get_endpoint_url(),
 			'access_type'     => 'offline',
 			'approval_prompt' => 'force',
@@ -79,7 +104,33 @@ abstract class Provider {
 				'id'     => $this->get_app_id(),
 				'secret' => $this->get_app_secret(),
 			],
-		];
+		] );
+	}
+
+	/**
+	 * App ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_app_id() {
+		$option = get_option( $this->option_name, [] );
+
+		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
+	}
+
+	/**
+	 * App Secret.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	public function get_app_secret() {
+		$option = get_option( $this->option_name, [] );
+
+		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
 	}
 
 	/**
@@ -121,38 +172,12 @@ abstract class Provider {
 			'astoundify_simple_social_login' => $action,
 			'provider'                       => $this->id,
 			'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$this->id}" ),
-			'_referer'                       => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?' ) ), // Remove all query vars from URL.
+			'_referrer'                      => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?' ) ),
 		];
 
 		$args = wp_parse_args( $args, $defaults );
 
 		return add_query_arg( $args, home_url() );
-	}
-
-	/**
-	 * App ID.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_app_id() {
-		$option = get_option( $this->option_name, [] );
-
-		return isset( $option['app_id'] ) ? esc_attr( trim( $option['app_id'] ) ) : '';
-	}
-
-	/**
-	 * App Secret.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_app_secret() {
-		$option = get_option( $this->option_name, [] );
-
-		return isset( $option['app_secret'] ) ? esc_attr( trim( $option['app_secret'] ) ) : '';
 	}
 
 	/**
@@ -378,7 +403,7 @@ abstract class Provider {
 		}
 
 		// User not connected, show connect button.
-		if ( ! $this->is_user_connected() ) {
+		if ( astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() );
 			$is_connected = false;
 
 			$text    = $this->get_link_button_text();
@@ -409,28 +434,6 @@ abstract class Provider {
 		}
 
 		return $html;
-	}
-
-	/**
-	 * Is user connected?
-	 *
-	 * @since 1.0.0
-	 * @todo Move to function.
-	 *
-	 * @return bool
-	 */
-	public function is_user_connected( $user_id = null ) {
-		$user = $user_id ? get_userdata( $user_id ) : wp_get_current_user();
-
-		// Bail if user not set.
-		if ( ! $user ) {
-			return false;
-		}
-
-		// Is connected status.
-		$is_connected = get_user_meta( $user->ID, "_astoundify_simple_social_login_{$this->id}_connected", true );
-
-		return $is_connected ? true : false;
 	}
 
 }

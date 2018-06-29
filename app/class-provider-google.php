@@ -33,6 +33,14 @@ class Provider_Google extends Provider {
 	public $id = 'google';
 
 	/**
+	 * Provider label.
+	 *
+	 * @since 2.0.0
+	 * @var string $label Provider label.
+	 */
+	public $label = 'Google';
+
+	/**
 	 * Option Name
 	 *
 	 * @since 1.0.0
@@ -42,35 +50,13 @@ class Provider_Google extends Provider {
 	public $option_name = 'astoundify_simple_social_login_google';
 
 	/**
-	 * Label
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
-	 */
-	public function get_label() {
-		return esc_html__( 'Google', 'astoundify-simple-social-login' );
-	}
-
-	/**
-	 * Get API config data.
+	 * Config
 	 *
 	 * @since 2.0.0
-	 *
-	 * @return array
+	 * @var array $config Provider configuration.
 	 */
-	public function get_config() {
-		return wp_parse_args(
-			[
-				'scope' => implode(
-					' ', [
-						'https://www.googleapis.com/auth/userinfo.profile',
-						'https://www.googleapis.com/auth/userinfo.email',
-					]
-				),
-			],
-			parent::get_config()
-		);
-	}
+	public $config = [
+		'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+	];
 
 }

@@ -87,11 +87,18 @@ function astoundify_simple_social_login_watch() {
 
 	$provider = astoundify_simple_social_login_get_provider( $provider );
 
-	$class    = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->id ) );
+	$class    = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->get_id() ) );
 	$adapter  = new $class( $provider->get_config() );
 
 	try {
+		// Cheating.
+		if ( ! wp_verify_nonce( "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
+			throw new Exception( esc_html__( 'Invalid operation.', 'astoundify-simple-social-login' ) );
+		}
+
 		switch ( $action ) {
+
+			// Login/Register
 			case 'authenticate':
 				$adapter->authenticate( $provider );
 
@@ -101,22 +108,40 @@ function astoundify_simple_social_login_watch() {
 				}
 
 				$provider_profile = $provider->get_profile_data( $adapter );
-				$user_id          = astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider->id );
+
+				// Try and find an existing user.
+				$user_id = astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider->get_id() );
 
 				// If no account exists register one.
 				if ( ! $user_id ) {
-					$user_id = astoundify_simple_social_login_register_user( $provider_profile, $provider->id );
+					$user_id = astoundify_simple_social_login_register_user( $provider_profile, $provider->get_id() );
 				}
 
 				// Log in if all is good.
 				if ( $user_id ) {
-					return astoundify_simple_social_login_log_user_in( $user_id, $provider->id );
+					return astoundify_simple_social_login_log_user_in( $user_id, $provider->get_id() );
 				}
 
 				throw new Exception( esc_html__( 'Unable to authenticate. Please try again', 'astoundify-simple-social-login' ) );
 
 				break;
-			case 'process':
+
+			// If a user is logged in they can link their account.
+			case 'link':
+				if ( ! is_user_logged_in() ) {
+					throw new Exception( esc_html__( 'You are not logged in.', 'astoundify-simple-social-login' ) );
+				}
+
+				$link = astoundify_simple_social_login_set_user_data( get_current_user_id(), $provider_profile, $provider->get_id() );
+
+				if ( ! $link ) {
+					throw new Exception( esc_html__( 'Unable to link account. Please try again', 'astoundify-simple-social-login' ) );
+				}
+
+				break;
+
+			// Remove an association.
+			case 'unlink':
 				var_dump( 'wat' );
 				break;
 		}
@@ -242,22 +267,47 @@ function astoundify_simple_social_login_register_user( $provider_data, $provider
 		return false;
 	}
 
-	// Success. Add user meta.
-	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_id", esc_html( $provider_data['id'] ) );
+	astoundify_simple_social_login_set_user_data( $user_id, $provider_data, $provider );
+
+	return $user_id;
+}
+
+/**
+ * Set a user's provider meta data.
+ *
+ * @since 1.0.0
+ *
+ * @param int $user_id User ID.
+ * @param array $provider_profile Provider profile information.
+ * @param string $provider Provider ID.
+ * @return bool
+ */
+function astoundify_simple_social_login_set_user_data( $user_id, $provider_profile, $provider ) {
+	if ( astoundify_simple_social_login_get_existing_user( $provider_data['id'], $provider ) {
+		return false;
+	}
+
+	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_id", esc_html( $provider_profile['id'] ) );
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp", current_time( 'timestamp' ) );
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt", time() );
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected", 1 );
 
-	// Unset defaults provider_data, save extra provider_datas as user meta.
-	foreach ( $defaults as $k => $v ) {
-		unset( $provider_data[ $k ] );
-	}
+	do_action( 'astoundify_simple_social_login_set_user_data', $user_id, $provider_profile, $provider );
 
-	foreach ( $provider_data as $k => $v ) {
-		update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_{$k}", $v );
-	}
+	return true;
+}
 
-	return $user_id;
+/**
+ * Is user connected to a provider?
+ *
+ * @since 1.0.0
+ *
+ * @param int $user_id User ID.
+ * @param string $provider Provider ID.
+ * @return bool
+ */
+function astoundify_simple_social_login_is_user_connected_to_provider( $user_id, $provider ) {
+	return get_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected", true );
 }
 
 /**
