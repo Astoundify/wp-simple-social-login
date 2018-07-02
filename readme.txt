@@ -1,9 +1,9 @@
 === Simple Social Login by Astoundify ===
 
 Contributors: astoundify
-Requires at least: 4.8.0
-Tested up to: 4.9.2
-Stable tag: 1.2.0
+Requires at least: 4.9.0
+Tested up to: 4.9.6
+Stable tag: 2.0.0-beta
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
