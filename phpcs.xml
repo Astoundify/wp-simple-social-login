@@ -5,6 +5,7 @@
 
 	<description>PHP_CodeSniffer ruleset.</description>
 	
+	<file>./astoundify-simple-social-login.php</file>
 	<file>./app</file>
 	<file>./bootstrap</file>
 	<file>./resources/templates/</file>
@@ -26,7 +27,7 @@
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="bigbox" />
+			<property name="text_domain" type="array" value="astoundify-simple-social-login" />
 		</properties>
 	</rule>
 
