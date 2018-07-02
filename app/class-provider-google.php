@@ -56,7 +56,7 @@ class Provider_Google extends Provider {
 	 * @var array $config Provider configuration.
 	 */
 	public $config = [
-		'scope' => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+		'scope' => 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.email',
 	];
 
 }

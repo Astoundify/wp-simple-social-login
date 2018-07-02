@@ -91,9 +91,11 @@ function astoundify_simple_social_login_watch() {
 	$adapter  = new $class( $provider->get_config() );
 
 	try {
-		// Cheating.
-		if ( ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
-			throw new Exception( esc_html__( 'Invalid operation.', 'astoundify-simple-social-login' ) );
+		// Nonce is only set when leaving the site to start action.
+		if ( isset( $_GET['_nonce'] ) ) {
+			if ( ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
+				throw new Exception( esc_html__( 'Invalid operation.', 'astoundify-simple-social-login' ) );
+			}
 		}
 
 		switch ( $action ) {

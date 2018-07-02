@@ -126,7 +126,7 @@ function astoundify_simple_social_login_panel_facebook() {
 			<th scope="row"><label for="facebook-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
 				<input placeholder="<?php echo esc_attr( $provider->get_connected_info_text_default() ); ?>" id="facebook-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_facebook[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
-				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
+				<p class="description"><?php echo wp_kses_post( esc_html__( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ) ); ?></p>
 			</td>
 		</tr>
 	</tbody>
