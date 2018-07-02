@@ -88,7 +88,7 @@ function astoundify_simple_social_login_settings() {
 	foreach ( $tabs as $id => $tab ) :
 		$i++;
 		echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-panel-' . esc_attr( $id ) . '">' . $tab . '</a>';
-	endif;
+	endforeach;
 	?>
 
 	</h2><!-- #astoundify-simple-social-login-nav-tab -->
