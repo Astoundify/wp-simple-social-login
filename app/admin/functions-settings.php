@@ -42,7 +42,9 @@ function astoundify_simple_social_login_sanitize_settings( $input ) {
 		'providers'          => [],
 		'users_can_register' => get_option( 'users_can_register', false ),
 	];
+
 	$output   = wp_parse_args( (array) $input, $defaults );
+
 	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $output );
 }
 
@@ -73,18 +75,22 @@ function astoundify_simple_social_login_settings() {
 	$tabs = [
 		'settings' => esc_html( 'Settings', 'astoundify-simple-social-login' ),
 	];
+
 	$tabs = apply_filters( 'astoundify_simple_social_login_settings_tabs', $tabs );
 ?>
+
 <div id="astoundify-simple-social-login-settings" class="wrap">
 
 	<h2 id="astoundify-simple-social-login-nav-tabs" class="nav-tab-wrapper wp-clearfix">
+
 	<?php
-	$i    = 0;
-	foreach ( $tabs as $id => $tab ) {
+	$i = 0;
+	foreach ( $tabs as $id => $tab ) :
 		$i++;
 		echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-panel-' . esc_attr( $id ) . '">' . $tab . '</a>';
-	};
+	endif;
 	?>
+
 	</h2><!-- #astoundify-simple-social-login-nav-tab -->
 
 	<form method="post" action="options.php">
@@ -110,6 +116,7 @@ function astoundify_simple_social_login_settings() {
 	</form>
 
 </div><!-- #astoundify-simple-social-login-settings -->
+
 <?php
 }
 
@@ -159,9 +166,13 @@ function astoundify_simple_social_login_panel_settings() {
 				?>
 
 				<?php if ( $choices ) : ?>
-		<?php foreach ( $choices as $key => $label ) : ?>
-						<label><input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>"> <?php echo esc_html( $label ); ?></label><br/>
-		<?php endforeach; ?>
+					<?php foreach ( $choices as $key => $label ) : ?>
+							<label>
+								<input <?php checked( 1, in_array( $key, $provider_options ) ); ?> type="checkbox" name="astoundify_simple_social_login[providers][]" value="<?php echo esc_attr( $key ); ?>">
+								<?php echo esc_html( $label ); ?>
+							</label>
+							<br/>
+					<?php endforeach; ?>
 				<?php else : ?>
 					<p class="description"><?php esc_html_e( 'No provider available.', 'astoundify-simple-social-login' ); ?></p>
 				<?php endif; ?>
@@ -174,7 +185,11 @@ function astoundify_simple_social_login_panel_settings() {
 				$registration_enabled = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
 				?>
 
-				<label><input <?php checked( true, $registration_enabled ); ?> type="checkbox" name="astoundify_simple_social_login[users_can_register][]" value="1"> <?php echo esc_html_e( 'Register user if no users associated with social profile.', 'astoundify-simple-social-login' ); ?></label><br/>
+				<label>
+					<input <?php checked( true, $registration_enabled ); ?> type="checkbox" name="astoundify_simple_social_login[users_can_register][]" value="1">
+					<?php echo esc_html_e( 'Register user if no users associated with social profile.', 'astoundify-simple-social-login' ); ?>
+				</label>
+				<br/>
 
 			</td>
 		</tr>
@@ -204,10 +219,11 @@ function astoundify_simple_social_login_admin_enqueue_scripts( $hook_suffix ) {
 
 	// Settings JS.
 	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/settings.min.js';
+
 	if ( $debug ) {
 		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/settings.js';
 	}
+
 	wp_enqueue_script( 'astoundify-simple-social-login', $url, [ 'jquery' ], $version, true );
 }
 add_action( 'admin_enqueue_scripts', 'astoundify_simple_social_login_admin_enqueue_scripts' );
-

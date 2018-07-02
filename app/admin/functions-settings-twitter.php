@@ -61,7 +61,8 @@ function astoundify_simple_social_login_twitter_sanitize_settings( $input ) {
  * @return array
  */
 function astoundify_simple_social_login_twitter_add_settings_tab( $settings ) {
-	$settings['twitter'] = esc_html( 'Twitter', 'astoundify-simple-social-login' );
+	$settings['twitter'] = esc_html( 'Twitter' );
+
 	return $settings;
 }
 add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_twitter_add_settings_tab' );
@@ -89,6 +90,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-app-id"><?php esc_html_e( 'Consumer Key', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -96,6 +98,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Your app ID.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-app-secret"><?php esc_html_e( 'Consumer Secret', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -103,6 +106,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-login-button-text"><?php esc_html_e( 'Login Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -110,6 +114,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the login button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -117,6 +122,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>

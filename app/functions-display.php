@@ -1,4 +1,18 @@
 <?php
+/**
+ * Frontend/Display helpers.
+ *
+ * @since 1.0.0
+ *
+ * @package  Template
+ * @category Functions
+ * @author   Astoundify
+ */
+
+// Do not access this file directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Get active display location.
@@ -62,6 +76,7 @@ function astoundify_simple_social_login_get_login_register_buttons() {
  */
 function astoundify_simple_social_login_get_link_unlink_buttons() {
 	$providers = astoundify_simple_social_login_get_active_providers();
+
 	if ( ! $providers || ! is_array( $providers ) ) {
 		return false;
 	}
@@ -90,14 +105,29 @@ function astoundify_simple_social_login_enqueue_styles( $page = false ) {
 
 	if ( $debug ) {
 		// If in debug load button base separately.
-		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', [], $version );
+		wp_enqueue_style(
+			'astoundify-simple-social-login-buttons',
+			ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css',
+			[],
+			$version
+		);
 
 		// Load supplemental styles if needed.
 		if ( $page ) {
-			wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css', [], $version );
+			wp_enqueue_style(
+				'astoundify-simple-social-login',
+				ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css',
+				[],
+				$version
+			);
 		}
 	} else {
-		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css', [], $version );
+		wp_enqueue_style(
+			'astoundify-simple-social-login',
+			ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css',
+			[],
+			$version
+		);
 	}
 }
 

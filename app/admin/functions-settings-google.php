@@ -61,11 +61,11 @@ function astoundify_simple_social_login_google_sanitize_settings( $input ) {
  * @return array
  */
 function astoundify_simple_social_login_google_add_settings_tab( $settings ) {
-	$settings['google'] = esc_html( 'Google', 'astoundify-simple-social-login' );
+	$settings['google'] = esc_html( 'Google' );
+
 	return $settings;
 }
 add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_google_add_settings_tab' );
-
 
 /**
  * Google Settings Panel
@@ -89,6 +89,7 @@ function astoundify_simple_social_login_panel_google() {
 				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="google-app-id"><?php esc_html_e( 'Client ID', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -96,6 +97,7 @@ function astoundify_simple_social_login_panel_google() {
 				<p class="description"><?php esc_html_e( 'Your app ID.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="google-app-secret"><?php esc_html_e( 'Client Secret', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -103,6 +105,7 @@ function astoundify_simple_social_login_panel_google() {
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="google-login-button-text"><?php esc_html_e( 'Login Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -110,6 +113,7 @@ function astoundify_simple_social_login_panel_google() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the login button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="google-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -117,6 +121,7 @@ function astoundify_simple_social_login_panel_google() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="google-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>

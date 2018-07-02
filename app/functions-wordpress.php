@@ -83,13 +83,16 @@ function astoundify_simple_social_login_wordpress_profile() {
 <table class="form-table">
 	<tbody>
 		<tr>
+
 			<th>
 				<label><?php esc_html_e( 'Social Profiles', 'astoundify-simple-social-login' ); ?></label>
 			</th>
+
 			<td>
 				<p class="description"><?php esc_html_e( 'You can connect your account to the following social login providers:', 'astoundify-simple-social-login' ); ?></p>
 				<?php echo astoundify_simple_social_login_get_link_unlink_buttons(); ?>
 			</td>
+
 		</tr>
 	</tbody>
 </table>

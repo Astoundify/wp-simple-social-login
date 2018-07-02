@@ -61,7 +61,8 @@ function astoundify_simple_social_login_facebook_sanitize_settings( $input ) {
  * @return array
  */
 function astoundify_simple_social_login_facebook_add_settings_tab( $settings ) {
-	$settings['facebook'] = esc_html( 'Facebook', 'astoundify-simple-social-login' );
+	$settings['facebook'] = esc_html( 'Facebook' );
+
 	return $settings;
 }
 add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_facebook_add_settings_tab' );
@@ -88,6 +89,7 @@ function astoundify_simple_social_login_panel_facebook() {
 				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="facebook-app-id"><?php esc_html_e( 'App ID', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -95,6 +97,7 @@ function astoundify_simple_social_login_panel_facebook() {
 				<p class="description"><?php esc_html_e( 'Your app ID.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="facebook-app-secret"><?php esc_html_e( 'App Secret', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -102,6 +105,7 @@ function astoundify_simple_social_login_panel_facebook() {
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="facebook-login-button-text"><?php esc_html_e( 'Login Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -109,6 +113,7 @@ function astoundify_simple_social_login_panel_facebook() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the login button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="facebook-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -116,6 +121,7 @@ function astoundify_simple_social_login_panel_facebook() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="facebook-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
