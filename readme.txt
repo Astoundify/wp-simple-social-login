@@ -29,6 +29,12 @@ Visit Settings > Simple Social Login and complete configuration.
 
 == Changelog ==
 
+= 2.0.0: June XX, 2018 =
+
+This is a major update that requires changes to configured oAuth applications. Please visit https://docs.astoundify.com/category/1061-social-login for more information on configuring providers.
+
+* New: Upgrade to HybridAuth 3.0
+
 = 1.2.0: January 31, 2018 =
 
 * Fix: Ensure build contains all vendor files.

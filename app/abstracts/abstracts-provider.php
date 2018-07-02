@@ -146,7 +146,7 @@ abstract class Provider {
 
 		$data = [
 			'id'           => isset( $profile->identifier ) ? $profile->identifier : '',
-			'user_email'   => isset( $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
+			'user_email'   => ( isset( $profile->emailVerified ) && '' !== $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
 			'display_name' => isset( $profile->displayName ) ? $profile->displayName : '',
 			'nickname'     => isset( $profile->displayName ) ? $profile->displayName : '',
 			'first_name'   => isset( $profile->firstName ) ? $profile->firstName : '',
