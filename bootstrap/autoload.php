@@ -4,13 +4,13 @@
  *
  * @since 1.0.0
  *
- * @package Plugin
+ * @package  Plugin
  * @category Bootstrap
- * @author Astoundify
+ * @author   Astoundify
  */
 
 $file = __DIR__ . '/../vendor/autoload.php';
 
 if ( file_exists( $file ) ) {
-	require( $file );
+	include $file;
 }

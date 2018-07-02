@@ -3,21 +3,17 @@
  * Plugin Name: Simple Social Login
  * Plugin URI: https://astoundify.com/products/simple-social-login/
  * Description: Simple Social Login by Astoundify for WooCommerce.
- * Version: 1.2.0
+ * Version: 2.0.0-beta
  * Author: Astoundify
  * Author URI: https://astoundify.com/
  * Requires at least: 4.9.0
- * Tested up to: 4.9.2
- * Text Domain: astoundify-plugin-scaffold
+ * Tested up to: 4.9.6
+ * Text Domain: astoundify-simple-social-login
  * Domain Path: resources/languages/
  *
- *    Copyright: 2017 Astoundify
- *    License: GNU General Public License v3.0
- *    License URI: http://www.gnu.org/licenses/gpl-3.0.html
- *
- * @package Plugin
+ * @package  Plugin
  * @category Core
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -36,7 +32,7 @@ function astoundify_simple_social_login_php_notice() {
 ?>
 
 <div class="notice notice-error">
-	<p><?php echo wp_kses_post( $notice, array( 'code' ) ); ?></p>
+	<p><?php echo wp_kses_post( $notice, [ 'code' ] ); ?></p>
 </div>
 
 <?php
@@ -50,7 +46,7 @@ if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
 }
 
 // Plugin can be loaded... define some constants.
-define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION', '1.2.0' );
+define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION', '2.0.0-beta' );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_FILE', __FILE__ );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PLUGIN', plugin_basename( __FILE__ ) );
 define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
@@ -62,11 +58,11 @@ define( 'ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH', trailingslashit( ASTOUND
  *
  * @since 1.0.0
  */
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'bootstrap/autoload.php' );
+require_once ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'bootstrap/autoload.php';
 
 /**
  * Start the application.
  *
  * @since 1.0.0
  */
-require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'bootstrap/app.php' );
+require_once ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'bootstrap/app.php';

@@ -14,258 +14,190 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. translators: %1$s minimum PHP version, %2$s current PHP version.
-#: astoundify-simple-social-login.php:35
+#: astoundify-simple-social-login.php:31
 msgid "Astoundify WC Simple Social Login plugin requires at least PHP %1$s. You are running PHP %2$s. Please upgrade and try again."
-msgstr ""
-
-#: app/class-provider-facebook.php:52
-msgid "Facebook"
-msgstr ""
-
-#: app/class-provider-facebook.php:63
-msgid "Log in with Facebook"
-msgstr ""
-
-#: app/class-provider-facebook.php:74
-msgid "Link your account to Facebook"
-msgstr ""
-
-#: app/class-provider-facebook.php:85
-msgid "Your account is connected to Facebook. {{unlink}}."
-msgstr ""
-
-#: app/class-provider-google.php:52
-msgid "Google"
-msgstr ""
-
-#: app/class-provider-google.php:63
-msgid "Log in with Google"
-msgstr ""
-
-#: app/class-provider-google.php:74
-msgid "Link your account to Google"
-msgstr ""
-
-#: app/class-provider-google.php:85
-msgid "Your account is connected to Google. {{unlink}}."
-msgstr ""
-
-#: app/class-provider-twitter.php:52
-msgid "Twitter"
-msgstr ""
-
-#: app/class-provider-twitter.php:63
-msgid "Log in with Twitter"
-msgstr ""
-
-#: app/class-provider-twitter.php:74
-msgid "Link your account to Twitter"
-msgstr ""
-
-#: app/class-provider-twitter.php:85
-msgid "Your account is connected to Twitter. {{unlink}}."
 msgstr ""
 
 #: app/functions-template.php:34
 msgid "%s does not exist."
 msgstr ""
 
-#: app/functions-woocommerce.php:50
+#: app/functions-woocommerce.php:35
 msgid "Use a social account for faster login or easy registration."
 msgstr ""
 
-#: app/functions-woocommerce.php:52, app/functions-wordpress.php:37
+#: app/functions-woocommerce.php:39, app/functions-wordpress.php:43
 msgid "Or"
 msgstr ""
 
-#: app/functions-woocommerce.php:74, app/functions-wordpress.php:70
-msgid "Connected Social Accounts"
+#: app/functions-woocommerce.php:65
+msgid "Social Accounts"
 msgstr ""
 
-#: app/functions-woocommerce.php:75, app/functions-wordpress.php:79
-msgid "You can connect your account to the following social login providers:"
-msgstr ""
-
-#: app/functions-woocommerce.php:115, app/functions-wordpress.php:158
-msgid "Please setup your email to activate your account."
-msgstr ""
-
-#: app/functions-woocommerce.php:115, app/functions-wordpress.php:158
-msgid "Add Email"
-msgstr ""
-
-#: app/functions-wordpress.php:38
+#: app/functions-wordpress.php:44
 msgid "Log in with username and password"
 msgstr ""
 
-#: app/functions-wordpress.php:48
+#: app/functions-wordpress.php:55
 msgid "Login with social account?"
 msgstr ""
 
-#: app/functions-wordpress.php:76
+#: app/functions-wordpress.php:81
+msgid "Connected Social Accounts"
+msgstr ""
+
+#: app/functions-wordpress.php:88
 msgid "Social Profiles"
 msgstr ""
 
-#: app/functions-wordpress.php:101
-msgid "You're already logged-in."
+#: app/functions-wordpress.php:92
+msgid "You can connect your account to the following social login providers:"
 msgstr ""
 
-#: app/functions-wordpress.php:101
-msgid "Logout?"
+#: app/functions.php:97
+msgid "Invalid operation."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:238
-msgid "Last connected: %1$s @ %2$s"
+#: app/functions.php:109
+msgid "You are already logged in to an account."
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:275
+#: app/functions.php:122
+msgid "Unable to create user account. Please contact the website administrator."
+msgstr ""
+
+#: app/functions.php:131
+msgid "Unable to authenticate. Please try again."
+msgstr ""
+
+#: app/functions.php:138, app/functions.php:159
+msgid "You are not logged in."
+msgstr ""
+
+#: app/functions.php:145
+msgid "This social account is already linked to an existing user account."
+msgstr ""
+
+#: app/functions.php:151
+msgid "Unable to link account. Please try again."
+msgstr ""
+
+#: app/abstracts/abstracts-provider.php:237
+msgid "Log in with %s"
+msgstr ""
+
+#: app/abstracts/abstracts-provider.php:248
+msgid "Link your account to %s"
+msgstr ""
+
+#: app/abstracts/abstracts-provider.php:259
+msgid "Your account is connected to %s. {{unlink}}"
+msgstr ""
+
+#: app/abstracts/abstracts-provider.php:338
 msgid "Unlink"
 msgstr ""
 
-#: app/abstracts/abstracts-provider.php:588
-msgid "Unknown Error: %s"
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:600
-msgid "Cannot retrieve social profile ID."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:601
-msgid "User already logged-in."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:602
-msgid "User need to login to connect."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:603
-msgid "API connection error."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:604
-msgid "Login failed. Your social profile is not registered to this website."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:605
-msgid "Fail to register user."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:606
-msgid "User already connected."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:607
-msgid "Fail to link account with social profile."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:608
-msgid "Error. Action unknown."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:609
-msgid "Fail to register user. Email already registered."
-msgstr ""
-
-#: app/abstracts/abstracts-provider.php:610
-msgid "Another user already connected to social account."
-msgstr ""
-
-#: app/admin/functions-settings-facebook.php:80
+#: app/admin/functions-settings-facebook.php:81
 msgid "Need help setting up and configuring Facebook social login?"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:80, app/admin/functions-settings-google.php:81, app/admin/functions-settings-twitter.php:81
+#: app/admin/functions-settings-facebook.php:81, app/admin/functions-settings-google.php:81, app/admin/functions-settings-twitter.php:82
 msgid "Read the docs"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:85, app/admin/functions-settings-google.php:86, app/admin/functions-settings-twitter.php:86
+#: app/admin/functions-settings-facebook.php:86, app/admin/functions-settings-google.php:86, app/admin/functions-settings-twitter.php:87
 msgid "Callback URL"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:88, app/admin/functions-settings-google.php:89, app/admin/functions-settings-twitter.php:89
+#: app/admin/functions-settings-facebook.php:89, app/admin/functions-settings-google.php:89, app/admin/functions-settings-twitter.php:90
 msgid "oAuth redirect URL."
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:92
+#: app/admin/functions-settings-facebook.php:94
 msgid "App ID"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:95, app/admin/functions-settings-google.php:96, app/admin/functions-settings-twitter.php:96
+#: app/admin/functions-settings-facebook.php:97, app/admin/functions-settings-google.php:97, app/admin/functions-settings-twitter.php:98
 msgid "Your app ID."
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:99
+#: app/admin/functions-settings-facebook.php:102
 msgid "App Secret"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:102, app/admin/functions-settings-google.php:103, app/admin/functions-settings-twitter.php:103
+#: app/admin/functions-settings-facebook.php:105, app/admin/functions-settings-google.php:105, app/admin/functions-settings-twitter.php:106
 msgid "Your app secret."
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:106, app/admin/functions-settings-google.php:107, app/admin/functions-settings-twitter.php:107
+#: app/admin/functions-settings-facebook.php:110, app/admin/functions-settings-google.php:110, app/admin/functions-settings-twitter.php:111
 msgid "Login Button Text"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:109, app/admin/functions-settings-google.php:110, app/admin/functions-settings-twitter.php:110
+#: app/admin/functions-settings-facebook.php:113, app/admin/functions-settings-google.php:113, app/admin/functions-settings-twitter.php:114
 msgid "Controls the text displayed on the login button."
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:113, app/admin/functions-settings-google.php:114, app/admin/functions-settings-twitter.php:114
+#: app/admin/functions-settings-facebook.php:118, app/admin/functions-settings-google.php:118, app/admin/functions-settings-twitter.php:119
 msgid "Link Button Text"
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:116, app/admin/functions-settings-google.php:117, app/admin/functions-settings-twitter.php:117
+#: app/admin/functions-settings-facebook.php:121, app/admin/functions-settings-google.php:121, app/admin/functions-settings-twitter.php:122
 msgid "Controls the text displayed on the link account button."
 msgstr ""
 
-#: app/admin/functions-settings-facebook.php:120, app/admin/functions-settings-google.php:121, app/admin/functions-settings-twitter.php:121
+#: app/admin/functions-settings-facebook.php:126, app/admin/functions-settings-google.php:126, app/admin/functions-settings-twitter.php:127
 msgid "Connected Info"
+msgstr ""
+
+#: app/admin/functions-settings-facebook.php:129, app/admin/functions-settings-google.php:129, app/admin/functions-settings-twitter.php:130
+msgid "Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link."
 msgstr ""
 
 #: app/admin/functions-settings-google.php:81
 msgid "Need help setting up and configuring Google social login?"
 msgstr ""
 
-#: app/admin/functions-settings-google.php:93
+#: app/admin/functions-settings-google.php:94
 msgid "Client ID"
 msgstr ""
 
-#: app/admin/functions-settings-google.php:100
+#: app/admin/functions-settings-google.php:102
 msgid "Client Secret"
 msgstr ""
 
-#: app/admin/functions-settings-twitter.php:81
+#: app/admin/functions-settings-twitter.php:82
 msgid "Need help setting up and configuring Twitter social login?"
 msgstr ""
 
-#: app/admin/functions-settings-twitter.php:93
+#: app/admin/functions-settings-twitter.php:95
 msgid "Consumer Key"
 msgstr ""
 
-#: app/admin/functions-settings-twitter.php:100
+#: app/admin/functions-settings-twitter.php:103
 msgid "Consumer Secret"
 msgstr ""
 
-#: app/admin/functions-settings.php:126
+#: app/admin/functions-settings.php:133
 msgid "Simple Social Login"
 msgstr ""
 
-#: app/admin/functions-settings.php:131
+#: app/admin/functions-settings.php:138
 msgid "Output"
 msgstr ""
 
-#: app/admin/functions-settings.php:147
+#: app/admin/functions-settings.php:154
 msgid "Providers"
 msgstr ""
 
-#: app/admin/functions-settings.php:166
+#: app/admin/functions-settings.php:177
 msgid "No provider available."
 msgstr ""
 
-#: app/admin/functions-settings.php:171
+#: app/admin/functions-settings.php:182
 msgid "Enable Registration"
 msgstr ""
 
-#: app/admin/functions-settings.php:177
+#: app/admin/functions-settings.php:190
 msgid "Register user if no users associated with social profile."
 msgstr ""

@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Admin
+ * @package  Admin
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -33,11 +33,11 @@ add_action( 'admin_init', 'astoundify_simple_social_login_twitter_register_setti
  *
  * @since 1.0.0
  *
- * @param mixed $input Data input.
+ * @param  mixed $input Data input.
  * @return array
  */
 function astoundify_simple_social_login_twitter_sanitize_settings( $input ) {
-	$output = array();
+	$output = [];
 
 	$output['app_id'] = isset( $input['app_id'] ) ? esc_attr( trim( $input['app_id'] ) ) : '';
 
@@ -57,11 +57,12 @@ function astoundify_simple_social_login_twitter_sanitize_settings( $input ) {
  *
  * @since 1.0.0
  *
- * @param array $settings Settings Section.
+ * @param  array $settings Settings Section.
  * @return array
  */
 function astoundify_simple_social_login_twitter_add_settings_tab( $settings ) {
-	$settings['twitter'] = esc_html( 'Twitter', 'astoundify-simple-social-login' );
+	$settings['twitter'] = esc_html( 'Twitter' );
+
 	return $settings;
 }
 add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_social_login_twitter_add_settings_tab' );
@@ -73,7 +74,7 @@ add_filter( 'astoundify_simple_social_login_settings_tabs', 'astoundify_simple_s
  * @since 1.0.0
  */
 function astoundify_simple_social_login_panel_twitter() {
-	$options  = get_option( 'astoundify_simple_social_login_twitter', array() );
+	$options  = get_option( 'astoundify_simple_social_login_twitter', [] );
 	$options  = astoundify_simple_social_login_twitter_sanitize_settings( $options );
 	$provider = astoundify_simple_social_login_get_provider( 'twitter' );
 ?>
@@ -89,6 +90,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'oAuth redirect URL.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-app-id"><?php esc_html_e( 'Consumer Key', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -96,6 +98,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Your app ID.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-app-secret"><?php esc_html_e( 'Consumer Secret', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -103,6 +106,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-login-button-text"><?php esc_html_e( 'Login Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -110,6 +114,7 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the login button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-link-button-text"><?php esc_html_e( 'Link Button Text', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
@@ -117,11 +122,12 @@ function astoundify_simple_social_login_panel_twitter() {
 				<p class="description"><?php esc_html_e( 'Controls the text displayed on the link account button.', 'astoundify-simple-social-login' ); ?></p>
 			</td>
 		</tr>
+
 		<tr>
 			<th scope="row"><label for="twitter-connected-info"><?php esc_html_e( 'Connected Info', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
 				<input placeholder="<?php echo esc_attr( $provider->get_connected_info_text_default() ); ?>" id="twitter-connected-info" type="text" class="regular-text" name="astoundify_simple_social_login_twitter[connected_info]" value="<?php echo esc_attr( $options['connected_info'] ); ?>">
-				<p class="description"><?php echo wp_kses_post( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ); ?></p>
+				<p class="description"><?php echo wp_kses_post( esc_html__( 'Controls the text displayed on the account page if the user is already connected. Use {{unlink}} to display unlink link.', 'astoundify-simple-social-login' ) ); ?></p>
 			</td>
 		</tr>
 	</tbody>

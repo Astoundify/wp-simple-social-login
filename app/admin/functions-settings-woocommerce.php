@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Admin
+ * @package  Admin
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -20,7 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 function astoundify_simple_social_login_admin_woocommerce_add_display_choice( $choices ) {
-	$choices['woocommerce'] = esc_html( 'WooCommerce', 'astoundify-simple-social-login' );
+	$choices['woocommerce'] = esc_html( 'WooCommerce' );
+
 	return $choices;
 }
 add_action( 'astoundify_simple_social_login_display_choices', 'astoundify_simple_social_login_admin_woocommerce_add_display_choice' );

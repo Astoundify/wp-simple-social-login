@@ -4,9 +4,9 @@
  *
  * @since 1.0.0
  *
- * @package Functions
+ * @package  Functions
  * @category Functions
- * @author Astoundify
+ * @author   Astoundify
  */
 
 // Do not access this file directly.
@@ -22,12 +22,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function astoundify_simple_social_login_get_providers() {
-	$providers = array(
+	$providers = [
 		'facebook' => '\Astoundify\Simple_Social_Login\Provider_Facebook',
 		'twitter'  => '\Astoundify\Simple_Social_Login\Provider_Twitter',
 		'google'   => '\Astoundify\Simple_Social_Login\Provider_Google',
-	);
+	];
 	return apply_filters( 'astoundify_simple_social_login_providers', $providers );
+}
+
+/**
+ * Get Provider.
+ *
+ * @since 1.0.0
+ *
+ * @param  string $id Provider ID.
+ * @return Astoundify\Simple_Social_Login\Provider|false
+ */
+function astoundify_simple_social_login_get_provider( $id ) {
+	$providers = astoundify_simple_social_login_get_providers();
+
+	return isset( $providers[ $id ] ) && class_exists( $providers[ $id ] ) ? new $providers[ $id ]() : false;
 }
 
 /**
@@ -39,187 +53,167 @@ function astoundify_simple_social_login_get_providers() {
  */
 function astoundify_simple_social_login_get_active_providers() {
 	$_providers = astoundify_simple_social_login_get_providers();
+
 	if ( ! $_providers || ! is_array( $_providers ) ) {
-		return array();
+		return [];
 	}
 
 	// Get active providers.
-	$providers = array();
+	$providers = [];
+
 	foreach ( $_providers as $id => $v ) {
 		$provider = astoundify_simple_social_login_get_provider( $id );
+
 		if ( $provider && $provider->is_active() ) {
 			$providers[ $id ] = $provider;
 		}
 	}
+
 	return $providers;
 }
 
 /**
- * Get Provider.
+ * Watch for provider actions.
  *
  * @since 1.0.0
- *
- * @param string $id Provider ID.
- * @return Astoundify\Simple_Social_Login\Provider|false
  */
-function astoundify_simple_social_login_get_provider( $id ) {
-	$providers = astoundify_simple_social_login_get_providers();
-	return isset( $providers[ $id ] ) && class_exists( $providers[ $id ] ) ? new $providers[ $id ] : false;
-}
+function astoundify_simple_social_login_watch() {
+	$action   = isset( $_GET['astoundify_simple_social_login'] ) ? $_GET['astoundify_simple_social_login'] : false;
+	$provider = isset( $_GET['provider'] ) ? $_GET['provider'] : false;
 
-/**
- * Get active display location.
- *
- * @since 1.0.0
- *
- * @return array
- */
-function astoundify_simple_social_login_get_display_locations() {
-	$options = get_option( 'astoundify_simple_social_login', array() );
-	$display = isset( $options['display'] ) && is_array( $options['display'] ) ? $options['display'] : array();
-	return $display;
-}
-
-/**
- * Is location selected.
- *
- * @since 1.0.0
- *
- * @param string $location Display location.
- * @return array
- */
-function astoundify_simple_social_login_is_display_location_selected( $location ) {
-	$locations = astoundify_simple_social_login_get_display_locations();
-	return in_array( $location, $locations, true );
-}
-
-/**
- * Login/Register Buttons
- *
- * @since 1.0.0
- *
- * @return string
- */
-function astoundify_simple_social_login_get_login_register_buttons() {
-	$providers = astoundify_simple_social_login_get_active_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		return false;
+	if ( ! $action || ! $provider ) {
+		return;
 	}
 
-	ob_start();
-
-	astoundify_simple_social_login_get_template(
-		'login-register-buttons.php', array(
-			'providers' => $providers,
-		)
-	);
-
-	return apply_filters( 'astoundify_simple_social_login_login_register_buttons', ob_get_clean() );
-}
-
-/**
- * Link/Unlink Buttons.
- *
- * @since 1.0.0
- *
- * @return string
- */
-function astoundify_simple_social_login_get_link_unlink_buttons() {
-	$providers = astoundify_simple_social_login_get_active_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		return false;
-	}
-
-	ob_start();
-
-	astoundify_simple_social_login_get_template(
-		'link-unlink-buttons.php', array(
-			'providers' => $providers,
-		)
-	);
-
-	return apply_filters( 'astoundify_simple_social_login_link_unlink_buttons', ob_get_clean() );
-}
-
-/**
- * Add Query Vars
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_add_query_vars( $vars ) {
-	$vars[] = 'astoundify_simple_social_login';
-	return $vars;
-}
-add_filter( 'query_vars', 'astoundify_simple_social_login_add_query_vars', 1 );
-
-/**
- * Register Custom Template When visiting Query Vars.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_template_include( $template ) {
-	$get = get_query_var( 'astoundify_simple_social_login' );
-	if ( $get ) {
-		$template = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_TEMPLATE_PATH . 'process.php';
-	}
-	return $template;
-}
-add_filter( 'template_include', 'astoundify_simple_social_login_template_include' );
-
-/**
- * Done Process. Endpoint For HybridAuth.
- *
- * @since 1.0.0
- */
-function astoundify_simple_social_login_process_done() {
-	// Bail if no active provider.
-	$providers = astoundify_simple_social_login_get_active_providers();
-	if ( ! $providers || ! is_array( $providers ) ) {
-		wp_redirect( home_url() );
-		exit;
-	}
-
-	// Load HybridAuth Library.
-	require_once( ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . 'vendor/hybridauth/hybridauth/hybridauth/Hybrid/Auth.php' );
-
-	// Process social account data.
-	try {
-		\Hybrid_Endpoint::process();
-	} catch ( \Exception $e ) {
-		wp_die();
-		exit;
-	}
-	wp_die();
-	exit;
-}
-add_action( 'astoundify_simple_social_login_process_done', 'astoundify_simple_social_login_process_done' );
-
-/**
- * Action Process
- *
- * @since 1.0.0
- *
- * @param string $provider Login provider.
- * @param string $action   Request action.
- * @param string $referer  URL.
- */
-function astoundify_simple_social_login_process( $provider, $action, $referer ) {
-	// Bail if invalid or not active.
 	$provider = astoundify_simple_social_login_get_provider( $provider );
-	if ( ! $provider || ! $provider->is_active() ) {
-		wp_safe_redirect( esc_url_raw( urldecode( $referer ) ) );
-		exit;
+
+	$class    = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->get_id() ) );
+	$adapter  = new $class( $provider->get_config() );
+
+	try {
+		// Nonce is only set when leaving the site to start action.
+		if ( isset( $_GET['_nonce'] ) ) {
+			if ( ! wp_verify_nonce( $_GET['_nonce'], "astoundify_simple_social_login_{$provider->get_id()}" ) ) {
+				throw new Exception( esc_html__( 'Invalid operation.', 'astoundify-simple-social-login' ) );
+			}
+		}
+
+		switch ( $action ) {
+
+			// Login/Register
+			case 'authenticate':
+				$adapter->authenticate( $provider );
+
+				// Already logged in.
+				if ( is_user_logged_in() ) {
+					throw new Exception( esc_html__( 'You are already logged in to an account.', 'astoundify-simple-social-login' ) );
+				}
+
+				$provider_profile = $provider->get_profile_data( $adapter );
+
+				// Try and find an existing user.
+				$user_id = astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider->get_id() );
+
+				// If no account exists register one.
+				if ( ! $user_id ) {
+					$user_id = astoundify_simple_social_login_register_user( $provider_profile, $provider->get_id() );
+
+					if ( ! $user_id ) {
+						throw new Exception( esc_html__( 'Unable to create user account. Please contact the website administrator.', 'astoundify-simple-social-login' ) );
+					}
+				}
+
+				// Log in if all is good.
+				if ( $user_id ) {
+					return astoundify_simple_social_login_log_user_in( $user_id, $provider->get_id() );
+				}
+
+				throw new Exception( esc_html__( 'Unable to authenticate. Please try again.', 'astoundify-simple-social-login' ) );
+
+				break;
+
+			// If a user is logged in they can link their account.
+			case 'link':
+				if ( ! is_user_logged_in() ) {
+					throw new Exception( esc_html__( 'You are not logged in.', 'astoundify-simple-social-login' ) );
+				}
+
+				// Try and find an existing user.
+				$user_id = astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider->get_id() );
+
+				if ( $user_id ) {
+					throw new Exception( esc_html__( 'This social account is already linked to an existing user account.', 'astoundify-simple-social-login' ) );
+				}
+
+				$link = astoundify_simple_social_login_set_user_data( get_current_user_id(), $provider_profile, $provider->get_id() );
+
+				if ( ! $link ) {
+					throw new Exception( esc_html__( 'Unable to link account. Please try again.', 'astoundify-simple-social-login' ) );
+				}
+
+				break;
+
+			// Remove an association.
+			case 'unlink':
+				if ( ! is_user_logged_in() ) {
+					throw new Exception( esc_html__( 'You are not logged in.', 'astoundify-simple-social-login' ) );
+				}
+
+				astoundify_simple_social_login_unset_user_data( get_current_user_id(), $provider->get_id() );
+
+				break;
+		}
+	} catch ( \Exception $e ) {
+		wp_die( $e->getMessage() );
 	}
 
-	// Process action.
-	$provider->process_action( $action, $referer );
+	if ( isset( $_GET['_referrer'] ) ) {
+		wp_safe_redirect( esc_url( $_GET['_referrer'] ) );
+		exit();
+	}
 }
-add_action( 'astoundify_simple_social_login_process', 'astoundify_simple_social_login_process', 10, 3 );
+add_action( 'template_redirect', 'astoundify_simple_social_login_watch' );
 
 /**
- * Log User In.
+ * Determine if we can connect a social account to an existing WordPress user account.
  *
  * @since 1.0.0
+ *
+ * @param int $provider_user_id User to search for based on social data.
+ * @param string $provider Provider ID to search for.
+ * @return int|false False if no existing user is found; otherwise the ID.
+ */
+function astoundify_simple_social_login_get_existing_user( $provider_user_id, $provider ) {
+	$args  = array(
+		'meta_key'   => "_astoundify_simple_social_login_{$provider}_id",
+		'meta_value' => esc_html( $provider_user_id ),
+		'number'     => -1,
+		'fields'     => 'ID',
+	);
+
+	$users = get_users( $args );
+
+	// If user found, return it.
+	if ( ! $users ) {
+		return false;
+	}
+
+	if ( 1 === count( $users ) ) {
+		return intval( $users[0] );
+	} else {
+		// More than one users connected to the same account ? Maybe notify admin.
+		return false;
+	}
+
+	return false;
+}
+
+/**
+ * Authenticate a specific user.
+ *
+ * @since 1.0.0
+ *
+ * @param int $user_id User to authenticate.
  */
 function astoundify_simple_social_login_log_user_in( $user_id ) {
 	// Bail if user already logged in.
@@ -236,66 +230,129 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
 
 	wp_set_auth_cookie( $user_id, $remember_me );
 	wp_set_current_user( $user_id, $user_login );
+
 	do_action( 'wp_login', $user_login, $user );
 
-	// User logged in, but no email.
+	// User logged in, but no email -- let things happen here (currently nothing).
 	if ( is_user_logged_in() ) {
 		$user = wp_get_current_user();
+
 		if ( ! $user->user_email ) {
-			wp_safe_redirect( esc_url_raw( astoundify_simple_social_login_get_setup_profile_url() ) );
-			exit;
+			do_action( 'astoundify_simple_social_login_incomplete_user_account', $user );
 		}
 	}
 }
 
 /**
- * Setup Profile URL
- * In case cannot capture email from social account. User will need to setup email in their user account.
- * As default it will use WordPress admin profile edit page.
+ * Register a user based on provider data.
  *
  * @since 1.0.0
+ *
+ * @param array $provider_data Provider APi data.
+ * @param string $provider Provider ID.
+ * @return int|false
  */
-function astoundify_simple_social_login_get_setup_profile_url() {
-	return apply_filters( 'astoundify_simple_social_login_setup_profile_url', admin_url( 'profile.php' ) );
+function astoundify_simple_social_login_register_user( $provider_data, $provider ) {
+	$defaults = array(
+		'id'           => '',
+		'user_login'   => '',
+		'user_pass'    => wp_generate_password(),
+		'user_email'   => '',
+		'display_name' => '',
+		'nickname'     => '',
+		'first_name'   => '',
+		'last_name'    => '',
+	);
+
+	$provider_data = wp_parse_args( $provider_data, $defaults );
+
+	// Bail if missing some data.
+	if ( ! $provider_data['id'] || ! $provider_data['display_name'] || ! $provider_data['user_email'] ) {
+		return false;
+	}
+
+	// User Login.
+	$provider_data['user_login'] = sanitize_title( $provider_data['display_name'] );
+
+	if ( username_exists( $provider_data['user_login'] ) ) {
+		$provider_data['user_login'] = $provider_data['user_login'] . '_' . time();
+	}
+
+	// Email.
+	if ( email_exists( $provider_data['user_email'] ) ) {
+		return false;
+	}
+
+	$inserted = wp_insert_user( $provider_data );
+	$user_id  = $inserted && is_wp_error( $inserted ) ? false : intval( $inserted );
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	astoundify_simple_social_login_set_user_data( $user_id, $provider_data, $provider );
+
+	return $user_id;
 }
 
 /**
- * Is registration enabled.
+ * Set a user's provider meta data.
  *
  * @since 1.0.0
  *
+ * @param int $user_id User ID.
+ * @param array $provider_profile Provider profile information.
+ * @param string $provider Provider ID.
  * @return bool
  */
-function astoundify_simple_social_login_is_registration_enabled() {
-	$options = get_option( 'astoundify_simple_social_login', array() );
-	$enable  = isset( $options['users_can_register'] ) && $options['users_can_register'] ? true : false;
-	return apply_filters( 'astoundify_simple_social_login_registration_enabled', $enable );
+function astoundify_simple_social_login_set_user_data( $user_id, $provider_profile, $provider ) {
+	if ( astoundify_simple_social_login_get_existing_user( $provider_data['id'], $provider ) ) {
+		return false;
+	}
+
+	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_id", esc_html( $provider_profile['id'] ) );
+	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp", current_time( 'timestamp' ) );
+	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt", time() );
+	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected", 1 );
+
+	do_action( 'astoundify_simple_social_login_set_user_data', $user_id, $provider_profile, $provider );
+
+	return true;
 }
 
 /**
- * Date Format.
+ * Unset a user's provider meta data.
  *
  * @since 1.0.0
  *
- * @return string.
+ * @param int $user_id User ID.
+ * @param string $provider Provider ID.
  */
-function astoundify_simple_social_login_get_date_format() {
-	return apply_filters( 'astoundify_simple_social_login_date_format', get_option( 'date_format' ) );
+function astoundify_simple_social_login_unset_user_data( $user_id, $provider ) {
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_id" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt" );
+	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected" );
+
+	do_action( 'astoundify_simple_social_login_unset_user_data', $user_id, $provider_profile, $provider );
 }
 
 /**
- * Time Format.
+ * Is user connected to a provider?
  *
  * @since 1.0.0
  *
- * @return string.
+ * @param int $user_id User ID.
+ * @param string $provider Provider ID.
+ * @return bool
  */
-function astoundify_simple_social_login_get_time_format() {
-	return apply_filters( 'astoundify_simple_social_login_time_format', get_option( 'time_format' ) );
+function astoundify_simple_social_login_is_user_connected_to_provider( $user_id, $provider ) {
+	return get_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected", true );
 }
 
 /**
  * Is wp-login.php Page.
+ *
  * Utility. WordPress do not have conditional for this.
  *
  * @since 1.0.0
@@ -307,14 +364,17 @@ function astoundify_simple_social_login_is_wp_login_page() {
 	if ( astoundify_simple_social_login_is_wp_register_page() ) {
 		return false;
 	}
+
 	if ( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
 		return true;
 	}
+
 	return false;
 }
 
 /**
  * Is wp-login.php Register Page.
+ *
  * Utility. WordPress do not have conditional for this.
  *
  * @since 1.0.0
@@ -322,60 +382,5 @@ function astoundify_simple_social_login_is_wp_login_page() {
  * @return bool
  */
 function astoundify_simple_social_login_is_wp_register_page() {
-	if ( isset( $GLOBALS['pagenow'], $_REQUEST['action'] ) && 'wp-login.php' === $GLOBALS['pagenow'] && 'register' === $_REQUEST['action'] ) {
-		return true;
-	}
-	return false;
-}
-
-/**
- * Enqueu styles depending on page.
- *
- * @since 1.0.0
- *
- * @param string $page Optional page for specific styles in debug.
- */
-function astoundify_simple_social_login_enqueue_styles( $page = false ) {
-	$debug   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
-	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
-
-	if ( $debug ) {
-		// If in debug load button base separately.
-		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', array(), $version );
-
-		// Load supplemental styles if needed.
-		if ( $page ) {
-			wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css', array(), $version );
-		}
-	} else {
-		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css', array(), $version );
-	}
-}
-
-/**
- * Get SVG
- *
- * @since 1.0.0
- *
- * @param string $icon Icon name.
- */
-function astoundify_simple_social_login_get_svg( $icon ) {
-	$debug = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
-	$file  = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "public/images/{$icon}.svg";
-
-	if ( $debug ) {
-		$file = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_PATH . "resources/assets/images/{$icon}.svg";
-	}
-
-	$file = apply_filters( 'astoundify_simple_social_login_svg', $file, $icon );
-
-	if ( file_exists( $file ) ) {
-		ob_start();
-?>
-
-<span class="astoundify-simple-social-login-icon"><?php require( $file ); ?></span>
-
-<?php
-		return ob_get_clean();
-	}
+	return ( isset( $GLOBALS['pagenow'], $_REQUEST['action'] ) && 'wp-login.php' === $GLOBALS['pagenow'] && 'register' === $_REQUEST['action'] );
 }

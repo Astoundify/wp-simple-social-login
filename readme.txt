@@ -1,9 +1,9 @@
 === Simple Social Login by Astoundify ===
 
 Contributors: astoundify
-Requires at least: 4.8.0
-Tested up to: 4.9.2
-Stable tag: 1.2.0
+Requires at least: 4.9.0
+Tested up to: 4.9.6
+Stable tag: 2.0.0-beta
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
@@ -28,6 +28,12 @@ To install this plugin, please refer to the guide here: [http://codex.wordpress.
 Visit Settings > Simple Social Login and complete configuration.
 
 == Changelog ==
+
+= 2.0.0: June XX, 2018 =
+
+This is a major update that requires changes to configured oAuth applications. Please visit https://docs.astoundify.com/category/1061-social-login for more information on configuring providers.
+
+* New: Upgrade to HybridAuth 3.0
 
 = 1.2.0: January 31, 2018 =
 
