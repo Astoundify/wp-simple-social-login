@@ -3,7 +3,7 @@
 Contributors: astoundify
 Requires at least: 4.9.0
 Tested up to: 4.9.6
-Stable tag: 2.0.0-beta
+Stable tag: 2.0.0-beta-2
 Requires PHP: 5.6.0
 License: GNU General Public License v3.0
 
@@ -29,7 +29,7 @@ Visit Settings > Simple Social Login and complete configuration.
 
 == Changelog ==
 
-= 2.0.0: June XX, 2018 =
+= 2.0.0: August XX, 2018 =
 
 This is a major update that requires changes to configured oAuth applications. Please visit https://docs.astoundify.com/category/1061-social-login for more information on configuring providers.
 

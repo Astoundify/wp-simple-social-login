@@ -1,6 +1,6 @@
 {
   "name": "astoundify-simple-social-login",
-  "version": "2.0.0-beta",
+  "version": "2.0.0-beta-2",
   "description": "Facebook, Twitter, and Google login options for WordPress.",
   "main": "gulpfile.js",
   "devDependencies": {
