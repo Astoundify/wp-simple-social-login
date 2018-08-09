@@ -87,8 +87,8 @@ function astoundify_simple_social_login_watch() {
 
 	$provider = astoundify_simple_social_login_get_provider( $provider );
 
-	$class    = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->get_id() ) );
-	$adapter  = new $class( $provider->get_config() );
+	$class   = sprintf( 'Hybridauth\Provider\%s', ucfirst( $provider->get_id() ) );
+	$adapter = new $class( $provider->get_config() );
 
 	try {
 		// Nonce is only set when leaving the site to start action.
@@ -179,17 +179,17 @@ add_action( 'template_redirect', 'astoundify_simple_social_login_watch' );
  *
  * @since 1.0.0
  *
- * @param int $provider_user_id User to search for based on social data.
+ * @param int    $provider_user_id User to search for based on social data.
  * @param string $provider Provider ID to search for.
  * @return int|false False if no existing user is found; otherwise the ID.
  */
 function astoundify_simple_social_login_get_existing_user( $provider_user_id, $provider ) {
-	$args  = array(
+	$args = [
 		'meta_key'   => "_astoundify_simple_social_login_{$provider}_id",
 		'meta_value' => esc_html( $provider_user_id ),
 		'number'     => -1,
 		'fields'     => 'ID',
-	);
+	];
 
 	$users = get_users( $args );
 
@@ -248,12 +248,12 @@ function astoundify_simple_social_login_log_user_in( $user_id ) {
  *
  * @since 1.0.0
  *
- * @param array $provider_data Provider APi data.
+ * @param array  $provider_data Provider APi data.
  * @param string $provider Provider ID.
  * @return int|false
  */
 function astoundify_simple_social_login_register_user( $provider_data, $provider ) {
-	$defaults = array(
+	$defaults = [
 		'id'           => '',
 		'user_login'   => '',
 		'user_pass'    => wp_generate_password(),
@@ -262,7 +262,7 @@ function astoundify_simple_social_login_register_user( $provider_data, $provider
 		'nickname'     => '',
 		'first_name'   => '',
 		'last_name'    => '',
-	);
+	];
 
 	$provider_data = wp_parse_args( $provider_data, $defaults );
 
@@ -300,8 +300,8 @@ function astoundify_simple_social_login_register_user( $provider_data, $provider
  *
  * @since 1.0.0
  *
- * @param int $user_id User ID.
- * @param array $provider_profile Provider profile information.
+ * @param int    $user_id User ID.
+ * @param array  $provider_profile Provider profile information.
  * @param string $provider Provider ID.
  * @return bool
  */
@@ -314,6 +314,7 @@ function astoundify_simple_social_login_set_user_data( $user_id, $provider_profi
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp", current_time( 'timestamp' ) );
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt", time() );
 	update_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected", 1 );
+	update_user_meta( $user_id, '_astoundify_simple_social_login_profile_image', esc_url( $provider_profile['profile_image'] ) );
 
 	do_action( 'astoundify_simple_social_login_set_user_data', $user_id, $provider_profile, $provider );
 
@@ -325,7 +326,7 @@ function astoundify_simple_social_login_set_user_data( $user_id, $provider_profi
  *
  * @since 1.0.0
  *
- * @param int $user_id User ID.
+ * @param int    $user_id User ID.
  * @param string $provider Provider ID.
  */
 function astoundify_simple_social_login_unset_user_data( $user_id, $provider ) {
@@ -333,16 +334,63 @@ function astoundify_simple_social_login_unset_user_data( $user_id, $provider ) {
 	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp" );
 	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_timestamp_gmt" );
 	delete_user_meta( $user_id, "_astoundify_simple_social_login_{$provider}_connected" );
+	delete_user_meta( $user_id, '_astoundify_simple_social_login_profile_image' );
 
 	do_action( 'astoundify_simple_social_login_unset_user_data', $user_id, $provider_profile, $provider );
 }
+
+/**
+ * Use the connected profile avatar URL if available.
+ *
+ * @since 1.0.0
+ *
+ * @param string $avatar Avatar HTML
+ * @param mixed  $id_or_email Identifier.
+ * @return string
+ */
+function astoundify_simple_social_login_get_avatar( $avatar, $id_or_email ) {
+
+	if ( is_admin() ) {
+		$screen = get_current_screen();
+
+		if ( is_object( $screen ) && 'options-discussion' === $screen->id ) {
+			return $avatar;
+		}
+	}
+
+	$user_id = 0;
+
+	if ( is_numeric( $id_or_email ) ) {
+		$user_id = (int) $id_or_email;
+	} elseif ( is_object( $id_or_email ) ) {
+		if ( ! empty( $id_or_email->user_id ) ) {
+			$user_id = (int) $id_or_email->user_id;
+		}
+	} else {
+		$user = get_user_by( 'email', $id_or_email );
+
+		if ( $user ) {
+			$user_id = $user->ID;
+		}
+	}
+
+	$image = get_user_meta( $user_id, '_astoundify_simple_social_login_profile_image', true );
+
+	if ( $user_id && $image && '' !== $image ) {
+		$avatar = preg_replace( "/src='(.*?)'/i", "src='" . $image . "'", $avatar );
+		$avatar = preg_replace( "/srcset='(.*?)'/i", "srcset='" . $image . " 2x'", $avatar );
+	}
+
+	return $avatar;
+}
+add_filter( 'get_avatar', 'astoundify_simple_social_login_get_avatar', 10, 2 );
 
 /**
  * Is user connected to a provider?
  *
  * @since 1.0.0
  *
- * @param int $user_id User ID.
+ * @param int    $user_id User ID.
  * @param string $provider Provider ID.
  * @return bool
  */

@@ -49,13 +49,13 @@ function astoundify_simple_social_login_wordpress_login_form() {
 	// Add "back to social login" link in login footer.
 	add_action(
 		'login_footer', function () {
-?>
+		?>
 
 <p id="astoundify-simple-social-login-wordpress-back">
 	<a style="display:none;" href="#"><?php esc_html_e( 'Login with social account?', 'astoundify-simple-social-login' ); ?></a>
 </p><!-- #astoundify-simple-social-login-wordpress-back -->
 
-<?php
+		<?php
 		}
 	);
 }

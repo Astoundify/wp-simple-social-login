@@ -54,7 +54,7 @@ class Provider_Facebook extends Provider {
 	 * @var array $config Provider configuration.
 	 */
 	public $config = [
-		'scope' => 'email',
+		'scope' => 'default, email',
 	];
 
 }

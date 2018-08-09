@@ -43,7 +43,7 @@ function astoundify_simple_social_login_sanitize_settings( $input ) {
 		'users_can_register' => get_option( 'users_can_register', false ),
 	];
 
-	$output   = wp_parse_args( (array) $input, $defaults );
+	$output = wp_parse_args( (array) $input, $defaults );
 
 	return apply_filters( 'astoundify_simple_social_login_sanitize_settings', $output );
 }
@@ -84,7 +84,7 @@ function astoundify_simple_social_login_settings() {
 	<h2 id="astoundify-simple-social-login-nav-tabs" class="nav-tab-wrapper wp-clearfix">
 
 	<?php
-	$i = 0;
+	$i    = 0;
 	foreach ( $tabs as $id => $tab ) :
 		$i++;
 		echo '<a class="nav-tab ' . esc_attr( 1 === $i ? 'nav-tab-active' : '' ) . '" href="#astoundify-simple-social-login-panel-' . esc_attr( $id ) . '">' . $tab . '</a>';

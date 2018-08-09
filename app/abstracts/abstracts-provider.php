@@ -25,10 +25,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - connected_info
  *
  * User meta keys:
- * - "_astoundify_simple_social_login_{$this->id}_id"            (string)
- * - "_astoundify_simple_social_login_{$this->id}_connected"     (bool)
- * - "_astoundify_simple_social_login_{$this->id}_timestamp"     (int)
- * - "_astoundify_simple_social_login_{$this->id}_timestamp_gmt" (int)
+ * - "_astoundify_simple_social_login_{$this->id}_id"                (string)
+ * - "_astoundify_simple_social_login_{$this->id}_connected"         (bool)
+ * - "_astoundify_simple_social_login_{$this->id}_timestamp"         (int)
+ * - "_astoundify_simple_social_login_{$this->id}_timestamp_gmt"     (int)
+ * - "_astoundify_simple_social_login_{$this->id}_profile_image_url" (string)
  *
  * @since 1.0.0
  */
@@ -96,15 +97,17 @@ abstract class Provider {
 	 * @return array
 	 */
 	public function get_config() {
-		return wp_parse_args( $this->config, [
-			'callback'        => $this->get_endpoint_url(),
-			'access_type'     => 'offline',
-			'approval_prompt' => 'force',
-			'keys'            => [
-				'id'     => $this->get_app_id(),
-				'secret' => $this->get_app_secret(),
-			],
-		] );
+		return wp_parse_args(
+			$this->config, [
+				'callback'        => $this->get_endpoint_url(),
+				'access_type'     => 'offline',
+				'approval_prompt' => 'force',
+				'keys'            => [
+					'id'     => $this->get_app_id(),
+					'secret' => $this->get_app_secret(),
+				],
+			]
+		);
 	}
 
 	/**
@@ -145,12 +148,13 @@ abstract class Provider {
 		$profile = $adapter->getUserProfile();
 
 		$data = [
-			'id'           => isset( $profile->identifier ) ? $profile->identifier : '',
-			'user_email'   => ( isset( $profile->emailVerified ) && '' !== $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
-			'display_name' => isset( $profile->displayName ) ? $profile->displayName : '',
-			'nickname'     => isset( $profile->displayName ) ? $profile->displayName : '',
-			'first_name'   => isset( $profile->firstName ) ? $profile->firstName : '',
-			'last_name'    => isset( $profile->lastName ) ? $profile->lastName : '',
+			'id'            => isset( $profile->identifier ) ? $profile->identifier : '',
+			'user_email'    => ( isset( $profile->emailVerified ) && '' !== $profile->emailVerified ) ? $profile->emailVerified : ( isset( $profile->email ) ? $profile->email : '' ),
+			'display_name'  => isset( $profile->displayName ) ? $profile->displayName : '',
+			'nickname'      => isset( $profile->displayName ) ? $profile->displayName : '',
+			'first_name'    => isset( $profile->firstName ) ? $profile->firstName : '',
+			'last_name'     => isset( $profile->lastName ) ? $profile->lastName : '',
+			'profile_image' => isset( $profile->photoURL ) ? $profile->photoURL : '',
 		];
 
 		if ( ! $data['id'] ) {
@@ -296,8 +300,8 @@ abstract class Provider {
 			return '';
 		}
 
-		$text    = $this->get_login_register_button_text();
-		$url     = $this->get_action_url( 'authenticate' );
+		$text = $this->get_login_register_button_text();
+		$url  = $this->get_action_url( 'authenticate' );
 
 		$classes = [
 			'astoundify-simple-social-login-button',
@@ -335,8 +339,8 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_unlink_button() {
-		$text  = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
-		$url   = $this->get_action_url( 'unlink' );
+		$text = apply_filters( 'astoundify_simple_social_login_unlink_link_text', esc_html__( 'Unlink', 'astoundify-simple-social-login' ) );
+		$url  = $this->get_action_url( 'unlink' );
 
 		return sprintf( '<a href="%s">%s</a>', esc_url( $url ), $text );
 	}
@@ -372,8 +376,8 @@ abstract class Provider {
 		if ( ! astoundify_simple_social_login_is_user_connected_to_provider( get_current_user_id(), $this->get_id() ) ) {
 			$is_connected = false;
 
-			$text    = $this->get_link_button_text();
-			$url     = $this->get_action_url( 'link' );
+			$text = $this->get_link_button_text();
+			$url  = $this->get_action_url( 'link' );
 
 			$classes = [
 				'astoundify-simple-social-login-button',
