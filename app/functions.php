@@ -306,7 +306,7 @@ function astoundify_simple_social_login_register_user( $provider_data, $provider
  * @return bool
  */
 function astoundify_simple_social_login_set_user_data( $user_id, $provider_profile, $provider ) {
-	if ( astoundify_simple_social_login_get_existing_user( $provider_data['id'], $provider ) ) {
+	if ( astoundify_simple_social_login_get_existing_user( $provider_profile['id'], $provider ) ) {
 		return false;
 	}
 
@@ -375,6 +375,7 @@ function astoundify_simple_social_login_get_avatar( $avatar, $id_or_email ) {
 	}
 
 	$image = get_user_meta( $user_id, '_astoundify_simple_social_login_profile_image', true );
+  $image = set_url_scheme( $image, 'https' );
 
 	if ( $user_id && $image && '' !== $image ) {
 		$avatar = preg_replace( "/src='(.*?)'/i", "src='" . $image . "'", $avatar );

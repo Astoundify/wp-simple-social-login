@@ -172,14 +172,12 @@ abstract class Provider {
 	 * @return string
 	 */
 	public function get_action_url( $action ) {
-		$defaults = [
+		$args = [
 			'astoundify_simple_social_login' => $action,
 			'provider'                       => $this->id,
 			'_nonce'                         => wp_create_nonce( "astoundify_simple_social_login_{$this->id}" ),
 			'_referrer'                      => urlencode( strtok( esc_url( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ), '?' ) ),
 		];
-
-		$args = wp_parse_args( $args, $defaults );
 
 		return add_query_arg( $args, home_url() );
 	}
