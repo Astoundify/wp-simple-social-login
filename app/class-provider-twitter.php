@@ -57,4 +57,15 @@ class Provider_Twitter extends Provider {
 		'includeEmail' => true,
 	];
 
+	/**
+	 * Endpoint URL (HybridAuth Process)
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return string
+	 */
+	public function get_endpoint_url() {
+		return home_url();
+	}
+
 }
