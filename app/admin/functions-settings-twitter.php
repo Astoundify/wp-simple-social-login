@@ -92,7 +92,7 @@ function astoundify_simple_social_login_panel_twitter() {
 		</tr>
 
 		<tr>
-			<th scope="row"><label for="twitter-app-id"><?php esc_html_e( 'Consumer Key', 'astoundify-simple-social-login' ); ?></label></th>
+			<th scope="row"><label for="twitter-app-id"><?php esc_html_e( 'API Key', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
 				<input id="twitter-app-id" type="text" class="regular-text" name="astoundify_simple_social_login_twitter[app_id]" value="<?php echo esc_attr( $options['app_id'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Your app ID.', 'astoundify-simple-social-login' ); ?></p>
@@ -100,7 +100,7 @@ function astoundify_simple_social_login_panel_twitter() {
 		</tr>
 
 		<tr>
-			<th scope="row"><label for="twitter-app-secret"><?php esc_html_e( 'Consumer Secret', 'astoundify-simple-social-login' ); ?></label></th>
+			<th scope="row"><label for="twitter-app-secret"><?php esc_html_e( 'API Secret Key', 'astoundify-simple-social-login' ); ?></label></th>
 			<td>
 				<input id="twitter-app-secret" type="<?php echo esc_attr( defined( 'WP_DEBUG' ) && WP_DEBUG ? 'text' : 'password' ); ?>" class="regular-text" name="astoundify_simple_social_login_twitter[app_secret]" value="<?php echo esc_attr( $options['app_secret'] ); ?>">
 				<p class="description"><?php esc_html_e( 'Your app secret.', 'astoundify-simple-social-login' ); ?></p>
