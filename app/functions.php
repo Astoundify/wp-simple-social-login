@@ -336,19 +336,13 @@ function astoundify_simple_social_login_is_wp_register_page() {
  * @param string $page Optional page for specific styles in debug.
  */
 function astoundify_simple_social_login_enqueue_styles( $page = false ) {
-	$debug   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
-	if ( $debug ) {
-		// If in debug load button base separately.
-		wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/buttons.css', array(), $version );
+	wp_enqueue_style( 'astoundify-simple-social-login-buttons', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/buttons.min.css', array(), $version );
 
-		// Load supplemental styles if needed.
-		if ( $page ) {
-			wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/css/' . $page . '.css', array(), $version );
-		}
-	} else {
-		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/wp-simple-social-login.min.css', array(), $version );
+	// Load supplemental styles if needed.
+	if ( $page ) {
+		wp_enqueue_style( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/css/' . $page . '.min.css', array(), $version );
 	}
 }
 

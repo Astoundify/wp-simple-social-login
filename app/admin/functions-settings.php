@@ -198,16 +198,10 @@ function astoundify_simple_social_login_admin_enqueue_scripts( $hook_suffix ) {
 		return;
 	}
 
-	// Script Vars.
-	$debug   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? true : false;
 	$version = $debug ? time() : ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_VERSION;
 
 	// Settings JS.
-	$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/settings.min.js';
-	if ( $debug ) {
-		$url = ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'resources/assets/js/settings.js';
-	}
-	wp_enqueue_script( 'astoundify-simple-social-login', $url, array( 'jquery' ), $version, true );
+	wp_enqueue_script( 'astoundify-simple-social-login', ASTOUNDIFY_SIMPLE_SOCIAL_LOGIN_URL . 'public/js/settings.min.js', array( 'jquery' ), $version, true );
 }
 add_action( 'admin_enqueue_scripts', 'astoundify_simple_social_login_admin_enqueue_scripts' );
 

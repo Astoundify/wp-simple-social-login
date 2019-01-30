@@ -4,6 +4,13 @@
  * @since 1.0.0
  */
 
+/**
+ * Internal dependencies.
+ */
+import 'css/buttons.css';
+import 'css/woocommerce.css';
+import 'css/wp-login.css';
+
 (function( window, undefined ){
 
 	window.wp = window.wp || {};

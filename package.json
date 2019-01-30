@@ -1,41 +1,63 @@
 {
-  "name": "astoundify-simple-social-login",
-  "version": "1.2.0",
-  "description": "Facebook, Twitter, and Google login options for WordPress.",
-  "main": "gulpfile.js",
-  "devDependencies": {
-    "fs": "0.0.1-security",
-    "fs-extra": "^3.0.1",
-    "gulp": "^3.9.1",
-    "gulp-checktextdomain": "^1.1.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-clean-css": "^3.1.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-csslint": "^1.0.0",
-    "gulp-jshint": "^2.0.4",
-    "gulp-phpcs": "^1.4.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^2.6.0",
-    "gulp-template": "^4.0.0",
-    "gulp-uglify": "^2.1.2",
-    "gulp-watch": "^4.3.11",
-    "gulp-wp-pot": "^2.0.4",
-    "gulp-zip": "^4.0.0",
-    "jshint": "^2.9.4",
-    "pump": "^1.0.2"
-  },
-  "scripts": {
-    "setup": "npm install && composer install && gulp assets",
-    "dist": "gulp bundle && gulp zip && gulp clean"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Astoundify/wp-simple-social-login.git"
-  },
-  "author": "Astoundify",
-  "license": "GPL-3.0",
-  "bugs": {
-    "url": "https://github.com/Astoundify/wp-simple-social-login/issues"
-  },
-  "homepage": "https://astoundify.com/products/simple-social-login/"
+	"name": "astoundify-simple-social-login",
+	"version": "1.2.0",
+	"description": "Facebook, Twitter, and Google login options for WordPress.",
+	"main": "webpack.config.js",
+	"devDependencies": {
+		"@babel/core": "7.2.2",
+		"@wordpress/babel-preset-default": "3.0.2",
+		"@wordpress/browserslist-config": "2.2.3",
+		"@wordpress/dom-ready": "2.0.2",
+		"@wordpress/eslint-plugin": "1.0.1",
+		"autoprefixer": "9.4.7",
+		"babel-loader": "8.0.5",
+		"classnames": "2.2.6",
+		"copy-webpack-plugin": "4.6.0",
+		"cross-env": "5.2.0",
+		"eslint": "5.12.1",
+		"exports-loader": "0.7.0",
+		"extract-text-webpack-plugin": "4.0.0-beta.0",
+		"file-loader": "3.0.1",
+		"node-sass": "4.11.0",
+		"postcss-focus-within": "3.0.0",
+		"postcss-loader": "3.0.0",
+		"raw-loader": "1.0.0",
+		"sass-loader": "7.1.0",
+		"stylelint": "9.10.1",
+		"stylelint-config-wordpress": "13.1.0",
+		"webpack": "4.29.0",
+		"webpack-cli": "3.2.1"
+	},
+	"babel": {
+		"presets": [
+			"@wordpress/babel-preset-default"
+		]
+	},
+	"eslintConfig": {
+		"extends": [
+			"plugin:@wordpress/eslint-plugin/recommended"
+		]
+	},
+	"scripts": {
+		"build": "cross-env NODE_ENV=production webpack",
+		"check-npm-licenses": "./bin/wp-bin/bin/check-npm-licenses.sh; exit 0",
+		"css-lint": "./node_modules/.bin/stylelint resources/**/*.scss --syntax scss; exit 0",
+		"css-lint:fix": "./node_modules/.bin/stylelint resources/**/*.scss --syntax scss --fix; exit 0",
+		"dev": "cross-env NODE_ENV=default webpack --watch",
+		"generate-font-list": "./bin/generate-google-font-list.sh",
+		"install-node-nvm": "./bin/wp-bin/bin/install-node-nvm.sh; exit 0",
+		"lint": "./node_modules/.bin/eslint .; exit 0",
+		"lint:fix": "./node_modules/.bin/eslint . --fix; exit 0",
+		"lint:jsdoc": "eslint . --config eslint/jsdoc-config.js; exit 0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Astoundify/wp-simple-social-login.git"
+	},
+	"author": "Astoundify",
+	"license": "GPL-3.0",
+	"bugs": {
+		"url": "https://github.com/Astoundify/wp-simple-social-login/issues"
+	},
+	"homepage": "https://astoundify.com/products/simple-social-login/"
 }
