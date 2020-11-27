@@ -1,6 +1,6 @@
 {
 	"name": "astoundify-simple-social-login",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "Facebook, Twitter, and Google login options for WordPress.",
 	"main": "webpack.config.js",
 	"devDependencies": {
